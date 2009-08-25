@@ -46,21 +46,23 @@ public class View extends JCFrame {
 	private ActionRemoveFile actionCloseFile;
 	private ActionCopy actionCopy;
 	private ActionExport actionExport;
-	private FilesPanel filesPanel;
+	private final FilesPanel filesPanel;
 	private ActionCloseAll actionCloseAllFiles;
-	private CanvasControlsPanel canvasPanel;
+	private final CanvasControlsPanel canvasPanel;
 	
 	private BufferedImage busy;
 	
 	/**
+	 * @param controller 
 	 * 
 	 */
 	public View(final Application controller) {
 		super(controller);
 		
 		try {
-			this.busy = ImageIO.read(new File("de/danielsenff/radds/resources/defaultimage.png"));
-		} catch (IOException e) {
+			
+			this.busy = ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/defaultimage.png"));
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -79,7 +81,7 @@ public class View extends JCFrame {
 //				new GBConstraints(1,2,GridBagConstraints.BOTH,GridBagConstraints.CENTER, 1.0, 1.0));
 		
 		canvasPanel = new CanvasControlsPanel(controller);
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, filesPanel, canvasPanel);
+		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, filesPanel, canvasPanel);
 		splitPane.setDividerLocation(200);
 		splitPane.setContinuousLayout(true);
 		splitPane.setResizeWeight(0.0);
@@ -106,7 +108,7 @@ public class View extends JCFrame {
 	}
 
 	private void initMenu(final Application controller) {
-		JMenuBar menuBar = new JMenuBar();
+		final JMenuBar menuBar = new JMenuBar();
 		
 		JMenu menuFile;
 		if(OS.isMacOS()) 
@@ -130,7 +132,7 @@ public class View extends JCFrame {
 		
 		
 		
-		JMenu menuEdit = new JMenu(bundle.getString("Edit"));
+		final JMenu menuEdit = new JMenu(bundle.getString("Edit"));
 		menuEdit.add(actionCopy);
 		menuBar.add(menuEdit);
 		
@@ -152,7 +154,7 @@ public class View extends JCFrame {
 		setTitle(title);
 		setName(title);
 		
-		BufferedImage applicationIcon;
+		final BufferedImage applicationIcon;
 		/*try {
 			applicationIcon = ImageIO.read(ResourceLoader.getResource(bundle.getString("application_icon")));
 			setIconImage(applicationIcon);
@@ -197,12 +199,19 @@ public class View extends JCFrame {
 		return this.actionCloseAllFiles;
 	}
 
-	public void setImage(DDSImageFile image) {
+	/**
+	 * Sets the image in the Canvas to the specified Image.
+	 * @param image
+	 */
+	public void setImage(final DDSImageFile image) {
 		getCanvas().setSourceBI(image.getData());
 		filesPanel.getInfoPanel().setDDSFile(image);
 		this.actionCopy.setEnabled(true);
 	}
 	
+	/**
+	 * Sets the icon on the Canvas to "busy"
+	 */
 	public void setBusyImage() {
 		this.actionCopy.setEnabled(false);
 		getCanvas().setSourceBI(busy);
