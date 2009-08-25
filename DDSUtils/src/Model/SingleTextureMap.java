@@ -1,0 +1,66 @@
+/**
+ * 
+ */
+package Model;
+
+import gr.zdimensions.jsquish.Squish.CompressionType;
+
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+
+import DDSUtil.ByteBufferedImage;
+
+/**
+ * @author danielsenff
+ *
+ */
+public class SingleTextureMap extends AbstractTextureMap {
+
+	BufferedImage bi;
+	
+	public SingleTextureMap(final BufferedImage bi) {
+		this.bi = bi;
+	}
+	
+	/**
+	 * 
+	 */
+	public BufferedImage getData() {
+		return this.bi;
+	}
+	
+	/* (non-Javadoc)
+	 * @see DDSUtil.AbstractMipMaps#getDXTCompressedBuffer(gr.zdimensions.jsquish.Squish.CompressionType)
+	 */
+	public ByteBuffer[] getDXTCompressedBuffer(CompressionType compressionType) {
+		ByteBuffer[] buffer = new ByteBuffer[1];
+		buffer[0] = super.compress(bi, compressionType);
+		return buffer;
+	}
+
+	
+
+	/* (non-Javadoc)
+	 * @see DDSUtil.AbstractMipMaps#getHeight()
+	 */
+	public int getHeight() {
+		return this.bi.getHeight();
+	}
+
+	/* (non-Javadoc)
+	 * @see DDSUtil.AbstractMipMaps#getWidth()
+	 */
+	public int getWidth() {
+		return this.bi.getWidth();
+	}
+
+	/* (non-Javadoc)
+	 * @see DDSUtil.AbstractTextureMap#getUncompressedBuffer()
+	 */
+	public ByteBuffer[] getUncompressedBuffer() {
+		ByteBuffer[] mipmapBuffer = new ByteBuffer[1];
+		mipmapBuffer[0] = ByteBuffer.wrap(ByteBufferedImage.convertBIintoARGBArray(this.bi));
+		return mipmapBuffer;
+	}
+
+}
