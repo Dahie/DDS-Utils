@@ -1,0 +1,6 @@
+Car-Texture HD (2048x2048);DXT5;2048;2048;true
+Car-Texture (1024x1024);DXT5;1024;1024;true
+Car-Tech-Texture (512x512);DXT5;512;512;true
+Helmet-Texture (1024x1024);DXT5;1024;1024;true
+Normal-Map-Texture (512x512);DXT1;512;512;true
+Specular-Map-Texture (256x256);DXT1;256;256;true
