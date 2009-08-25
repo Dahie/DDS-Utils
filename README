@@ -1,0 +1,11 @@
+DDS-Utils are a selection of tools to work with DirectDrawSurfaces textures in Java.
+
+Badds - Batch a DDS, Rescale and Batch-process DDS-files.
+Radds - Review a DDS, Lightweight DDS-viewer
+Dropps - Simple DDS-image-converter
+DDSUtil - Wannabe-library for DDS-conversion
+
+--------------
+
+Each subproject has it's own project folder in the repository. 
+I use eclipse to check each one out. The Tools require the DDSUtils-project in their buildpath.
