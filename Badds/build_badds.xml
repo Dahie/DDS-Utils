@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="Badds">
+    <property environment="env"/>
+    <property name="JOGL.location" value="../JOGL"/>
+    <property name="ECLIPSE_HOME" value="../../../../../Applications/eclipse"/>
+    <property name="DDSUtil.location" value="../DDSUtil"/>
+    <property name="Jsquish.location" value="../Jsquish"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.5"/>
+    <property name="source" value="1.5"/>
+    <path id="DDSUtil.classpath">
+        <pathelement location="${DDSUtil.location}/bin"/>
+        <pathelement location="${DDSUtil.location}/../../libraries/junit-4.4.jar"/>
+        <pathelement location="${DDSUtil.location}/../../libraries/jsquish.jar"/>
+        <pathelement location="${JOGL.location}/jogl.jar"/>
+    </path>
+    <path id="Jsquish.classpath">
+        <pathelement location="${Jsquish.location}/bin"/>
+        <pathelement location="${Jsquish.location}/lib/jai_imageio.jar"/>
+        <pathelement location="${Jsquish.location}/lib/lwjgl.jar"/>
+    </path>
+    <path id="Badds.classpath">
+        <pathelement location="bin"/>
+        <path refid="DDSUtil.classpath"/>
+        <path refid="Jsquish.classpath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src" excludes="**/*.launch, **/*.java"/>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall">
+        <ant antfile="${DDSUtil.location}/build_badds.xml" inheritAll="false" target="clean"/>
+        <ant antfile="${Jsquish.location}/build_badds.xml" inheritAll="false" target="clean"/>
+    </target>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects">
+        <ant antfile="${DDSUtil.location}/build_badds.xml" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="${Jsquish.location}/build_badds.xml" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+    </target>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="Badds.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="Badds (de)">
+        <java classname="Controller.Badds" failonerror="true" fork="yes">
+            <classpath refid="Badds.classpath"/>
+        </java>
+    </target>
+</project>
