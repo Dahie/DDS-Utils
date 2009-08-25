@@ -10,7 +10,16 @@ DDSUtil - Wannabe-library for DDS-conversion
 Each subproject has it's own project folder in the repository. 
 I use eclipse to check each one out. The Tools require the DDSUtils-project in their buildpath.
 
+--------------
 
+History
+
+The project stem from some hobby work I did in summer 2008. 
+Out of boredom I wanted to be able to load DDS files in Java and write tools
+for reviewing and processing in Java. This was my first own bigger java project and therefore
+I'm sure there are things that can be nicer and I'm open for feedback and criticism. 
+
+--------------
 
 DDS-Utils for DirectDrawSurface texture handling in Java
     Copyright (C) 2008-2009 Daniel Senff
