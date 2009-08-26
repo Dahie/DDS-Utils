@@ -9,10 +9,12 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.Hashtable;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,13 +24,12 @@ import javax.swing.event.AncestorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import DDSUtil.BIUtil;
+import DDSUtil.ImageOperations;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.ResourceLoader;
 import de.danielsenff.radds.view.JCPanel;
-
-import DDSUtil.BIUtil;
-import DDSUtil.ImageOperations;
 
 /**
  * Control-Panel for the {@link BICanvas}. 
@@ -94,6 +95,12 @@ public class CanvasControlsPanel extends JCPanel {
 		final JLabel lblZoomCombo = new JLabel(bundle.getString("Zoom")+":");
 		
 		final JSlider zoomSlider = new JSlider(10, 500, 100);
+        Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
+        labels.put(new Integer(10), new JLabel("0.1x"));
+        labels.put(new Integer(100), new JLabel("1x"));
+        labels.put(new Integer(250), new JLabel("2.5x"));
+        labels.put(new Integer(500), new JLabel("5x"));
+        zoomSlider.setLabelTable(labels);
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setPaintLabels(true);
 		zoomSlider.addChangeListener(new ChangeListener() {
