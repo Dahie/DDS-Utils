@@ -39,6 +39,8 @@ public class BICanvas extends JCPanel implements Scrollable {
 	/**
 	 * Displays a {@link BufferedImage} in RGB-Mode 
 	 * without multiplied Alpha-channel.
+	 * @param controller 
+	 * @param image 
 	 * @param biRendered BufferedImage to display
 	 */
 	public BICanvas(final Application controller, BufferedImage image) {
@@ -48,10 +50,14 @@ public class BICanvas extends JCPanel implements Scrollable {
 	
 	/**
 	 * Displays a {@link BufferedImage} in the channel-mode specified.
+	 * @param controller 
+	 * @param image 
 	 * @param biRendered BufferedImage to display
 	 * @param channel Channel of the BufferedImage to display 
 	 */
-	public BICanvas(final Application controller, final BufferedImage image, final ImageOperations.ChannelMode channel) {
+	public BICanvas(final Application controller, 
+			final BufferedImage image, 
+			final ImageOperations.ChannelMode channel) {
 		super(controller);
 		this.controller = controller;
 		this.channelMode = channel;
