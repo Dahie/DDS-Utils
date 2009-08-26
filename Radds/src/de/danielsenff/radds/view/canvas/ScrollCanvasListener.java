@@ -25,7 +25,10 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 	
 	private JScrollPane scrollViewPane;
 	private JComboBox zoomCombo;
+	
 	/**
+	 * @param pane 
+	 * @param zoomCombo 
 	 * 
 	 */
 	public ScrollCanvasListener(JScrollPane pane, JComboBox zoomCombo) {
@@ -37,17 +40,17 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 	int yOld = 0;
 	
 	public void mouseDragged(MouseEvent event) {
-		newMethod(event);
+		drag(event);
 	}
 
 	/**
 	 * 
 	 */
-	private void newMethod(MouseEvent event) {
+	private void drag(MouseEvent event) {
 		
 		JViewport viewport = scrollViewPane.getViewport();
 		Point position = viewport.getViewPosition();
-		Rectangle rect = viewport.getViewRect();
+		Rectangle rectViewport = viewport.getViewRect();
 		
 	
 		// get new click coordinates
@@ -65,21 +68,23 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 		int canvasWidth = (int) viewport.getViewSize().getWidth();
 		int canvasHeight = (int) viewport.getViewSize().getHeight();
 		
-		if(rect.width < canvasWidth) 
+		if(rectViewport.width < canvasWidth) 
 		{
 			// left and top edge
 			if (x <= 0) x = 0;
-			if (y <= 0) y = 0;
+			
 			// right edge
-			int maxX = canvasWidth - rect.width;
+			int maxX = canvasWidth - rectViewport.width;
 			if (x > maxX)	x = maxX;
-			// bottom edge
-			int maxY = canvasHeight - rect.height;
-			if (y > maxY)	y = maxY;
+			position.x = x;
 		}
-		// write coordinates back
-		position.x = x;
-		position.y = y;
+		if(rectViewport.height < canvasHeight) {
+			if (y <= 0) y = 0;
+			int maxY = canvasHeight - rectViewport.height;
+			// bottom edge
+			if (y > maxY)	y = maxY;
+			position.y = y;
+		}
 		
 		viewport.setViewPosition(position);
 	}
