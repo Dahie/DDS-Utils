@@ -118,37 +118,19 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	
 	/**
 	 * All contained MipMaps compressed with DXT in {@link ByteBuffer}
+	 * Squishes each mipmap and store in a {@link DDSImage} compatible {@link ByteBuffer}-Array.
 	 * @param compressionType
 	 * @return
 	 */
 	public ByteBuffer[] getDXTCompressedBuffer(final Squish.CompressionType compressionType) {
-		BufferedImage bufferedImage = this.mipmaps.get(TOP_MOST_MIP_MAP);
-		return compressMipMaps(bufferedImage.getWidth(), 
-				bufferedImage.getHeight(), 
-				compressionType);
-	}
-	
-	
-	
-	/**
-	 * Squish each mipmap
-	 * @param mipMapWidth
-	 * @param mipMapHeight
-	 * @param mipmapBuffer
-	 * @param compressionType
-	 * @return
-	 */
-	public ByteBuffer[] compressMipMaps(int mipMapWidth, int mipMapHeight,
-			final Squish.CompressionType compressionType) {
-
 		ByteBuffer[] mipmapBuffer = new ByteBuffer[this.numMipMaps];
 		
 		for (int j = 0; j < this.numMipMaps; j++) {
-			mipmapBuffer[j] = super.compress(this.mipmaps.get(j), compressionType);
+			mipmapBuffer[j] = compress(this.mipmaps.get(j), compressionType);
 		}
 		return mipmapBuffer;
 	}
-
+	
 	/**
 	 * Returns a Vector with all MipMaps
 	 * @return
