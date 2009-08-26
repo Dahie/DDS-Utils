@@ -153,7 +153,6 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 		int yNew = wheelEvent.getY();
 		
 		// translation aka centerin
-		System.out.println(wheelEvent.getY());
 		int deltaX = position.x - xNew;
 		int deltaY = position.y - yNew;
 		
