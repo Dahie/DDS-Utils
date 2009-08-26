@@ -81,6 +81,7 @@ public class ByteBufferedImage extends BufferedImage {
 	/**
 	 * Transfers the pixel-Information from a {@link BufferedImage} into a byte-array.
 	 * If the {@link BufferedImage} is of different type, the pixels are reordered and stored in RGBA-order.
+	 * TODO this eats performance ... FIXME need simple way to convert bi to data-array
 	 * @param bi
 	 * @return array in order RGBA
 	 */
@@ -89,7 +90,7 @@ public class ByteBufferedImage extends BufferedImage {
 		DataBuffer dataBuffer = bi.getRaster().getDataBuffer();
 		
 		// read channel count
-		int componentCount = bi.getColorModel().getNumComponents() ;
+		/*int componentCount = bi.getColorModel().getNumComponents() ;
 		
 		int length = bi.getWidth() * bi.getHeight() * 4;
 		byte[] argb = new byte[length];
@@ -98,26 +99,20 @@ public class ByteBufferedImage extends BufferedImage {
 		int count = 0;
 		for (int i = 0; i < length; i=i+4) {
 			// databuffer has unsigned integers, they must be converted to signed byte 
-
 			// original order from BufferedImage
-
 			
 			if(componentCount > 3) {
 				// 32bit image
-				
 				b =  (dataBuffer.getElem(i) );
 				g =  (dataBuffer.getElem(i+1));
 				r =  (dataBuffer.getElem(i+2));
 				a =  (dataBuffer.getElem(i+3));
-
 				
 				argb[i] = (byte) (a & 0xFF);
 				argb[i+1] = (byte) (r & 0xFF);
 				argb[i+2] = (byte) (g & 0xFF);
 				argb[i+3] = (byte) (b & 0xFF);
-			} 
-			else 
-			{
+			} else {
 				//24bit image
 				b =  (dataBuffer.getElem(count) );
 				count++;
@@ -131,12 +126,19 @@ public class ByteBufferedImage extends BufferedImage {
 				argb[i+2] = (byte) (g & 0xFF);
 				argb[i+3] = (byte) (b & 0xFF);
 			}
-			
-			
 			//				System.out.println(argb[i] + " " + argb[i+1] + " " + argb[i+2] + " " + argb[i+3]);
 		}
 		// aim should be RGBA order
-		return argb;
+		return argb;*/
+		
+		WritableRaster r = bi.getRaster();
+	    DataBuffer db = r.getDataBuffer();
+	    if (db instanceof DataBufferByte) {
+	        DataBufferByte dbi = (DataBufferByte) db;
+	        return dbi.getData();
+	    }
+		System.err.println("db is of type " + db.getClass());
+		return null;
 	}
 
 	
