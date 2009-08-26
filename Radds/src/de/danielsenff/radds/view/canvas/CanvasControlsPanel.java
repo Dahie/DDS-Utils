@@ -31,11 +31,16 @@ import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
 
 /**
- * @author danielsenff
+ * Control-Panel for the {@link BICanvas}. 
+ * @author Daniel Senff
  *
  */
 public class CanvasControlsPanel extends JCPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3204480115770320549L;
 	private BICanvas canvas;
 	private JComboBox zoomCombo;
 
@@ -51,7 +56,6 @@ public class CanvasControlsPanel extends JCPanel {
 		final JScrollPane scrollViewPane = initScrollCanvas(controller);
 		
 		this.add(scrollViewPane, BorderLayout.CENTER);
-		
 		this.add(navigateCanvas, BorderLayout.SOUTH);
 	}
 
@@ -60,41 +64,42 @@ public class CanvasControlsPanel extends JCPanel {
 		final JComboBox channelCombo = new JComboBox(composeColorChannelModel());
 		channelCombo.addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent arg0) {
-				JComboBox channelCombo = (JComboBox) arg0.getSource();
-				ColorChannel channel = (ColorChannel) channelCombo.getSelectedItem();
+			public void actionPerformed(final ActionEvent event) {
+				final JComboBox channelCombo = (JComboBox) event.getSource();
+				final ColorChannel channel = (ColorChannel) channelCombo.getSelectedItem();
 				canvas.setChannelMode(channel.getChannel());
 			}
 			
 		});
 		
 		
-		JLabel lblChannelCombo = new JLabel(bundle.getString("Channels")+":");
+		final JLabel lblChannelCombo = new JLabel(bundle.getString("Channels")+":");
 		
 		panel.add(lblChannelCombo);
 		panel.add(channelCombo);
 		
-		// zoom box
-		final String[] defaultZooms = { "25", "50", "100", "150", "200", "400"};
+		/*
+		 * unused combo for selecting zoom
+		 * final String[] defaultZooms = { "25", "50", "100", "150", "200", "400"};
 		zoomCombo = new JComboBox(defaultZooms);
 		zoomCombo.setSelectedIndex(2);
 		zoomCombo.setEditable(true);
 		zoomCombo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				canvas.setZoomFactor( (Float.valueOf((String) zoomCombo.getSelectedItem())) / 100);
 				canvas.repaint();
 			}
-		});
+		});*/
 		
-		JLabel lblZoomCombo = new JLabel(bundle.getString("Zoom")+":");
+		final JLabel lblZoomCombo = new JLabel(bundle.getString("Zoom")+":");
 		
-		JSlider zoomSlider = new JSlider(10, 500, 100);
+		final JSlider zoomSlider = new JSlider(10, 500, 100);
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setPaintLabels(true);
 		zoomSlider.addChangeListener(new ChangeListener() {
 
-			public void stateChanged(ChangeEvent e) {
-				int zoomValue = ((JSlider)e.getSource()).getValue();
+			public void stateChanged(final ChangeEvent e) {
+				final int zoomValue = ((JSlider)e.getSource()).getValue();
 				canvas.setZoomFactor( (Float.valueOf(zoomValue)) / 100);
 				canvas.repaint();
 			}
@@ -113,6 +118,7 @@ public class CanvasControlsPanel extends JCPanel {
 	
 	
 	/**
+	 * Init ComboBox for selecting different Color Channels of an Image.
 	 * @return
 	 */
 	private DefaultComboBoxModel composeColorChannelModel() {
@@ -128,7 +134,7 @@ public class CanvasControlsPanel extends JCPanel {
 
 	private JScrollPane initScrollCanvas(final Application controller) {
 		
-		ImageIcon defaultImage = ResourceLoader.getResourceIcon("/de/danielsenff/radds/resources/defaultimage.png");
+		final ImageIcon defaultImage = ResourceLoader.getResourceIcon("/de/danielsenff/radds/resources/defaultimage.png");
 		
 		canvas = new BICanvas(controller, 
 				BIUtil.convertImageToBufferedImage(defaultImage.getImage(), 
