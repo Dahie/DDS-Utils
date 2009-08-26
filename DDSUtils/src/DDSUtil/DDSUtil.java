@@ -155,12 +155,18 @@ public class DDSUtil {
 			final int pixelformat,
 			boolean generateMipMaps) throws IOException {
 		
+		System.out.println("build mipmaps");
+		
 		TextureMap maps;
 		if (generateMipMaps) {
-			maps = new MipMaps(bi);
+			MipMaps mMaps = new MipMaps();
+			mMaps.generateMipMaps(bi);
+			maps = mMaps;
 		} else {
 			maps = new SingleTextureMap(bi);
 		}
+		
+		System.out.println("compress mipmaps");
 		
 		ByteBuffer[] mipmapBuffer = null;
 		if (isDXTCompressed(pixelformat)) {
@@ -168,6 +174,8 @@ public class DDSUtil {
 		} else {
 			mipmapBuffer = maps.getUncompressedBuffer();
 		}
+		
+		System.out.println("write DDSImage");
 		
 		writeDDSImage(file, mipmapBuffer, bi.getWidth(), bi.getHeight(), pixelformat);
 
