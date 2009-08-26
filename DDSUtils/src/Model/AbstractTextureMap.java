@@ -25,6 +25,7 @@ public abstract class AbstractTextureMap implements TextureMap{
 	 */
 	public ByteBuffer[] getDXTCompressedBuffer(final int pixelformat) {
 		CompressionType compressionType = DDSUtil.getSquishCompressionFormat(pixelformat);
+		//FIXME wtf doesn't this loop itself?
 		return this.getDXTCompressedBuffer(compressionType );
 	}
 	
@@ -33,8 +34,9 @@ public abstract class AbstractTextureMap implements TextureMap{
 	 * @param compressionType
 	 * @return
 	 */
-	public ByteBuffer compress(final BufferedImage bi, final Squish.CompressionType compressionType) { 
-		return new DXTBufferCompressor(bi, compressionType).getByteBuffer();
+	public ByteBuffer compress(final BufferedImage bi, final Squish.CompressionType compressionType) {
+		DXTBufferCompressor compi = new DXTBufferCompressor(bi, compressionType);
+		return compi.getByteBuffer();
 	}
 	
 	
