@@ -59,6 +59,9 @@ public class BIUtil {
 					case BLUE:
 						newBi.setRGB(x, y, ImageOperations.writePixelRGB(0,0, argb[3]));
 						break;
+					case RGB:
+						newBi.setRGB(x,y, ImageOperations.writePixelARGB(255, argb[1],argb[2],argb[3]));
+						break;
 				}
 			}
 		}
@@ -71,7 +74,7 @@ public class BIUtil {
 	 * @param sourceBi
 	 * @return
 	 */
-	public static BufferedImage getRGBChannel(final BufferedImage sourceBi) {
+	/*public static BufferedImage getRGBChannel(final BufferedImage sourceBi) {
 
 		if (sourceBi.getType() == BufferedImage.TYPE_4BYTE_ABGR ||
 				sourceBi.getType() == BufferedImage.TYPE_4BYTE_ABGR_PRE ||
@@ -91,8 +94,7 @@ public class BIUtil {
 		}
 		
 		return sourceBi;
-		
-	}
+	}*/
 	
 	
 	/**

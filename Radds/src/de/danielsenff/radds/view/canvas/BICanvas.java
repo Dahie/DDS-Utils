@@ -63,19 +63,20 @@ public class BICanvas extends JCPanel implements Scrollable {
 		this.channelMode = channel;
 		this.biRendered = image;
 		this.biSource = image;
-		changeChannelBi(channel, biRendered);
+		changeChannelBi(channel, biSource);
 		
 		this.setPreferredSize(new Dimension(biRendered.getWidth(), biRendered.getHeight()));
 	}
 
 	private void changeChannelBi(ImageOperations.ChannelMode channel, BufferedImage currentImage) {
+		
 		switch(channel){
 			default:
 			case RGBA:
 				this.biRendered = currentImage;
 				break;
 			case RGB:
-				this.biRendered = BIUtil.getRGBChannel(currentImage);
+				this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.RGB);
 				break;
 			case ALPHA:
 				this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.ALPHA);
@@ -132,7 +133,7 @@ public class BICanvas extends JCPanel implements Scrollable {
 		this.biRendered = bi;
 		this.biSource = bi;
 		this.setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
-		changeChannelBi(channelMode, bi);
+		changeChannelBi(channelMode, biSource);
 		invalidate();
 	}
 		

@@ -13,6 +13,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JViewport;
 
 
@@ -25,6 +26,7 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 	
 	private JScrollPane scrollViewPane;
 	private JComboBox zoomCombo;
+	private JSlider zoomSlider;
 	
 	/**
 	 * @param pane 
@@ -32,8 +34,17 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 	 * 
 	 */
 	public ScrollCanvasListener(JScrollPane pane, JComboBox zoomCombo) {
+		this(pane, zoomCombo, null);
+	}
+	
+	public ScrollCanvasListener(JScrollPane pane, JComboBox zoomCombo, JSlider zoomSlider) {
 		this.scrollViewPane = pane;
 		this.zoomCombo = zoomCombo;
+		this.zoomSlider = zoomSlider;
+	}
+	
+	public ScrollCanvasListener(JScrollPane pane, JSlider zoomSlider) {
+		this(pane, null, zoomSlider);
 	}
 
 	int xOld = 0;
@@ -138,7 +149,10 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 			canvas.setZoomFactor(zoomFactor);
 		}
 		int f = (int) (zoomFactor*100);
-		zoomCombo.setSelectedItem(f+"");
+		if(zoomCombo != null) 
+			zoomCombo.setSelectedItem(f+"");
+		if(zoomSlider != null)
+			zoomSlider.setValue(f);
 		
 		// mouse position offset
 		
