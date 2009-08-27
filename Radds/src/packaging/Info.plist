@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="0.9">
+<dict>
+	<key>CFBundleName</key>
+	<string>Radds</string>
+	<key>CFBundleIconFile</key>
+	<string>Radds.icns</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<string>true</string>
+	<key>CFBundleExecutable</key>
+	<string>JavaApplicationStub</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Review a DDS</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>DS</string>
+	<key>Java</key>
+	<dict>
+	    <key>MainClass</key>
+	    <string>de.danielsenff.radds.controller.Radds</string>
+	    <key>JVMVersion</key>
+	    <string>1.5*</string>
+	    <key>VMOptions</key>
+	    <string>-Xmx512m</string>
+	    <key>ClassPath</key>
+        <string>$JAVAROOT/Radds.jar</string>
+	    <key>Properties</key>
+	    <dict>
+	      <key>com.apple.mrj.application.apple.menu.about.name</key>
+	      <string>Radds</string>
+	      <key>com.apple.macos.useScreenMenuBar</key>
+	      <string>true</string>
+	 	</dict>
+	</dict>
+</dict>
+</plist>
