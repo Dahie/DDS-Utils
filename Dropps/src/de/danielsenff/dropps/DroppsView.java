@@ -1,9 +1,7 @@
 package de.danielsenff.dropps;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -29,10 +27,7 @@ import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
 import org.jdesktop.application.Task.BlockingScope;
 
-import com.sun.java.swing.plaf.motif.MotifBorders.BevelBorder;
-
 import JOGL.DDSImage;
-import Model.DDSFile;
 import de.danielsenff.dropps.models.ExportOptions;
 import de.danielsenff.dropps.models.ProgressStatus;
 import de.danielsenff.dropps.tasks.ConvertFilesTask;
@@ -40,7 +35,7 @@ import de.danielsenff.dropps.util.FileDrop;
 
 
 /**
- * @author danielsenff
+ * @author Daniel Senff
  *
  */
 public class DroppsView extends FrameView {
@@ -185,8 +180,6 @@ public class DroppsView extends FrameView {
 		final ResourceMap resourceMap = getResourceMap();
         resourceMap.injectComponents(mainPanel);
         resourceMap.injectComponents(statusPanel);
-
-        
         
         this.settingsPanel = new SettingsPanel(this.options);
         this.settingsPanel.setName("settingsPanel");
@@ -248,9 +241,6 @@ public class DroppsView extends FrameView {
 	public JList getDropPanel() {
 		return dropPanel;
 	}
-
-
-
 
 	/**
 	 * @return

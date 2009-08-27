@@ -36,7 +36,10 @@ public class Converter implements IProgressObserverable {
 
 	private ExportOptions options;
 	
-	public Converter(ExportOptions options) {
+	/**
+	 * @param options
+	 */
+	public Converter(final ExportOptions options) {
 		this.options = options;
 	}
 	

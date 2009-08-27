@@ -23,7 +23,8 @@ import JOGL.DDSImage;
 import JOGL.DDSImage.ImageInfo;
 
 /**
- * @author danielsenff
+ * MipMap Texture contains several layers of MipMaps, each is 1/4 the size of the one above.
+ * @author Daniel Senff
  *
  */
 public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImage> {
@@ -88,7 +89,7 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * @return
 	 */
 	public BufferedImage getTopMostMipMap() {
-		return this.mipmaps.get(0);
+		return getMipMap(0);
 	}
 	
 	/**
@@ -99,12 +100,12 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	}
 	
 	public int getHeight() {
-		return this.mipmaps.get(TOP_MOST_MIP_MAP).getHeight();
+		return getMipMap(TOP_MOST_MIP_MAP).getHeight();
 	}
 	
 
 	public int getWidth() {
-		return this.mipmaps.get(TOP_MOST_MIP_MAP).getWidth();
+		return getMipMap(TOP_MOST_MIP_MAP).getWidth();
 	}
 
 	/**
@@ -126,7 +127,8 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		ByteBuffer[] mipmapBuffer = new ByteBuffer[this.numMipMaps];
 		
 		for (int j = 0; j < this.numMipMaps; j++) {
-			mipmapBuffer[j] = compress(this.mipmaps.get(j), compressionType);
+			System.out.println("compress mipmap " + j);
+			mipmapBuffer[j] = compress(getMipMap(j), compressionType);
 		}
 		return mipmapBuffer;
 	}
@@ -142,7 +144,7 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	public BufferedImage[] getAllMipMapsArray() {
 		BufferedImage[] array = new BufferedImage[numMipMaps];
 		for (int i = 0; i < numMipMaps; i++) {
-			array[i] = this.mipmaps.get(i);
+			array[i] = getMipMap(i);
 		}
 		return array;
 	}
@@ -153,7 +155,7 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	public ByteBuffer[] getUncompressedBuffer() {
 		ByteBuffer[] mipmapBuffer = new ByteBuffer[numMipMaps];
 		for (int i = 0; i < numMipMaps; i++) {
-			mipmapBuffer[i] = ByteBuffer.wrap(ByteBufferedImage.convertBIintoARGBArray(this.mipmaps.get(i)));
+			mipmapBuffer[i] = ByteBuffer.wrap(ByteBufferedImage.convertBIintoARGBArray(getMipMap(i)));
 		}
 		return mipmapBuffer;
 	}
@@ -240,11 +242,11 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	}
 	
 	public int getMipMapWidth(int index) {
-		return this.mipmaps.get(index).getWidth();
+		return getMipMap(index).getWidth();
 	}
 	
 	public int getMipMapHeight(int index) {
-		return this.mipmaps.get(index).getHeight();
+		return getMipMap(index).getHeight();
 	}
 	
 	/**
@@ -253,9 +255,7 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * @return
 	 */
 	public Dimension getMipMapDimension(final int index) {
-		return new Dimension(
-				getMipMapWidth(index),
-				getMipMapHeight(index));
+		return new Dimension(getMipMapWidth(index),	getMipMapHeight(index));
 	}
 	
 }

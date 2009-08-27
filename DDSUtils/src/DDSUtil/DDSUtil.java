@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileLockInterruptionException;
 
+import util.ImageUtils;
+
 import Compression.DXTBufferCompressor;
 import Compression.DXTBufferDecompressor;
 import JOGL.DDSImage;
@@ -143,27 +145,38 @@ public class DDSUtil {
 	
 	/**
 	 * Writes a DDS-Image to disc.
-	 * @param file 
-	 * @param bi 
+	 * @param destnationfile 
+	 * @param sourceImage 
 	 * @param pixelformat 
 	 * @param generateMipMaps 
 	 * @throws IOException 
 	 * 
 	 */
-	public static void write(final File file, 
-			BufferedImage bi, 
+	public static void write(final File destnationfile, 
+			BufferedImage sourceImage, 
 			final int pixelformat,
 			boolean generateMipMaps) throws IOException {
 		
+		int width = sourceImage.getWidth();
+		int height = sourceImage.getHeight();
+		
 		System.out.println("build mipmaps");
+		
+		//convert RGB to RGBA image
+		if(!sourceImage.getColorModel().hasAlpha()) {
+			System.out.println("create alpha for image");
+//			BufferedImage rgbaImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+//			rgbaImage.setData(sourceImage.getData());
+//			sourceImage = rgbaImage;
+			sourceImage = ImageUtils.convert(sourceImage, BufferedImage.TYPE_4BYTE_ABGR);
+		}
 		
 		TextureMap maps;
 		if (generateMipMaps) {
-			MipMaps mMaps = new MipMaps();
-			mMaps.generateMipMaps(bi);
-			maps = mMaps;
+			maps = new MipMaps();
+			((MipMaps)maps).generateMipMaps(sourceImage);
 		} else {
-			maps = new SingleTextureMap(bi);
+			maps = new SingleTextureMap(sourceImage);
 		}
 		
 		System.out.println("compress mipmaps");
@@ -177,7 +190,7 @@ public class DDSUtil {
 		
 		System.out.println("write DDSImage");
 		
-		writeDDSImage(file, mipmapBuffer, bi.getWidth(), bi.getHeight(), pixelformat);
+		writeDDSImage(destnationfile, mipmapBuffer, width, height, pixelformat);
 
 		System.gc();
 	}

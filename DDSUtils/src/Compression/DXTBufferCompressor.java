@@ -85,9 +85,16 @@ public class DXTBufferCompressor {
 	 * @return ByteBuffer
 	 */
 	public ByteBuffer getByteBuffer() {
-		//TODO what if RGB not ARGB?
 		byte[] compressedData;
 		try {
+			
+			// the data-Array given to the squishCompressToArray is expected to be
+			// width * height * 4 -> with RGBA, which means, if we got RGB, we need to add A!
+			if(data.length < dimension.height*dimension.width*4) {
+				System.out.println("blow up array from RGB to ARGB");
+				data = convertRGBArraytiRGBAArray(data, dimension);
+			}
+			
 			compressedData = squishCompressToArray(data, dimension.width, dimension.height, compressionType);
 			return ByteBuffer.wrap(compressedData);
 		} catch (DataFormatException e) {
@@ -97,6 +104,29 @@ public class DXTBufferCompressor {
 		
 	}
 	
+	private byte[] convertRGBArraytiRGBAArray(byte[] data, final Dimension dimension) {
+		
+		int rgbLength = data.length;
+		int rgbaLength = dimension.width * dimension.height * 4;
+		
+		byte[] rgbaBuffer = new byte[rgbaLength];
+		
+		// populate new array
+		// we always copy 3 byte chunks, skip one byte, which we set to 255 and take the next 3 byte
+		int loopN = 0;
+		for (int i = 0; i < rgbLength; i=i+3) {
+			
+			int srcPos = i; 
+			int destPos = i+loopN;
+			
+			System.arraycopy(data, srcPos, rgbaBuffer, destPos, 3);
+			loopN++;
+		}
+		
+		
+		return rgbaBuffer;
+	}
+
 	/**
 	 * Get the Byte-array hold by this object.
 	 * @return
