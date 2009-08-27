@@ -44,6 +44,7 @@ public class CanvasControlsPanel extends JCPanel {
 	private static final long serialVersionUID = -3204480115770320549L;
 	private BICanvas canvas;
 	private JComboBox zoomCombo;
+	private JSlider zoomSlider; 
 
 	/**
 	 * @param controller
@@ -94,7 +95,7 @@ public class CanvasControlsPanel extends JCPanel {
 		
 		final JLabel lblZoomCombo = new JLabel(bundle.getString("Zoom")+":");
 		
-		final JSlider zoomSlider = new JSlider(10, 500, 100);
+		zoomSlider = new JSlider(10, 500, 100);
         Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
         labels.put(new Integer(10), new JLabel("0.1x"));
         labels.put(new Integer(100), new JLabel("1x"));
@@ -148,7 +149,7 @@ public class CanvasControlsPanel extends JCPanel {
 						BufferedImage.TYPE_4BYTE_ABGR));
 		final JScrollPane scrollViewPane = new JScrollPane(canvas);
 		scrollViewPane.setPreferredSize(new Dimension(700,300));
-		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane, zoomCombo);
+		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane, zoomSlider);
 		canvas.addMouseMotionListener(scrollCanvasListener);
 		canvas.addMouseWheelListener(scrollCanvasListener);
 		canvas.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
