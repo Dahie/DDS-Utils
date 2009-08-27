@@ -94,6 +94,9 @@ public class FilesPanel extends JCPanel {
 
 	}
 
+	/**
+	 * @return
+	 */
 	public InfoPanel getInfoPanel() {
 		return this.infoPanel;
 	}
