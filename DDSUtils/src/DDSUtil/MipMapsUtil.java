@@ -31,8 +31,10 @@ public class MipMapsUtil {
 	 * @param compressionType
 	 * @return
 	 */
-	private static ByteBuffer[] compressMipMaps(int mipMapWidth, int mipMapHeight,
-			final ByteBuffer[] mipmapBuffer, final Squish.CompressionType compressionType) {
+	private static ByteBuffer[] compressMipMaps(int mipMapWidth, 
+			int mipMapHeight,
+			final ByteBuffer[] mipmapBuffer, 
+			final Squish.CompressionType compressionType) {
 
 		byte[] rgba;
 		int i = 0;
