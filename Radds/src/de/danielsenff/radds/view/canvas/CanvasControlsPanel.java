@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Hashtable;
 
 import javax.swing.DefaultComboBoxModel;
@@ -16,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -26,8 +28,10 @@ import javax.swing.event.ChangeListener;
 
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
+import Model.DDSImageFile;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
+import de.danielsenff.radds.util.FileDrop;
 import de.danielsenff.radds.util.ResourceLoader;
 import de.danielsenff.radds.view.JCPanel;
 
@@ -51,11 +55,43 @@ public class CanvasControlsPanel extends JCPanel {
 	 */
 	public CanvasControlsPanel(final Application controller) {
 		super(controller);
-		
+
 		setLayout(new BorderLayout());
 		final JPanel navigateCanvas = initNavigationPanel();
-		
+
 		final JScrollPane scrollViewPane = initScrollCanvas(controller);
+
+		
+
+
+		new FileDrop( scrollViewPane, new FileDrop.Listener(){   
+			public void filesDropped( java.io.File[] files ) {   
+				// handle file drop
+
+				for (int i = 0; i < files.length; i++) {
+					File file = files[i];
+					if(file.getAbsolutePath().toLowerCase().contains(".dds") && !file.isDirectory()) {
+						try {
+							DDSImageFile image;
+							image = new DDSImageFile(file.getAbsolutePath());
+							controller.getView().setImage(image);
+							long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+							System.out.println(mem0);
+						} catch (OutOfMemoryError ex) {
+							ex.printStackTrace();
+							long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+							JOptionPane.showMessageDialog(controller.getView(), 
+									"<html>Error: Out of memory: " + mem0 +
+									"<br>The operation is aborted. </html>",	"Error", 
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+
+					}
+				}
+
+			}   // end filesDropped
+		}); // end FileDrop.Listener
 		
 		this.add(scrollViewPane, BorderLayout.CENTER);
 		this.add(navigateCanvas, BorderLayout.SOUTH);
@@ -71,15 +107,15 @@ public class CanvasControlsPanel extends JCPanel {
 				final ColorChannel channel = (ColorChannel) channelCombo.getSelectedItem();
 				canvas.setChannelMode(channel.getChannel());
 			}
-			
+
 		});
-		
-		
+
+
 		final JLabel lblChannelCombo = new JLabel(bundle.getString("Channels")+":");
-		
+
 		panel.add(lblChannelCombo);
 		panel.add(channelCombo);
-		
+
 		/*
 		 * unused combo for selecting zoom
 		 * final String[] defaultZooms = { "25", "50", "100", "150", "200", "400"};
@@ -92,16 +128,16 @@ public class CanvasControlsPanel extends JCPanel {
 				canvas.repaint();
 			}
 		});*/
-		
+
 		final JLabel lblZoomCombo = new JLabel(bundle.getString("Zoom")+":");
-		
+
 		zoomSlider = new JSlider(10, 500, 100);
-        Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
-        labels.put(new Integer(10), new JLabel("0.1x"));
-        labels.put(new Integer(100), new JLabel("1x"));
-        labels.put(new Integer(250), new JLabel("2.5x"));
-        labels.put(new Integer(500), new JLabel("5x"));
-        zoomSlider.setLabelTable(labels);
+		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
+		labels.put(new Integer(10), new JLabel("0.1x"));
+		labels.put(new Integer(100), new JLabel("1x"));
+		labels.put(new Integer(250), new JLabel("2.5x"));
+		labels.put(new Integer(500), new JLabel("5x"));
+		zoomSlider.setLabelTable(labels);
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setPaintLabels(true);
 		zoomSlider.addChangeListener(new ChangeListener() {
@@ -111,20 +147,20 @@ public class CanvasControlsPanel extends JCPanel {
 				canvas.setZoomFactor( (Float.valueOf(zoomValue)) / 100);
 				canvas.repaint();
 			}
-			
+
 		});
-		
+
 		panel.add(lblZoomCombo);
 		panel.add(zoomSlider);
-		
+
 		//TODO fit to width/optimal
-		
-		
-		
+
+
+
 		return panel;
 	}
-	
-	
+
+
 	/**
 	 * Init ComboBox for selecting different Color Channels of an Image.
 	 * @return
@@ -138,12 +174,12 @@ public class CanvasControlsPanel extends JCPanel {
 		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.ALPHA, bundle.getString("a_channel")));
 		return combo;
 	}
-	
+
 
 	private JScrollPane initScrollCanvas(final Application controller) {
-		
+
 		final ImageIcon defaultImage = ResourceLoader.getResourceIcon("/de/danielsenff/radds/resources/defaultimage.png");
-		
+
 		canvas = new BICanvas(controller, 
 				BIUtil.convertImageToBufferedImage(defaultImage.getImage(), 
 						BufferedImage.TYPE_4BYTE_ABGR));
@@ -158,7 +194,7 @@ public class CanvasControlsPanel extends JCPanel {
 			public void ancestorAdded(final AncestorEvent arg0) {}
 
 			public void ancestorMoved(final AncestorEvent arg0) {
-//				canvas.repaint();
+				//				canvas.repaint();
 				/*Rectangle bounds = canvas.getBounds();
 				scrollcanvas.repaint(new Rectangle(bounds.x+bounds.width, 80));*/
 				scrollViewPane.repaint();
@@ -166,6 +202,9 @@ public class CanvasControlsPanel extends JCPanel {
 
 			public void ancestorRemoved(final AncestorEvent arg0) {	}
 		});
+
+
+
 		return scrollViewPane;
 	}
 
