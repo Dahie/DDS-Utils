@@ -21,7 +21,7 @@ import DDSUtil.NonCubicDimensionException;
 import JOGL.DDSImage;
 
 /**
- * @author danielsenff
+ * @author Daniel Senff
  *
  */
 public class DDSImageFile extends DDSFile {
@@ -30,6 +30,9 @@ public class DDSImageFile extends DDSFile {
 	 * 
 	 */
 	private static final long serialVersionUID = -8820796948052852501L;
+	/**
+	 * MipMap at the highest Level, ie the original 
+	 */
 	protected BufferedImage topmost;
 	
 	
@@ -84,6 +87,7 @@ public class DDSImageFile extends DDSFile {
 	 */
 	public DDSImageFile(File file, DDSImage ddsimage) {
 		super(file, ddsimage);
+		
 		CompressionType compressionType = 
 			DDSUtil.getSquishCompressionFormat(ddsimage.getPixelFormat());
 		this.topmost = 
@@ -166,7 +170,9 @@ public class DDSImageFile extends DDSFile {
 	 * @return
 	 */
 	public BufferedImage[] getAllMipMapsBI(){
-		return new MipMaps(topmost).getAllMipMapsArray();		
+		MipMaps mipMaps = new MipMaps();
+		mipMaps.generateMipMaps(topmost);
+		return mipMaps.getAllMipMapsArray();		
 	}
 	
 
@@ -174,10 +180,18 @@ public class DDSImageFile extends DDSFile {
 	 * returns the stored MipMaps as {@link ByteBuffer}-Array
 	 * @return
 	 */
-	public Vector generateAllMipMaps(){
-		return new MipMaps(topmost).getAllMipMaps();
+	public Vector<BufferedImage> generateAllMipMaps(){
+		MipMaps mipMaps = new MipMaps();
+		mipMaps.generateMipMaps(topmost);
+		return mipMaps.getAllMipMaps();
 	}
 
+	/**
+	 * Calculates the number of MipMaps generated for this image dimensions.
+	 * @param width
+	 * @param height
+	 * @return
+	 */
 	public static int calculateMaxNumberOfMipMaps(final int width, final int height) {
 		return MipMapsUtil.calculateMaxNumberOfMipMaps(width, height);
 	}
@@ -217,7 +231,7 @@ public class DDSImageFile extends DDSFile {
 
 	/**
 	 * Closes the included ddsimage and finalizes the object. 
-	 * Don't call this object after calling this method
+	 * Don't use this object after calling this method
 	 * @throws Throwable
 	 */
 	public void close() {
@@ -230,14 +244,16 @@ public class DDSImageFile extends DDSFile {
 
 	/**
 	 * Activates the generation of MipMaps when saving the DDS to disc.
-	 * @param b
+	 * @param generateMipMaps 
+	 * @throws IllegalArgumentException 
 	 */
-	public void activateMipMaps(boolean activateMipMapsGeneration) throws IllegalArgumentException{
+	public void activateMipMaps(final boolean generateMipMaps) throws IllegalArgumentException{
 		if(isPowerOfTwo(topmost.getWidth()) && isPowerOfTwo(topmost.getHeight()))
-			super.hasMipMaps = activateMipMapsGeneration;
+			super.hasMipMaps = generateMipMaps;
 		else throw new NonCubicDimensionException();
 	}
 	
+	@Override
 	public boolean hasMipMaps() {
 		return super.hasMipMaps;
 	}
