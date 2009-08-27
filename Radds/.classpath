@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/DDSUtil"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Jsquish"/>
 	<classpathentry kind="lib" path="lib/swing-worker-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/appframework-1.0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>

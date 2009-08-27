@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="build" name="Create Runnable Jar for Project Radds">
+<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+<!--ANT 1.7 is required                                        -->
+	
+  <property name="app-name" value="Radds" />
+  <tstamp>
+	<format property="NOW" pattern="d-MM-yyyy-hhmm" />
+  </tstamp>
+  <property name="bin.dir" location="${basedir}/bin" /> 
+  <property name="src.dir" location="${basedir}/src" /> 
+  <property name="lib.dir" location="${basedir}/lib" />
+  <property name="packaging.dir" location="${src.dir}/packaging" />
+  <property name="build.dir" location="${basedir}/build" />
+  <property name="release.dir" location="${build.dir}/${app-name}-${NOW}" />
+  <property name="dist-mac.dir" location="${build.dir}/${app-name}-${NOW}" />
+  <property name="app.dir" location="${dist-mac.dir}/${app-name}.app" />
+  <property name="doc.dir" location="${basedir}/doc/release" />
+	
+	
+  <target name="startup" description="Initialization">
+	<condition property="isWin32">
+      <os family="windows"/>
+	</condition>
+  	<condition property="isOSX">
+  	  <os family="mac"/>
+  	</condition>
+  </target>
+	
+  <target name="copy" description="Delete old build and dist directories" 
+  	depends="startup">
+ 	<mkdir dir="${release.dir}" />
+ 	<mkdir dir="${release.dir}" />
+ 	<!-- copy *nix batch starter, windows exe -->
+ 		<!-- TODO build mac-app is not created automatically -->
+ 	
+ 	<!--<copy todir="${release.dir}/Imageflow" file="${build.dir}/ImageFlow" />
+ 	<copy todir="${release.dir}/Imageflow" file="${build.dir}/ImageFlow.exe" />-->
+ 	
+  </target>
+
+  <!-- build jar -->
+  <target name="create_run_jar" depends="copy" description="Build jar file">
+    <jar destfile="${release.dir}/${app-name}.jar" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Main-Class" value="de.danielsenff.radds.controller.Radds"/>
+        <attribute name="Class-Path" value="."/>
+      </manifest>
+      <fileset dir="${bin.dir}"/>
+      <fileset dir="${basedir}/../DDSUtils/bin"/>
+      <zipfileset excludes="META-INF/*.SF" src="${basedir}/../DDSUtils/lib/jogl.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="${basedir}/../DDSUtils/lib/jsquish.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/swing-worker-1.1.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/appframework-1.0.3.jar"/>
+    </jar>
+  </target>
+	
+	
+	
+	
+	
+	
+  <!-- creates an OSX application bundle 
+  		based on http://today.java.net/pub/a/today/2004/01/05/swing.html-->
+  <target name="build_osx_app" depends="create_run_jar" description="Create OSX App-Bundle" if="isOSX">
+  	<property name="app.dir" value="${dist-mac.dir}/${app-name}.app"/>
+  	<!-- create necessary folder structure -->
+  	<mkdir dir="${app.dir}"/>
+  	<mkdir dir="${app.dir}/Contents"/>
+  	<mkdir dir="${app.dir}/Contents/MacOS"/>
+  	<mkdir dir="${app.dir}/Contents/Resources"/>
+  	<mkdir dir="${app.dir}/Contents/Resources/Java"/>
+  	
+  	<!-- applicationstub -->
+  	<copy file="${packaging.dir}/JavaApplicationStub" todir="${app.dir}/Contents/MacOS"/>
+  	<exec executable="chmod">
+  	  <arg value="755" />
+  	  <arg path="${app.dir}/Contents/MacOS/JavaApplicationStub" />
+  	</exec>
+  	
+  	<!-- copy Info.plist and icon-->
+  	<copy file="${packaging.dir}/Info.plist" todir="${app.dir}/Contents"/>
+  	<copy file="${packaging.dir}/${app-name}.icns" todir="${app.dir}/Contents/Resources"/>
+  	
+  	<!-- copy jar files -->
+  	<copy file="${release.dir}/${app-name}.jar" todir="${app.dir}/Contents/Resources/Java"/>
+  	<!-- required? <copy todir="${app.dir}/Contents/Resources/Java">
+  	  <fileset dir="lib">
+  	    <include name="*.jar"/>
+      </fileset>
+  	</copy>-->
+  	
+  	<!-- make folder a bundle -->
+	<exec executable="/Developer/Tools/SetFile">
+	  <arg value="-a" />
+	  <arg value="B" />
+	  <arg path="${app.dir}" />
+	</exec>
+  </target>
+	
+
+  <target name="build" description="Build project" depends="create_run_jar, build_osx_app">
+	<!-- we are done -->
+  </target>
+	
+</project>
