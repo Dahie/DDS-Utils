@@ -23,7 +23,7 @@ import Model.DDSImageFile;
  * @author danielsenff
  *
  */
-public class Application  {
+public class Application extends org.jdesktop.application.SingleFrameApplication {
 
 	
 	//GUI
@@ -101,6 +101,13 @@ public class Application  {
 		BufferedImage image = view.getCanvas().getCanvas();
 //		DDSImageFile image = this.openFilesModel.getSelectedItem();
 		return image;  
+	}
+
+
+
+	@Override
+	protected void startup() {
+		
 	}
 	
 }
