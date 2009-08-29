@@ -10,6 +10,18 @@
 	<string>1.0</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	
+	<!-- handling file types -->
+	<key>CFBundleTypeExtensions</key>
+        <array>
+            <string>dds</string>
+        </array>
+    <key>CFBundleTypeName</key>
+        <string>DirectDrawSurfaces Texture</string>
+        <key>CFBundleTypeRole</key>
+        <string>Viewer</string>
+        
+        
 	<key>CFBundleAllowMixedLocalizations</key>
 	<string>true</string>
 	<key>CFBundleExecutable</key>
