@@ -16,6 +16,10 @@
   <property name="dist-mac.dir" location="${build.dir}/${app-name}-${NOW}" />
   <property name="app.dir" location="${dist-mac.dir}/${app-name}.app" />
   <property name="doc.dir" location="${basedir}/doc/release" />
+  <path id="classpath">
+	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+  	<fileset dir="../DDSUtils/lib" includes="**/*.jar"/>
+  </path>
 	
 	
   <target name="startup" description="Initialization">
@@ -26,9 +30,13 @@
   	  <os family="mac"/>
   	</condition>
   </target>
+		
+  <target name="clean" description="Clean and delete exisinst folders">
+    <delete dir="${bin.dir}"/>
+  </target>
 	
   <target name="copy" description="Delete old build and dist directories" 
-  	depends="startup">
+  	depends="startup, clean">
  	<mkdir dir="${release.dir}" />
  	<mkdir dir="${release.dir}" />
  	<!-- copy *nix batch starter, windows exe -->
@@ -38,9 +46,27 @@
  	<copy todir="${release.dir}/Imageflow" file="${build.dir}/ImageFlow.exe" />-->
  	
   </target>
+	
+  <target name="compile" depends="clean" description="Fresh compile Java class files">
+  	<!-- build DDSUitls -->
+  	<copy todir="${bin.dir}">
+  		  <fileset dir="../DDSUtils/src" excludes="**.java, packaging/" />
+  		</copy>
+  		<javac srcdir="../DDSUtils/src" destdir="${bin.dir}"  classpathref="classpath"/>
+  	
+  	<mkdir dir="${bin.dir}" />
+	<!-- copy all files from src which are not java-files -->
+	<copy todir="${bin.dir}">
+	  <fileset dir="${src.dir}" excludes="**.java, packaging/" />
+	</copy>
+	<javac srcdir="src" destdir="${bin.dir}"  classpathref="classpath"/>
+  	
+  	
+  	
+  </target>
 
   <!-- build jar -->
-  <target name="create_run_jar" depends="copy" description="Build jar file">
+  <target name="create_run_jar" depends="clean, compile, copy" description="Build jar file">
     <jar destfile="${release.dir}/${app-name}.jar" filesetmanifest="mergewithoutmain">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
@@ -73,15 +99,15 @@
   	<mkdir dir="${app.dir}/Contents/Resources/Java"/>
   	
   	<!-- applicationstub -->
-  	<copy file="${packaging.dir}/JavaApplicationStub" todir="${app.dir}/Contents/MacOS"/>
+  	<copy file="${packaging.dir}/osx/JavaApplicationStub" todir="${app.dir}/Contents/MacOS"/>
   	<exec executable="chmod">
   	  <arg value="755" />
   	  <arg path="${app.dir}/Contents/MacOS/JavaApplicationStub" />
   	</exec>
   	
   	<!-- copy Info.plist and icon-->
-  	<copy file="${packaging.dir}/Info.plist" todir="${app.dir}/Contents"/>
-  	<copy file="${packaging.dir}/${app-name}.icns" todir="${app.dir}/Contents/Resources"/>
+  	<copy file="${packaging.dir}/osx/Info.plist" todir="${app.dir}/Contents"/>
+  	<copy file="${packaging.dir}/osx/${app-name}.icns" todir="${app.dir}/Contents/Resources"/>
   	
   	<!-- copy jar files -->
   	<copy file="${release.dir}/${app-name}.jar" todir="${app.dir}/Contents/Resources/Java"/>
