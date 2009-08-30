@@ -16,14 +16,9 @@ package de.danielsenff.dropps.models;
 import java.io.File;
 
 /**
- * A SplitListener observes the split process. The according methods will be
- * called from the observerable splitter.
+ * A ConvertListener observes the convertion process. The according methods will be
+ * called from the observerable converter.
  *
- * @author Helmut Juskewycz
- * @createdon 27. January 2008
- * @lastmodified 27. January 2008
- * @history
- * 27. January 2008 Finished version 1.0
  */
 public interface IConvertListener {
 
@@ -41,22 +36,4 @@ public interface IConvertListener {
      * @param originalFile The original (large) file.
      */
     public void convertEnd(File originalFile);
-
-    /**
-     * This method will be called <strong>before</strong> a new file part is
-     * created.
-     * 
-     * @param number The number of the file part.
-     * @param partFile The file part.
-     */
-    public void splitPartBegin(int number, File partFile);
-
-    /**
-     * This method will be called <strong>after</strong> the file part is filled
-     * with the content.
-     * 
-     * @param number The number of the file part.
-     * @param partFile The file part.
-     */
-    public void splitPartEnd(int number, File partFile);
 }

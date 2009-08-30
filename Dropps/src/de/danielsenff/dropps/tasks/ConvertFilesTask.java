@@ -79,8 +79,6 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 			final List<IProgressListener> listeners = new ArrayList<IProgressListener>();
 			listeners.add(listener);
 //			converter.convert(listener);
-			System.out.println(Dropps.getInstance().getContext().getTaskMonitor());
-			
 			
 			Converter converter = new Converter(options);
 			if (converter instanceof IProgressObserverable) {
@@ -88,9 +86,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 					converter.addListener(iProgressListener);
 				}
 			}
-			
-//			ConversionController concon = new ConversionController(fileList);
-			
+			message("message", "Handle files");
 			converter.convertFiles(fileList);
 		}
 		((Dropps)getApplication()).getMainView().getFrame().setEnabled(true);
@@ -102,7 +98,6 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 	 */
 	@Override
 	protected void succeeded(final ProgressStatus result) {
-		System.out.println("finished");
 		if (result != null) {
 			if (!result.isError()) {
 				message("finishedMessage", getExecutionDuration(TimeUnit.SECONDS), getExecutionDuration(TimeUnit.SECONDS) / 60);
@@ -111,6 +106,12 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 			}
 		}
 		super.succeeded(result);
+	}
+	
+	@Override
+	protected void cancelled() {
+		
+		super.cancelled();
 	}
 
 	private void showErrorDialog(final String message) {
