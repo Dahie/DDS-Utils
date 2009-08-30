@@ -27,7 +27,7 @@ public class Converter implements IProgressObserverable {
 	protected final List<IConvertListener> convertListeners = new ArrayList<IConvertListener>(1);
 	protected final List<IProgressListener> progressListeners = new ArrayList<IProgressListener>(1);
 
-	//constants for messages regarding the splitting process
+	//constants for messages regarding the conversion process
     public static final String ERROR_FILE_IO = "errorFileIOMessage";
     public static final String ERROR_THREAD_INTERUPTION = "errorGeneralMessage";
     public static final String ERROR_ORIGINAL_FILE_PATH_NULL = "errorOriginalFilePathNull";
@@ -74,11 +74,13 @@ public class Converter implements IProgressObserverable {
 		notifyProgressListeners(new ProgressStatus(i, filesCount, "progress"));
 
 		BufferedImage imageToConvert;
+		DefaultListModel dlm = (DefaultListModel) ((DroppsView)((Dropps)Dropps.getInstance()).getMainView()).getDropPanel().getModel();
 		try {
 			System.out.println("Read BufferedImage ...");
 			
 			// check supported fileformats
 			if(!isFiletypeSupported(file)) {
+				dlm.removeElement(file);
 				notifyError(new ProgressStatus(i, filesCount, "unsupportedFileformat_"+file.getName(), true));
 				return;
 			}
@@ -92,6 +94,7 @@ public class Converter implements IProgressObserverable {
 			if (!MipMapsUtil.isPowerOfTwo(imageToConvert.getWidth())
 				&& !MipMapsUtil.isPowerOfTwo(imageToConvert.getHeight())
 				&& options.hasGeneratedMipMaps()) {
+				dlm.removeElement(file);
 				notifyError(new ProgressStatus(i, filesCount, "notPowerOf2_"+file.getName(), true));
 				return;
 			}
@@ -102,7 +105,6 @@ public class Converter implements IProgressObserverable {
 			e.printStackTrace();
 			//			showErrorDialog(e.getMessage());
 		}
-		DefaultListModel dlm = (DefaultListModel) ((DroppsView)((Dropps)Dropps.getInstance()).getMainView()).getDropPanel().getModel();
 		dlm.removeElement(file);
 		
 		notifyConversionEnd(file);
@@ -151,12 +153,6 @@ public class Converter implements IProgressObserverable {
 			return false;
 		}
 		return true;
-	}
-
-	protected void errorCanNotCreateFile(String filePath, int piecesNumber, int pieceNumber) {
-		notifyError(new ProgressStatus(pieceNumber, piecesNumber, ERROR_CANT_CREATE_CONVERTED_FILE, true));
-		logger.log(Level.SEVERE, ERROR_CANT_CREATE_CONVERTED_FILE);
-		return;
 	}
 
 	public void addListener(IConvertListener listener) {

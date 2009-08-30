@@ -105,7 +105,7 @@ public class DroppsView extends FrameView {
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(final java.beans.PropertyChangeEvent evt) {
                 final String propertyName = evt.getPropertyName();
-                System.out.println(propertyName);
+                System.out.println("PropertyName: "+propertyName);
                 if ("started".equals(propertyName)) {
                     if (!busyIconTimer.isRunning()) {
                         statusAnimationLabel.setIcon(busyIcons[0]);
@@ -123,6 +123,7 @@ public class DroppsView extends FrameView {
                     statusMessageLabel.setText("Conversion finished");
                 } else if ("message".equals(propertyName)) {
                     final String text = (String)(evt.getNewValue());
+                    System.out.println("text: " + text);
                     statusMessageLabel.setText((text == null) ? "" : text);
                     messageTimer.restart();
                 } else if ("progress".equals(propertyName)) {
