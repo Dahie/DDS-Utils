@@ -193,7 +193,7 @@ public class DroppsView extends FrameView {
         final DefaultListModel dlm = new DefaultListModel();
         dropPanel = new JList(dlm);
 //        dropPanel.setBackground(Color.white);
-        dropPanel.setPreferredSize(new Dimension(250, 150));
+        dropPanel.setPreferredSize(new Dimension(350, 190));
         dropPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         mainPanel.add(dropPanel, BorderLayout.CENTER);
         
