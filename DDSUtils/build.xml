@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="build" name="Create Runnable Jar for Project Radds">
+<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+<!--ANT 1.7 is required                                        -->
+	
+  <property name="app-name" value="DDSUtils" />
+  <tstamp>
+	<format property="NOW" pattern="d-MM-yyyy-hhmm" />
+  </tstamp>
+  <property name="bin.dir" location="${basedir}/bin" /> 
+  <property name="src.dir" location="${basedir}/src" /> 
+  <property name="lib.dir" location="${basedir}/lib" />
+  <property name="packaging.dir" location="${src.dir}/packaging" />
+  <property name="build.dir" location="${basedir}/build" />
+  <property name="release.dir" location="${build.dir}/${app-name}-${NOW}" />
+  <path id="classpath">
+	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+  </path>
+	
+	
+  <target name="startup" description="Initialization">
+	<condition property="isWin32">
+      <os family="windows"/>
+	</condition>
+  	<condition property="isOSX">
+  	  <os family="mac"/>
+  	</condition>
+  </target>
+		
+  <target name="clean" description="Clean and delete exisinst folders">
+    <delete dir="${bin.dir}"/>
+  	<mkdir dir="${bin.dir}" />
+  	<mkdir dir="${release.dir}" />
+  </target>
+	
+	
+  	<!-- build DDSUitls -->
+  <target name="compile" depends="clean" description="Fresh compile Java class files">
+  	
+	<!-- copy all files from src which are not java-files -->
+	<copy todir="${bin.dir}">
+	  <fileset dir="${src.dir}" excludes="**.java, packaging/" />
+	</copy>
+	<javac srcdir="src" destdir="${bin.dir}"  classpathref="classpath"/>
+  </target>
+
+  <!-- build jar -->
+  <target name="create_run_jar" depends="clean, compile" description="Build jar file">
+    <jar destfile="${release.dir}/${app-name}.jar" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <!--<attribute name="Main-Class" value="de.danielsenff.radds.controller.Radds"/>-->
+        <attribute name="Class-Path" value="."/>
+      </manifest>
+      <fileset dir="${bin.dir}"/>
+      <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/jogl.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/jsquish.jar"/>
+    </jar>
+  </target>
+	
+  <target name="copy_jar_to_projects_lib" description="Copies the jar to the lib directoy of Radds, Badds and Dropps" 
+  	depends="create_run_jar">
+  	<copy file="${release.dir}/${app-name}.jar" todir="${basedir}/../Dropps/lib" />
+  	<copy file="${release.dir}/${app-name}.jar" todir="${basedir}/../Badds/lib" />
+  	<copy file="${release.dir}/${app-name}.jar" todir="${basedir}/../Radds/lib" />
+  </target>
+
+  <target name="build" description="Build project" depends="create_run_jar, copy_jar_to_projects_lib">
+	<!-- we are done -->
+  </target>
+	
+</project>
