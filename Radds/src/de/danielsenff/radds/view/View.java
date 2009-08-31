@@ -47,7 +47,6 @@ public class View extends JCFrame {
 		super(controller);
 		
 		try {
-			
 			this.busy = ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/defaultimage.png"));
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -64,7 +63,7 @@ public class View extends JCFrame {
 		// general layout
 		filesPanel = new FilesPanel(controller);
 		
-		canvasPanel = new CanvasControlsPanel(controller);
+		canvasPanel = new CanvasControlsPanel(this, controller);
 		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, filesPanel, canvasPanel);
 		splitPane.setDividerLocation(200);
 		splitPane.setContinuousLayout(true);
@@ -102,7 +101,7 @@ public class View extends JCFrame {
 		else
 			menuFile = new JMenu(bundle.getString("View_menu"));
 		
-		setJMenuBar(menuBar);
+		//setJMenuBar(menuBar);
 	}
 
 

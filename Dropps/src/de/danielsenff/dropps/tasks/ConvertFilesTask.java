@@ -31,6 +31,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 	private final Collection<File> fileList;
 	private ProgressStatus status;
 	private ExportOptions options;
+	private Converter converter;
 	
 	/**
 	 * @param app
@@ -40,7 +41,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 	public ConvertFilesTask(final Application app, 
 			final Collection<File> fileList, 
 			final ExportOptions options) {
-		super(app);
+		super(app, "convertFiles");
 		this.fileList = fileList;
 		this.options = options;
 	}
@@ -80,7 +81,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 			listeners.add(listener);
 //			converter.convert(listener);
 			
-			Converter converter = new Converter(options);
+			converter = new Converter(options);
 			if (converter instanceof IProgressObserverable) {
 				for (IProgressListener iProgressListener : listeners) {
 					converter.addListener(iProgressListener);
