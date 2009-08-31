@@ -14,6 +14,7 @@ import java.util.Hashtable;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
 import de.danielsenff.radds.util.ResourceLoader;
 import de.danielsenff.radds.view.JCPanel;
+import de.danielsenff.radds.view.View;
 
 /**
  * Control-Panel for the {@link BICanvas}. 
@@ -48,21 +50,20 @@ public class CanvasControlsPanel extends JCPanel {
 	private static final long serialVersionUID = -3204480115770320549L;
 	private BICanvas canvas;
 	private JComboBox zoomCombo;
-	private JSlider zoomSlider; 
+	private JSlider zoomSlider;
+	private View view;
 
 	/**
 	 * @param controller
 	 */
-	public CanvasControlsPanel(final Application controller) {
+	public CanvasControlsPanel(final View view, final Application controller) {
 		super(controller);
+		this.view = view;
 
 		setLayout(new BorderLayout());
 		final JPanel navigateCanvas = initNavigationPanel();
 
 		final JScrollPane scrollViewPane = initScrollCanvas(controller);
-
-		
-
 
 		new FileDrop( scrollViewPane, new FileDrop.Listener(){   
 			public void filesDropped( java.io.File[] files ) {   
@@ -99,6 +100,9 @@ public class CanvasControlsPanel extends JCPanel {
 
 	private JPanel initNavigationPanel() {
 		final JPanel panel = new JPanel();
+		
+		final JButton copyButton = new JButton(view.getActionCopy());
+		
 		final JComboBox channelCombo = new JComboBox(composeColorChannelModel());
 		channelCombo.addActionListener(new ActionListener() {
 
@@ -113,6 +117,7 @@ public class CanvasControlsPanel extends JCPanel {
 
 		final JLabel lblChannelCombo = new JLabel(bundle.getString("Channels")+":");
 
+		panel.add(copyButton);
 		panel.add(lblChannelCombo);
 		panel.add(channelCombo);
 
