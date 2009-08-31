@@ -1,5 +1,6 @@
 *.DS_Store
 DDSUtils/bin
+DDSUtils/build
 Dropps/bin
 Dropps/build
 Badds/bin
