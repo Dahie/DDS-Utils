@@ -138,6 +138,9 @@ public class CanvasControlsPanel extends JCPanel {
 		labels.put(new Integer(250), new JLabel("2.5x"));
 		labels.put(new Integer(500), new JLabel("5x"));
 		zoomSlider.setLabelTable(labels);
+		zoomSlider.setMajorTickSpacing(100);
+		zoomSlider.setSnapToTicks(true);
+		zoomSlider.setMinorTickSpacing(25);
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setPaintLabels(true);
 		zoomSlider.addChangeListener(new ChangeListener() {
