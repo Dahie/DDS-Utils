@@ -2,18 +2,12 @@ package de.danielsenff.radds.controller;
 
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ResourceBundle;
 
-import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 
 import de.danielsenff.radds.models.FilesListModel;
 import de.danielsenff.radds.view.View;
-
-import Model.DDSFile;
-import Model.DDSImageFile;
 
 /**
  * 
@@ -39,18 +33,10 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 	 * 
 	 */
 	public Application() {
-	
 		
-//		this.imageFileChooser = new ImageFileChooser();
 		this.openFilesModel = new FilesListModel();
 		
 		this.view = new View(this);
-		/*
-		File[] firstfiles = this.showImageFileChooser().showFilesDialog();
-		if (firstfiles != null) 
-				this.openFilesModel.addFiles(firstfiles);	
-*/
-		
 	}
 
 
