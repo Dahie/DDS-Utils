@@ -47,7 +47,7 @@ public class View extends JCFrame {
 		super(controller);
 		
 		try {
-			
+			this.setIconImage(ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/Radds128.png")));
 			this.busy = ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/defaultimage.png"));
 		} catch (final IOException e) {
 			e.printStackTrace();
