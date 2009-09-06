@@ -8,6 +8,10 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -64,17 +68,14 @@ public class CanvasControlsPanel extends JCPanel {
 		final JScrollPane scrollViewPane = initScrollCanvas(controller);
 
 		getCanvas().addPropertyChangeListener(new PropertyChangeListener() {
-
 			public void propertyChange(PropertyChangeEvent pChangeEvent) {
 				if(pChangeEvent.getPropertyName().equals("zoomFactor")){
 					float newValue = (Float) pChangeEvent.getNewValue();
 					Integer percentage = Integer.valueOf((int) (newValue * 100));
 					zoomSlider.setValue(percentage);
 					zoomCombo.setSelectedItem("" +percentage);
-					
 				}
 			}
-			
 		});
 
 
@@ -141,6 +142,22 @@ public class CanvasControlsPanel extends JCPanel {
 				canvas.repaint();
 			}
 		});
+		zoomCombo.addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					float zoomValue = (Float.valueOf((String) zoomCombo.getSelectedItem())) / 100;
+					canvas.setZoomFactor( zoomValue);
+					canvas.repaint();
+				}
+			}
+
+			public void keyReleased(KeyEvent e) {}
+
+			public void keyTyped(KeyEvent e) {}
+			
+		});
+		
 
 		final JLabel lblZoom = new JLabel(bundle.getString("Zoom")+":");
 
@@ -204,19 +221,30 @@ public class CanvasControlsPanel extends JCPanel {
 		scrollViewPane.setPreferredSize(new Dimension(700,300));
 		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane);
 		canvas.addMouseMotionListener(scrollCanvasListener);
-		canvas.addMouseWheelListener(scrollCanvasListener);
+//		canvas.addMouseWheelListener(scrollCanvasListener);
+		canvas.addKeyListener(scrollCanvasListener);
+		canvas.setFocusable(true);
+		canvas.requestFocus();
+
+		canvas.addMouseListener(new MouseListener() {
+			public void mouseClicked(MouseEvent e) {
+				canvas.requestFocus();
+			}
+			public void mouseEntered(MouseEvent arg0) {}
+			public void mouseExited(MouseEvent arg0) {}
+			public void mousePressed(MouseEvent arg0) {}
+			public void mouseReleased(MouseEvent arg0) {}
+		});
+		
 		canvas.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 		canvas.addAncestorListener(new AncestorListener() {
-
 			public void ancestorAdded(final AncestorEvent arg0) {}
-
 			public void ancestorMoved(final AncestorEvent arg0) {
 				//				canvas.repaint();
 				/*Rectangle bounds = canvas.getBounds();
 				scrollcanvas.repaint(new Rectangle(bounds.x+bounds.width, 80));*/
 				scrollViewPane.repaint();
 			}
-
 			public void ancestorRemoved(final AncestorEvent arg0) {	}
 		});
 

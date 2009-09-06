@@ -138,6 +138,7 @@ public class BICanvas extends JCPanel implements Scrollable {
 		this.biRendered = bi;
 		this.biSource = bi;
 		this.setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
+		this.getParent().setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
 		changeChannelBi(channelMode, biSource);
 		invalidate();
 	}

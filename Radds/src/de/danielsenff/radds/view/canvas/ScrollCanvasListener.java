@@ -6,6 +6,8 @@ package de.danielsenff.radds.view.canvas;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
@@ -21,7 +23,7 @@ import javax.swing.JViewport;
  * @author danielsenff
  *
  */
-public class ScrollCanvasListener implements MouseMotionListener, MouseWheelListener {
+public class ScrollCanvasListener implements MouseMotionListener, MouseWheelListener, KeyListener {
 
 	
 	private JScrollPane scrollViewPane;
@@ -112,15 +114,15 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 	public void mouseWheelMoved(MouseWheelEvent wheelEvent) {
 		BICanvas canvas = ((BICanvas) wheelEvent.getSource());
 		
-		
-		
 		float originalZoomFactor = canvas.getZoomFactor();
 		float zoomFactor = 1;
+		int rectCanvasX = 0, rectCanvasY = 0;
 		
 		// zoom direction
 		if(wheelEvent.getWheelRotation() < 0) {
 			// increase zoom
 			zoomFactor = originalZoomFactor + 0.2f;
+			rectCanvasX = (int) (wheelEvent.getX() + wheelEvent.getX()*0.2);
 			
 			if (originalZoomFactor > UPPER_ZOOM_LIMIT) {
 				zoomFactor = UPPER_ZOOM_LIMIT;
@@ -128,6 +130,7 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 		} else if(wheelEvent.getWheelRotation() > 0 ) {
 			// decrease zoom
 			zoomFactor = originalZoomFactor - 0.2f;
+			rectCanvasY = (int) (wheelEvent.getY() + wheelEvent.getY()*0.2);
 			if(zoomFactor < LOWER_ZOOM_LIMIT) {
 				zoomFactor = LOWER_ZOOM_LIMIT;
 			}
@@ -141,23 +144,71 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 		Dimension canvasDimension = canvas.getViewDimension();
 		
 		
-		// get new scroll coordinates
+		// get new scroll coordinates on canvas
 		int xNew = wheelEvent.getX();
 		int yNew = wheelEvent.getY();
+		// get new scroll coordinates on viewport
+		int xViewNew = wheelEvent.getX() - viewRect.x;
+		int yViewNew = wheelEvent.getY() - viewRect.y;
 		
-		// translation aka centerin
+		
+		
+		// translation aka centering
 		int deltaX = position.x - xNew;
 		int deltaY = position.y - yNew;
 		
-		double zoomRatioX = wheelEvent.getX() / canvasDimension.getWidth(); 
-		int xView = (int) ((canvasDimension.getWidth() - viewRect.width) * 0.5);
-		int yView = (int) ((canvasDimension.getHeight() - viewRect.height) * 0.5);
+		double zoomOffsetX = wheelEvent.getX() / canvasDimension.getWidth();
+		double zoomOffsetY = wheelEvent.getY() / canvasDimension.getHeight();
+		
+		int xView = rectCanvasX - xViewNew;
+		int yView = rectCanvasY - yViewNew;
+		
+//		int xView = (int) ((canvasDimension.getWidth() - viewRect.width) * 1);
+//		int yView = (int) ((canvasDimension.getHeight() - viewRect.height) * 1);
 		
 		// write coordinates back
 		position.x = xView;
 		position.y = yView;
 		
-//		viewport.setViewPosition(position);
+		viewport.setViewPosition(position);
+	}
+
+	public void keyPressed(KeyEvent keyEvent) {
+		BICanvas canvas = ((BICanvas) keyEvent.getSource());
+		
+		float originalZoomFactor = canvas.getZoomFactor();
+		float zoomFactor = 1;
+		
+		// zoom direction
+		if(keyEvent.getKeyChar() == '+') {
+			// increase zoom
+			zoomFactor = originalZoomFactor + 0.2f;
+			
+			if (originalZoomFactor > UPPER_ZOOM_LIMIT) {
+				zoomFactor = UPPER_ZOOM_LIMIT;
+			}
+		} else if(keyEvent.getKeyChar() == '-') {
+			// decrease zoom
+			zoomFactor = originalZoomFactor - 0.2f;
+			if(zoomFactor < LOWER_ZOOM_LIMIT) {
+				zoomFactor = LOWER_ZOOM_LIMIT;
+			}
+		} else if(keyEvent.getKeyChar() == '0') {
+			// decrease zoom
+			zoomFactor = 1.0f;
+		}
+		
+		canvas.setZoomFactor(zoomFactor);
+	}
+
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
