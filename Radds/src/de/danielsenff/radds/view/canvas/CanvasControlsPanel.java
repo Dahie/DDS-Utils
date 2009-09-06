@@ -202,7 +202,7 @@ public class CanvasControlsPanel extends JCPanel {
 						BufferedImage.TYPE_4BYTE_ABGR));
 		final JScrollPane scrollViewPane = new JScrollPane(canvas);
 		scrollViewPane.setPreferredSize(new Dimension(700,300));
-		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane, zoomSlider);
+		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane);
 		canvas.addMouseMotionListener(scrollCanvasListener);
 		canvas.addMouseWheelListener(scrollCanvasListener);
 		canvas.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
