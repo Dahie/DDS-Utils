@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Hashtable;
 
@@ -61,7 +63,19 @@ public class CanvasControlsPanel extends JCPanel {
 
 		final JScrollPane scrollViewPane = initScrollCanvas(controller);
 
-		
+		getCanvas().addPropertyChangeListener(new PropertyChangeListener() {
+
+			public void propertyChange(PropertyChangeEvent pChangeEvent) {
+				if(pChangeEvent.getPropertyName().equals("zoomFactor")){
+					float newValue = (Float) pChangeEvent.getNewValue();
+					Integer percentage = Integer.valueOf((int) (newValue * 100));
+					zoomSlider.setValue(percentage);
+					zoomCombo.setSelectedItem("" +percentage);
+					
+				}
+			}
+			
+		});
 
 
 		new FileDrop( scrollViewPane, new FileDrop.Listener(){   
@@ -124,7 +138,6 @@ public class CanvasControlsPanel extends JCPanel {
 			public void actionPerformed(final ActionEvent e) {
 				float zoomValue = (Float.valueOf((String) zoomCombo.getSelectedItem())) / 100;
 				canvas.setZoomFactor( zoomValue);
-				zoomSlider.setValue(Integer.valueOf((String) zoomCombo.getSelectedItem()));
 				canvas.repaint();
 			}
 		});
@@ -148,7 +161,6 @@ public class CanvasControlsPanel extends JCPanel {
 			public void stateChanged(final ChangeEvent e) {
 				final int zoomValue = ((JSlider)e.getSource()).getValue();
 				canvas.setZoomFactor( (Float.valueOf(zoomValue)) / 100);
-				zoomCombo.setSelectedItem("" + zoomValue);
 				canvas.repaint();
 			}
 
