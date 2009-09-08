@@ -14,6 +14,7 @@ import java.util.Hashtable;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -29,6 +30,7 @@ import javax.swing.event.ChangeListener;
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
 import Model.DDSImageFile;
+import de.danielsenff.radds.actions.ActionCopy;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
@@ -99,6 +101,7 @@ public class CanvasControlsPanel extends JCPanel {
 
 	private JPanel initNavigationPanel() {
 		final JPanel panel = new JPanel();
+		
 		final JComboBox channelCombo = new JComboBox(composeColorChannelModel());
 		channelCombo.addActionListener(new ActionListener() {
 
@@ -110,26 +113,30 @@ public class CanvasControlsPanel extends JCPanel {
 
 		});
 
+		
+		final JButton copyButton = new JButton(new ActionCopy(controller));
+		panel.add(copyButton);
+		
 
 		final JLabel lblChannelCombo = new JLabel(bundle.getString("Channels")+":");
 
 		panel.add(lblChannelCombo);
 		panel.add(channelCombo);
 
-		/*
-		 * unused combo for selecting zoom
-		 * final String[] defaultZooms = { "25", "50", "100", "150", "200", "400"};
+		final String[] defaultZooms = { "25", "50", "100", "150", "200", "400"};
 		zoomCombo = new JComboBox(defaultZooms);
 		zoomCombo.setSelectedIndex(2);
 		zoomCombo.setEditable(true);
 		zoomCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent e) {
-				canvas.setZoomFactor( (Float.valueOf((String) zoomCombo.getSelectedItem())) / 100);
+				float zoomValue = (Float.valueOf((String) zoomCombo.getSelectedItem())) / 100;
+				canvas.setZoomFactor( zoomValue);
+				zoomSlider.setValue(Integer.valueOf((String) zoomCombo.getSelectedItem()));
 				canvas.repaint();
 			}
-		});*/
+		});
 
-		final JLabel lblZoomCombo = new JLabel(bundle.getString("Zoom")+":");
+		final JLabel lblZoom = new JLabel(bundle.getString("Zoom")+":");
 
 		zoomSlider = new JSlider(10, 500, 100);
 		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
@@ -138,6 +145,9 @@ public class CanvasControlsPanel extends JCPanel {
 		labels.put(new Integer(250), new JLabel("2.5x"));
 		labels.put(new Integer(500), new JLabel("5x"));
 		zoomSlider.setLabelTable(labels);
+		zoomSlider.setMajorTickSpacing(100);
+		zoomSlider.setSnapToTicks(true);
+		zoomSlider.setMinorTickSpacing(25);
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setPaintLabels(true);
 		zoomSlider.addChangeListener(new ChangeListener() {
@@ -145,12 +155,14 @@ public class CanvasControlsPanel extends JCPanel {
 			public void stateChanged(final ChangeEvent e) {
 				final int zoomValue = ((JSlider)e.getSource()).getValue();
 				canvas.setZoomFactor( (Float.valueOf(zoomValue)) / 100);
+				zoomCombo.setSelectedItem("" + zoomValue);
 				canvas.repaint();
 			}
 
 		});
 
-		panel.add(lblZoomCombo);
+		panel.add(lblZoom);
+		panel.add(zoomCombo);
 		panel.add(zoomSlider);
 
 		//TODO fit to width/optimal
