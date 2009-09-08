@@ -82,7 +82,7 @@ public class DroppsView extends FrameView {
 		final int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                statusMessageLabel.setText("");
+//                statusMessageLabel.setText("");
             }
         });
         messageTimer.setRepeats(false);
@@ -124,7 +124,11 @@ public class DroppsView extends FrameView {
                 } else if ("message".equals(propertyName)) {
                     final String text = (String)(evt.getNewValue());
                     System.out.println("text: " + text);
-                    statusMessageLabel.setText((text == null) ? "" : text);
+//                    statusMessageLabel.setText((text == null) ? "" : text);
+                    
+                    
+                    if(text != null)
+                    	statusMessageLabel.setText(text); // this way we don't overwrite if message is empty
                     messageTimer.restart();
                 } else if ("progress".equals(propertyName)) {
                     final int value = (Integer)(evt.getNewValue());
