@@ -16,7 +16,7 @@ package de.danielsenff.dropps.models;
 import java.io.File;
 
 /**
- * A ConvertListener observes the convertion process. The according methods will be
+ * A ConvertListener observes the conversion process. The according methods will be
  * called from the observerable converter.
  *
  */
