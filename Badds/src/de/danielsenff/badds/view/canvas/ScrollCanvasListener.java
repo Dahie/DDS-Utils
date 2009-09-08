@@ -25,26 +25,13 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 
 	
 	private JScrollPane scrollViewPane;
-	private JComboBox zoomCombo;
-	private JSlider zoomSlider;
 	
 	/**
 	 * @param pane 
-	 * @param zoomCombo 
 	 * 
 	 */
-	public ScrollCanvasListener(JScrollPane pane, JComboBox zoomCombo) {
-		this(pane, zoomCombo, null);
-	}
-	
-	public ScrollCanvasListener(JScrollPane pane, JComboBox zoomCombo, JSlider zoomSlider) {
+	public ScrollCanvasListener(JScrollPane pane) {
 		this.scrollViewPane = pane;
-		this.zoomCombo = zoomCombo;
-		this.zoomSlider = zoomSlider;
-	}
-	
-	public ScrollCanvasListener(JScrollPane pane, JSlider zoomSlider) {
-		this(pane, null, zoomSlider);
 	}
 
 	int xOld = 0;
@@ -139,20 +126,14 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 			if (originalZoomFactor > UPPER_ZOOM_LIMIT) {
 				zoomFactor = UPPER_ZOOM_LIMIT;
 			}
-			canvas.setZoomFactor(zoomFactor);
 		} else if(wheelEvent.getWheelRotation() > 0 ) {
 			// decrease zoom
 			zoomFactor = originalZoomFactor - 0.05f;
 			if(zoomFactor < LOWER_ZOOM_LIMIT) {
 				zoomFactor = LOWER_ZOOM_LIMIT;
 			}
-			canvas.setZoomFactor(zoomFactor);
 		}
-		int f = (int) (zoomFactor*100);
-		if(zoomCombo != null) 
-			zoomCombo.setSelectedItem(f+"");
-		if(zoomSlider != null)
-			zoomSlider.setValue(f);
+		canvas.setZoomFactor(zoomFactor);
 		
 		// mouse position offset
 		
