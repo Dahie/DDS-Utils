@@ -11,7 +11,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JViewport;
 
 
@@ -23,29 +25,43 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 
 	
 	private JScrollPane scrollViewPane;
-
+	private JComboBox zoomCombo;
+	private JSlider zoomSlider;
+	
 	/**
+	 * @param pane 
+	 * @param zoomCombo 
 	 * 
 	 */
-	public ScrollCanvasListener(JScrollPane pane) {
+	public ScrollCanvasListener(JScrollPane pane, JComboBox zoomCombo) {
+		this(pane, zoomCombo, null);
+	}
+	
+	public ScrollCanvasListener(JScrollPane pane, JComboBox zoomCombo, JSlider zoomSlider) {
 		this.scrollViewPane = pane;
+		this.zoomCombo = zoomCombo;
+		this.zoomSlider = zoomSlider;
+	}
+	
+	public ScrollCanvasListener(JScrollPane pane, JSlider zoomSlider) {
+		this(pane, null, zoomSlider);
 	}
 
 	int xOld = 0;
 	int yOld = 0;
 	
 	public void mouseDragged(MouseEvent event) {
-		newMethod(event);
+		drag(event);
 	}
 
 	/**
 	 * 
 	 */
-	private void newMethod(MouseEvent event) {
+	private void drag(MouseEvent event) {
 		
 		JViewport viewport = scrollViewPane.getViewport();
 		Point position = viewport.getViewPosition();
-		Rectangle rect = viewport.getViewRect();
+		Rectangle rectViewport = viewport.getViewRect();
 		
 	
 		// get new click coordinates
@@ -63,21 +79,23 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 		int canvasWidth = (int) viewport.getViewSize().getWidth();
 		int canvasHeight = (int) viewport.getViewSize().getHeight();
 		
-		if(rect.width < canvasWidth) 
+		if(rectViewport.width < canvasWidth) 
 		{
 			// left and top edge
 			if (x <= 0) x = 0;
-			if (y <= 0) y = 0;
+			
 			// right edge
-			int maxX = canvasWidth - rect.width;
+			int maxX = canvasWidth - rectViewport.width;
 			if (x > maxX)	x = maxX;
-			// bottom edge
-			int maxY = canvasHeight - rect.height;
-			if (y > maxY)	y = maxY;
+			position.x = x;
 		}
-		// write coordinates back
-		position.x = x;
-		position.y = y;
+		if(rectViewport.height < canvasHeight) {
+			if (y <= 0) y = 0;
+			int maxY = canvasHeight - rectViewport.height;
+			// bottom edge
+			if (y > maxY)	y = maxY;
+			position.y = y;
+		}
 		
 		viewport.setViewPosition(position);
 	}
@@ -130,13 +148,18 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 			}
 			canvas.setZoomFactor(zoomFactor);
 		}
+		int f = (int) (zoomFactor*100);
+		if(zoomCombo != null) 
+			zoomCombo.setSelectedItem(f+"");
+		if(zoomSlider != null)
+			zoomSlider.setValue(f);
 		
 		// mouse position offset
 		
 		JViewport viewport = scrollViewPane.getViewport();
 		Point position = viewport.getViewPosition();
-		Rectangle rect = viewport.getViewRect();
-		Dimension dimension = canvas.getViewDimension();
+		Rectangle viewRect = viewport.getViewRect();
+		Dimension canvasDimension = canvas.getViewDimension();
 		
 		
 		// get new scroll coordinates
@@ -144,13 +167,13 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 		int yNew = wheelEvent.getY();
 		
 		// translation aka centerin
-		System.out.println(wheelEvent.getY());
 		int deltaX = position.x - xNew;
 		int deltaY = position.y - yNew;
 		
-		int xView = (int) ((dimension.getWidth() - rect.width) * 0.5);
-		int yView = (int) ((dimension.getHeight() - rect.height) * 0.5);
-
+		int xView = (int) ((canvasDimension.getWidth() - viewRect.width) * 0.5);
+		int yView = (int) ((canvasDimension.getHeight() - viewRect.height) * 0.5);
+//		int xView = deltaX
+		
 		// write coordinates back
 		position.x = xView;
 		position.y = yView;
