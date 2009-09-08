@@ -7,15 +7,13 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import javax.swing.BorderFactory;
 import javax.swing.Scrollable;
-
-import de.danielsenff.radds.controller.Application;
-import de.danielsenff.radds.view.JCPanel;
-
-import Model.DDSImageFile;
 
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
+import de.danielsenff.radds.controller.Application;
+import de.danielsenff.radds.view.JCPanel;
 
 
 /**
@@ -65,6 +63,7 @@ public class BICanvas extends JCPanel implements Scrollable {
 		this.biSource = image;
 		changeChannelBi(channel, biSource);
 		
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.setPreferredSize(new Dimension(biRendered.getWidth(), biRendered.getHeight()));
 	}
 

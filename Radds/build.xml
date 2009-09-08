@@ -2,8 +2,10 @@
 <project default="build" name="Create Runnable Jar for Project Radds">
 <!--this file was created by Eclipse Runnable JAR Export Wizard-->
 <!--ANT 1.7 is required                                        -->
-	
-  <property name="app-name" value="Radds" />
+	<property name="props" value="build.properties"/>
+	<!--<property name="secret" value="secret.properties"/>-->
+	<property file="${props}"/>
+		<property file="${secret}"/>
   <tstamp>
 	<format property="NOW" pattern="d-MM-yyyy-hhmm" />
   </tstamp>
@@ -11,11 +13,18 @@
   <property name="src.dir" location="${basedir}/src" /> 
   <property name="lib.dir" location="${basedir}/lib" />
   <property name="packaging.dir" location="${src.dir}/packaging" />
+	<property name="tools.dir" location="${basedir}/tools" />
   <property name="build.dir" location="${basedir}/build" />
-  <property name="release.dir" location="${build.dir}/${app-name}-${NOW}" />
-  <property name="dist-mac.dir" location="${build.dir}/${app-name}-${NOW}" />
-  <property name="app.dir" location="${dist-mac.dir}/${app-name}.app" />
+  <property name="release.dir" location="${build.dir}/${application.name}-${NOW}" />
+  <property name="dist-mac.dir" location="${build.dir}/${application.name}-${NOW}" />
+  <property name="app.dir" location="${dist-mac.dir}/${application.name}.app" />
   <property name="doc.dir" location="${basedir}/doc/release" />
+	<property name="jsmooth" location="${tools.dir}/jsmooth"/>
+		<property name="jsmooth.edit" location="${jsmooth}/editor"/>
+		<property name="jsmooth.infile" location="${jsmooth}/ant.jsmooth"/>
+	<property name="jsmooth.outfile" location="${release.dir}/${application.name}.jsmooth"/>
+	<taskdef name="jsmoothgen" classname="net.charabia.jsmoothgen.ant.JSmoothGen" classpath="${jsmooth}/jsmoothgen-ant.jar"/>
+	
   <path id="classpath">
 	<fileset dir="${lib.dir}" includes="**/*.jar"/>
   	<fileset dir="../DDSUtils/lib" includes="**/*.jar"/>
@@ -67,7 +76,7 @@
 
   <!-- build jar -->
   <target name="create_run_jar" depends="clean, compile, copy" description="Build jar file">
-    <jar destfile="${release.dir}/${app-name}.jar" filesetmanifest="mergewithoutmain">
+    <jar destfile="${release.dir}/${application.name}.jar" filesetmanifest="mergewithoutmain">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Main-Class" value="de.danielsenff.radds.controller.Radds"/>
@@ -90,7 +99,7 @@
   <!-- creates an OSX application bundle 
   		based on http://today.java.net/pub/a/today/2004/01/05/swing.html-->
   <target name="build_osx_app" depends="create_run_jar" description="Create OSX App-Bundle" if="isOSX">
-  	<property name="app.dir" value="${dist-mac.dir}/${app-name}.app"/>
+  	<property name="app.dir" value="${dist-mac.dir}/${application.name}.app"/>
   	<!-- create necessary folder structure -->
   	<mkdir dir="${app.dir}"/>
   	<mkdir dir="${app.dir}/Contents"/>
@@ -107,10 +116,10 @@
   	
   	<!-- copy Info.plist and icon-->
   	<copy file="${packaging.dir}/osx/Info.plist" todir="${app.dir}/Contents"/>
-  	<copy file="${packaging.dir}/osx/${app-name}.icns" todir="${app.dir}/Contents/Resources"/>
+  	<copy file="${packaging.dir}/osx/${application.osx.icon}" todir="${app.dir}/Contents/Resources"/>
   	
   	<!-- copy jar files -->
-  	<copy file="${release.dir}/${app-name}.jar" todir="${app.dir}/Contents/Resources/Java"/>
+  	<copy file="${release.dir}/${application.name}.jar" todir="${app.dir}/Contents/Resources/Java"/>
   	<!-- required? <copy todir="${app.dir}/Contents/Resources/Java">
   	  <fileset dir="lib">
   	    <include name="*.jar"/>
@@ -125,8 +134,21 @@
 	</exec>
   </target>
 	
+	<target name="create.jsmooth" depends="create_run_jar" description="Create JSmooth config file">
+			<copy file="${packaging.dir}/win/${application.win.icon}" todir="${release.dir}"/>
+			<copy file="${jsmooth.infile}" tofile="${jsmooth.outfile}"/>
+			<replace file="${jsmooth.outfile}" token="@icofile@" value="${application.win.icon}"/>
+			<replace file="${jsmooth.outfile}" token="@exefile@" value="${application.name}.exe"/>
+			<replace file="${jsmooth.outfile}" token="@jarfile@" value="${application.name}.jar"/>
+			<replace file="${jsmooth.outfile}" token="@mainclass@" value="${main.class}"/>
+			<replace file="${jsmooth.outfile}" token="@exewrapper@" value="${build.exewrapper}"/>
+		</target>
 
-  <target name="build" description="Build project" depends="create_run_jar, build_osx_app">
+	<target name="build_exe" depends="create.jsmooth" description="Build exe">
+		<jsmoothgen project="${jsmooth.outfile}" skeletonroot="${jsmooth}/skeletons"/>
+	</target>
+
+  <target name="build" description="Build project" depends="create_run_jar, build_osx_app, build_exe">
 	<!-- we are done -->
   </target>
 	
