@@ -4,6 +4,7 @@
 package de.danielsenff.radds.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -47,6 +48,7 @@ public class View extends JCFrame {
 		super(controller);
 		
 		try {
+			this.setIconImage(ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/Radds128.png")));
 			this.busy = ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/defaultimage.png"));
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -108,7 +110,7 @@ public class View extends JCFrame {
 	private void initFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationByPlatform(true);
-		setSize(400, 400);
+		setPreferredSize(new Dimension(900, 600));
 	
 		setResizable(true); 
 		setTitle(title);
