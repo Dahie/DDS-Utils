@@ -14,6 +14,7 @@ import java.util.Hashtable;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -29,6 +30,7 @@ import javax.swing.event.ChangeListener;
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
 import Model.DDSImageFile;
+import de.danielsenff.radds.actions.ActionCopy;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
@@ -99,6 +101,7 @@ public class CanvasControlsPanel extends JCPanel {
 
 	private JPanel initNavigationPanel() {
 		final JPanel panel = new JPanel();
+		
 		final JComboBox channelCombo = new JComboBox(composeColorChannelModel());
 		channelCombo.addActionListener(new ActionListener() {
 
@@ -110,6 +113,10 @@ public class CanvasControlsPanel extends JCPanel {
 
 		});
 
+		
+		final JButton copyButton = new JButton(new ActionCopy(controller));
+		panel.add(copyButton);
+		
 
 		final JLabel lblChannelCombo = new JLabel(bundle.getString("Channels")+":");
 
