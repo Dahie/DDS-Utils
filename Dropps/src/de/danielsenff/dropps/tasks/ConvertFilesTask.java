@@ -13,10 +13,11 @@ import javax.swing.JOptionPane;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 
-import de.danielsenff.dropps.Converter;
+import de.danielsenff.dropps.ConvertController;
 import de.danielsenff.dropps.Dropps;
 import de.danielsenff.dropps.DroppsView;
 import de.danielsenff.dropps.models.ExportOptions;
+import de.danielsenff.dropps.models.IConvertListener;
 import de.danielsenff.dropps.models.IProgressListener;
 import de.danielsenff.dropps.models.IProgressObserverable;
 import de.danielsenff.dropps.models.ProgressStatus;
@@ -57,7 +58,9 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 
 				public void update(final ProgressStatus newStatus) {
 					message("startMessage", newStatus.getProcessed(), newStatus.getProcessable());
+					//initial progress
 					setProgress(newStatus.getProcessed(), 0, newStatus.getProcessable());
+					// attention, this changes also the message
 					status = newStatus;
 				}
 
@@ -76,17 +79,36 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 					status = errorStatus;
 				}
 			};
+			final IConvertListener convListener = new IConvertListener() {
+
+				public void convertBegin(File originalFile) {
+					setMessage("Conversion of " + originalFile.getName());
+				}
+
+				public void convertEnd(File originalFile) {
+//					setMessage("End Convertion of " + originalFile.getName());
+				}
+				
+			};
+			
 			final List<IProgressListener> listeners = new ArrayList<IProgressListener>();
 			listeners.add(listener);
-//			converter.convert(listener);
 			
-			Converter converter = new Converter(options);
+			final List<IConvertListener> convListeners = new ArrayList<IConvertListener>();
+			convListeners.add(convListener);
+			
+			ConvertController converter = new ConvertController(options);
 			if (converter instanceof IProgressObserverable) {
 				for (IProgressListener iProgressListener : listeners) {
 					converter.addListener(iProgressListener);
 				}
+				
+				for (IConvertListener iConvertListener : convListeners) {
+					converter.addListener(iConvertListener);
+				}
 			}
-			message("message", "Handle files");
+			
+//			setMessage("Handle files");
 			converter.convertFiles(fileList);
 		}
 		((Dropps)getApplication()).getMainView().getFrame().setEnabled(true);

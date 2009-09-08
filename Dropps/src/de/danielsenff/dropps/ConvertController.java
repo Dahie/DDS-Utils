@@ -20,9 +20,9 @@ import de.danielsenff.dropps.models.IProgressListener;
 import de.danielsenff.dropps.models.IProgressObserverable;
 import de.danielsenff.dropps.models.ProgressStatus;
 
-public class Converter implements IProgressObserverable {
+public class ConvertController implements IProgressObserverable {
 
-	private static final Logger logger = Logger.getLogger(Converter.class.getName());
+	private static final Logger logger = Logger.getLogger(ConvertController.class.getName());
 
 	protected final List<IConvertListener> convertListeners = new ArrayList<IConvertListener>(1);
 	protected final List<IProgressListener> progressListeners = new ArrayList<IProgressListener>(1);
@@ -39,7 +39,7 @@ public class Converter implements IProgressObserverable {
 	/**
 	 * @param options
 	 */
-	public Converter(final ExportOptions options) {
+	public ConvertController(final ExportOptions options) {
 		this.options = options;
 	}
 	
@@ -100,6 +100,7 @@ public class Converter implements IProgressObserverable {
 			}
 			
 			System.out.println("Begin conversion ...");
+			// exclude this into an Converter with appropriate listeners
 			DDSUtil.write(newFile, imageToConvert, options.getNewPixelformat(), options.hasGeneratedMipMaps());
 		} catch (IOException e) {
 			e.printStackTrace();
