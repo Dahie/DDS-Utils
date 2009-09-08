@@ -49,18 +49,34 @@ public class ProgressStatus {
         this.message = message;
     }
 
+    /**
+     * Number of processable elements.
+     * @return
+     */
     public int getProcessable() {
         return processable;
     }
 
+    /**
+     * Set number of processable elements.
+     * @param processable
+     */
     public void setProcessable(int processable) {
         this.processable = processable;
     }
 
+    /**
+     * number of processed ie finished elemeent
+     * @return
+     */
     public int getProcessed() {
         return processed;
     }
 
+    /**
+     * Set number of processed elements.
+     * @param processed
+     */
     public void setProcessed(int processed) {
         this.processed = processed;
     }

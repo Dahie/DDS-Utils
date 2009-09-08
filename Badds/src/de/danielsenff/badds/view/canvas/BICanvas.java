@@ -7,13 +7,13 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import javax.swing.BorderFactory;
 import javax.swing.Scrollable;
-
-import de.danielsenff.badds.controller.Application;
-import de.danielsenff.badds.view.GUI.JCPanel;
 
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
+import de.danielsenff.badds.controller.Application;
+import de.danielsenff.badds.view.GUI.JCPanel;
 
 
 /**
@@ -37,6 +37,8 @@ public class BICanvas extends JCPanel implements Scrollable {
 	/**
 	 * Displays a {@link BufferedImage} in RGB-Mode 
 	 * without multiplied Alpha-channel.
+	 * @param controller 
+	 * @param image 
 	 * @param biRendered BufferedImage to display
 	 */
 	public BICanvas(final Application controller, BufferedImage image) {
@@ -46,28 +48,34 @@ public class BICanvas extends JCPanel implements Scrollable {
 	
 	/**
 	 * Displays a {@link BufferedImage} in the channel-mode specified.
+	 * @param controller 
+	 * @param image 
 	 * @param biRendered BufferedImage to display
 	 * @param channel Channel of the BufferedImage to display 
 	 */
-	public BICanvas(final Application controller, final BufferedImage image, final ImageOperations.ChannelMode channel) {
+	public BICanvas(final Application controller, 
+			final BufferedImage image, 
+			final ImageOperations.ChannelMode channel) {
 		super(controller);
 		this.controller = controller;
 		this.channelMode = channel;
 		this.biRendered = image;
 		this.biSource = image;
-		changeChannelBi(channel, biRendered);
+		changeChannelBi(channel, biSource);
 		
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.setPreferredSize(new Dimension(biRendered.getWidth(), biRendered.getHeight()));
 	}
 
 	private void changeChannelBi(ImageOperations.ChannelMode channel, BufferedImage currentImage) {
+		
 		switch(channel){
 			default:
 			case RGBA:
 				this.biRendered = currentImage;
 				break;
 			case RGB:
-				this.biRendered = BIUtil.getRGBChannel(currentImage);
+				this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.RGB);
 				break;
 			case ALPHA:
 				this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.ALPHA);
@@ -103,8 +111,6 @@ public class BICanvas extends JCPanel implements Scrollable {
 		return this.channelMode;
 	}
 	
-	
-	
 	/**
 	 * Returns the {@link BufferedImage} currently displayed on the canvas.
 	 * @return
@@ -126,7 +132,7 @@ public class BICanvas extends JCPanel implements Scrollable {
 		this.biRendered = bi;
 		this.biSource = bi;
 		this.setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
-		changeChannelBi(channelMode, bi);
+		changeChannelBi(channelMode, biSource);
 		invalidate();
 	}
 		
@@ -151,8 +157,10 @@ public class BICanvas extends JCPanel implements Scrollable {
 		return this.zoomFactor;
 	}
 	
-	@Override public void paint(Graphics g) {
-		
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
 		int width =  biRendered.getWidth(), height =  biRendered.getHeight();
 		int newW = (int) (zoomFactor * width); 
 		int newH = (int) (zoomFactor * height);

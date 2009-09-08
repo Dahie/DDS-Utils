@@ -11,13 +11,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
+import DDSUtil.ImageOperations;
 import de.danielsenff.badds.actions.ActionClose;
 import de.danielsenff.badds.controller.Application;
 import de.danielsenff.badds.view.canvas.BICanvas;
 import de.danielsenff.badds.view.canvas.ScrollCanvasListener;
-
-
-import DDSUtil.ImageOperations;
 
 
 /**
@@ -56,7 +54,7 @@ public class PreviewFrame extends JCFrame{
 		
 		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane);
 		canvas.addMouseMotionListener(scrollCanvasListener);
-		canvas.addMouseWheelListener(scrollCanvasListener);
+//		canvas.addMouseWheelListener(scrollCanvasListener);
 		canvas.addAncestorListener(new AncestorListener() {
 			public void ancestorAdded(AncestorEvent arg0) {		}
 			public void ancestorMoved(AncestorEvent arg0) {
