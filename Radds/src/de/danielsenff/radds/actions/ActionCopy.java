@@ -31,7 +31,7 @@ public class ActionCopy extends BasicAction implements ClipboardOwner {
 	
 	}
 
-	private class ClipImage implements Transferable 	{
+	private static class ClipImage implements Transferable 	{
 		private DataFlavor[] myFlavors; 
 		private BufferedImage myImage;
 
