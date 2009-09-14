@@ -119,6 +119,9 @@ public class BICanvas extends JCPanel implements Scrollable {
 		return this.biRendered;
 	}
 	
+	/**
+	 * @return
+	 */
 	public BufferedImage getSource() {
 		return this.biSource;
 	}
@@ -131,7 +134,10 @@ public class BICanvas extends JCPanel implements Scrollable {
 	public void setSourceBI(final BufferedImage bi) {
 		this.biRendered = bi;
 		this.biSource = bi;
-		this.setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
+		int width = (int) (zoomFactor*bi.getWidth());
+		int height = (int) (zoomFactor*bi.getHeight());
+		this.setPreferredSize(new Dimension(width, height));
+		this.getParent().setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
 		changeChannelBi(channelMode, biSource);
 		invalidate();
 	}
@@ -142,11 +148,14 @@ public class BICanvas extends JCPanel implements Scrollable {
 	 * @param zoom
 	 */
 	public void setZoomFactor(final float zoom) {
+		float oldValue = this.zoomFactor;
 		this.zoomFactor = zoom;
 		int newW = (int) (biRendered.getWidth() * zoom);
 		int newH = (int) (biRendered.getHeight() * zoom);
 		this.setPreferredSize(new Dimension(newW, newH));
 		this.revalidate();
+		
+		firePropertyChange("zoomFactor", oldValue, zoomFactor);
 	}
 	
 	/**
@@ -156,6 +165,7 @@ public class BICanvas extends JCPanel implements Scrollable {
 	public float getZoomFactor() {
 		return this.zoomFactor;
 	}
+
 	
 	@Override
 	protected void paintComponent(Graphics g) {

@@ -21,6 +21,7 @@ import Model.DDSFile;
 import Model.DDSImageFile;
 
 /**
+ * TODO can be done better
  * @author danielsenff
  *
  */
@@ -51,13 +52,10 @@ public class FileCellRenderer extends JPanel implements ListCellRenderer,
 		if (value instanceof DDSFile) {
 			DDSFile image = (DDSFile) value;
 			file = image.getFile();
-			System.out.println("ddsfile");
 		} else if (value instanceof File) {
 			file = (File) value;
-			System.out.println("file");
 		} else if (value instanceof String) {
 			file = new File((String) value);
-			System.out.println("string");
 		} else {
 			System.out.println("hm something is wrong with the cellrenderer");
 		}
