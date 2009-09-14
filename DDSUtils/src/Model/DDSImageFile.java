@@ -65,8 +65,6 @@ public class DDSImageFile extends DDSFile {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		System.gc();
 	}
 	
 	/**
