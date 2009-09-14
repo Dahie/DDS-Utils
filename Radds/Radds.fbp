@@ -1,0 +1,9 @@
+<Project projectName="radds">
+  <Jar>/Users/dahie/Produktion/Java/workspace/DDS-Utils/Radds/bin</Jar>
+  <Jar>/Users/dahie/Produktion/Java/workspace/DDS-Utils/DDSUtils/bin</Jar>
+  <SrcDir>/Users/dahie/Produktion/Java/workspace/DDS-Utils/Radds/src</SrcDir>
+  <SrcDir>/Users/dahie/Produktion/Java/workspace/DDS-Utils/DDSUtils/src</SrcDir>
+  <SuppressionFilter>
+    <LastVersion value="-1" relOp="NEQ"/>
+  </SuppressionFilter>
+</Project>
