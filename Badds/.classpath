@@ -2,9 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Jsquish"/>
 	<classpathentry kind="lib" path="lib/junit-4.5.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jagatoo"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/xith3d"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DDSUtil"/>
+	<classpathentry kind="lib" path="lib/jsquish.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -10,13 +10,10 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.Scrollable;
 
-import de.danielsenff.radds.controller.Application;
-import de.danielsenff.radds.view.JCPanel;
-
-import Model.DDSImageFile;
-
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
+import de.danielsenff.radds.controller.Application;
+import de.danielsenff.radds.view.JCPanel;
 
 
 /**

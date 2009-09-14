@@ -65,8 +65,6 @@ public class DDSImageFile extends DDSFile {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		System.gc();
 	}
 	
 	/**
@@ -90,8 +88,11 @@ public class DDSImageFile extends DDSFile {
 		
 		CompressionType compressionType = 
 			DDSUtil.getSquishCompressionFormat(ddsimage.getPixelFormat());
-		this.topmost = 
-			new DXTBufferDecompressor(ddsimage.getMipMap(0).getData(),ddsimage.getWidth(), ddsimage.getHeight(), compressionType).getImage();
+		this.topmost = new DXTBufferDecompressor(
+							ddsimage.getMipMap(0).getData(),
+							ddsimage.getWidth(), 
+							ddsimage.getHeight(), 
+							compressionType).getImage();
 	}
 
 	
@@ -132,7 +133,11 @@ public class DDSImageFile extends DDSFile {
 	}
 	
 	
-	protected ByteBuffer[] getMipMapBuffer(DDSImage ddsimage) {
+	/**
+	 * @param ddsimage
+	 * @return
+	 */
+	protected ByteBuffer[] getMipMapBuffer(final DDSImage ddsimage) {
 		ByteBuffer[] buffer = new ByteBuffer[this.numMipMaps];
 //		ddsimage.debugPrint();
 		if (hasMipMaps) {
@@ -140,23 +145,13 @@ public class DDSImageFile extends DDSFile {
 				buffer[i] = ddsimage.getMipMap(i).getData();
 			}
 		}  else {
-			//TODO here is a arrayindexoutofbound and I don't know why
+			//TODO here is an arrayindexoutofbound and I don't know why
 			buffer[TOP_MOST_MIP_MAP] = ddsimage.getMipMap(TOP_MOST_MIP_MAP).getData();
 		}
 			
 		return buffer;
 	}
 
-
-	/**
-	 * Returns the MipMap on index as a {@link BufferedImage}
-	 * @param index
-	 * @return BufferedImage
-	 */
-	/*public BufferedImage getMipMapDataBI(final int index) {
-		return mipmapBI[index];
-	}*/
-	
 	/**
 	 * Returns the topmost MipMap
 	 * @return {@link BufferedImage}
@@ -207,14 +202,17 @@ public class DDSImageFile extends DDSFile {
 	}
 	
 	
+	@Override
 	public void write() throws IOException {
 		this.write(this.file);
 	}
 	
+	@Override
 	public void write(final String filename) throws IOException {
 		write(new File(filename));
 	}
 	
+	@Override
 	public void write(final File targetFile) throws IOException {
 		
 		Stopwatch stopwatch = new Stopwatch();
@@ -227,19 +225,6 @@ public class DDSImageFile extends DDSFile {
 		
 		stopwatch.stop();
 		stopwatch.printMilliseconds("Time writing DDSImage: ");
-	}
-
-	/**
-	 * Closes the included ddsimage and finalizes the object. 
-	 * Don't use this object after calling this method
-	 * @throws Throwable
-	 */
-	public void close() {
-		try {
-			this.finalize();
-		} catch (Throwable e) {
-//			e.printStackTrace();
-		}
 	}
 
 	/**

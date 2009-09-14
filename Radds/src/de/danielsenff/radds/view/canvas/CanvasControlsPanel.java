@@ -20,6 +20,7 @@ import java.util.Hashtable;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -35,6 +36,7 @@ import javax.swing.event.ChangeListener;
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
 import Model.DDSImageFile;
+import de.danielsenff.radds.actions.ActionCopy;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
@@ -114,6 +116,7 @@ public class CanvasControlsPanel extends JCPanel {
 
 	private JPanel initNavigationPanel() {
 		final JPanel panel = new JPanel();
+		
 		final JComboBox channelCombo = new JComboBox(composeColorChannelModel());
 		channelCombo.addActionListener(new ActionListener() {
 
@@ -125,6 +128,10 @@ public class CanvasControlsPanel extends JCPanel {
 
 		});
 
+		
+		final JButton copyButton = new JButton(new ActionCopy(controller));
+		panel.add(copyButton);
+		
 
 		final JLabel lblChannelCombo = new JLabel(bundle.getString("Channels")+":");
 
@@ -163,10 +170,10 @@ public class CanvasControlsPanel extends JCPanel {
 
 		zoomSlider = new JSlider(10, 500, 100);
 		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
-		labels.put(new Integer(10), new JLabel("0.1x"));
-		labels.put(new Integer(100), new JLabel("1x"));
-		labels.put(new Integer(250), new JLabel("2.5x"));
-		labels.put(new Integer(500), new JLabel("5x"));
+		labels.put(10, new JLabel("0.1x"));
+		labels.put(100, new JLabel("1x"));
+		labels.put(250, new JLabel("2.5x"));
+		labels.put(500, new JLabel("5x"));
 		zoomSlider.setLabelTable(labels);
 		zoomSlider.setMajorTickSpacing(100);
 		zoomSlider.setSnapToTicks(true);
