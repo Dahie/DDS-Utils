@@ -63,7 +63,7 @@ public class DDSImageFile extends DDSFile {
 							ddsimage.getWidth(), 
 							ddsimage.getHeight(), 
 							compressionType).getImage();
-		ddsimage.close();
+//		ddsimage.close();
 	}
 
 	
