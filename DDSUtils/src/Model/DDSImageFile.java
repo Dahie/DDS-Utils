@@ -37,45 +37,15 @@ public class DDSImageFile extends DDSFile {
 	
 	
 	/**
-	 * @param filename 
-	 * @throws IOException 
-	 */
-	public DDSImageFile(final String filename) {
-		this(new File(filename));
-	}
-	
-	/**
 	 * @param file
 	 * @param ddsimage 
+	 * @throws IOException 
 	 * @throws IOException
 	 */
-	public DDSImageFile(final File file) {
-		super.file = file;
-		DDSImage ddsimage;
-		try {
-			ddsimage = DDSImage.read(file);
-			initDdsValues(ddsimage);
-			CompressionType compressionType = DDSUtil.getSquishCompressionFormat(ddsimage.getPixelFormat());
-			this.topmost = new DXTBufferDecompressor(
-					ddsimage.getMipMap(0).getData(),
-					ddsimage.getWidth(), 
-					ddsimage.getHeight(), 
-					compressionType).getImage();
-			ddsimage.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public DDSImageFile(final File file) throws IOException {
+		this(file, DDSImage.read(file));
 	}
 	
-	/**
-	 * 
-	 * @param filename
-	 * @param ddsimage
-	 * @throws InvalidObjectException 
-	 */
-	public DDSImageFile(String filename, DDSImage ddsimage) {
-		this(new File(filename), ddsimage);
-	}
 
 	/**
 	 * 
@@ -93,8 +63,28 @@ public class DDSImageFile extends DDSFile {
 							ddsimage.getWidth(), 
 							ddsimage.getHeight(), 
 							compressionType).getImage();
+		ddsimage.close();
 	}
 
+	
+
+	/**
+	 * @param filename 
+	 * @throws IOException 
+	 */
+	public DDSImageFile(final String filename) throws IOException {
+		this(new File(filename));
+	}
+
+	/**
+	 * 
+	 * @param filename
+	 * @param ddsimage
+	 * @throws InvalidObjectException 
+	 */
+	public DDSImageFile(String filename, DDSImage ddsimage) {
+		this(new File(filename), ddsimage);
+	}
 	
 	/**
 	 * @param filename

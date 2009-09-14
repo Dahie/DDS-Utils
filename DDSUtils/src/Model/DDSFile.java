@@ -82,14 +82,14 @@ public class DDSFile {
 	 */
 	public DDSFile(final File file) {
 		this.file = file;
-		DDSImage ddsimage;
+		DDSImage ddsimage = null;
 		try {
 			ddsimage = DDSImage.read(file);
 			initDdsValues(ddsimage);
+			ddsimage.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -101,6 +101,7 @@ public class DDSFile {
 	public DDSFile(final File file, final DDSImage ddsimage) {
 		this.file = file;
 		initDdsValues(ddsimage);
+		ddsimage.close();
 	}
 	
 	/**
