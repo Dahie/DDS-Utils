@@ -3,7 +3,6 @@
  */
 package DDSUtil;
 
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 /**
@@ -11,19 +10,6 @@ import java.awt.image.BufferedImage;
  *
  */
 public abstract class Rescaler {
-
-
-	private BufferedImage image;
-
-	
-	
-	public BufferedImage getScaledInstance(int width, int height) {
-		return rescaleBI(this.image, width, height);
-	}
-	
-	public BufferedImage getScaledInstance(Dimension dimension) {
-		return rescaleBI(this.image, dimension.width, dimension.height);
-	}
 
 	/**
 	 * @param image2

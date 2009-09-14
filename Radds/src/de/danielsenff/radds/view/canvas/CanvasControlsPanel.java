@@ -8,8 +8,15 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.Hashtable;
 
 import javax.swing.DefaultComboBoxModel;
@@ -30,7 +37,6 @@ import javax.swing.event.ChangeListener;
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
 import Model.DDSImageFile;
-import de.danielsenff.radds.actions.ActionCopy;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
@@ -66,6 +72,17 @@ public class CanvasControlsPanel extends JCPanel {
 
 		final JScrollPane scrollViewPane = initScrollCanvas(controller);
 
+		getCanvas().addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent pChangeEvent) {
+				if(pChangeEvent.getPropertyName().equals("zoomFactor")){
+					float newValue = (Float) pChangeEvent.getNewValue();
+					Integer percentage = Integer.valueOf((int) (newValue * 100));
+					zoomSlider.setValue(percentage);
+					zoomCombo.setSelectedItem("" +percentage);
+				}
+			}
+		});
+
 		new FileDrop( scrollViewPane, new FileDrop.Listener(){   
 			public void filesDropped( java.io.File[] files ) {   
 				// handle file drop
@@ -75,7 +92,7 @@ public class CanvasControlsPanel extends JCPanel {
 					if(file.getAbsolutePath().toLowerCase().contains(".dds") && !file.isDirectory()) {
 						try {
 							DDSImageFile image;
-							image = new DDSImageFile(file.getAbsolutePath());
+							image = new DDSImageFile(file);
 							controller.getView().setImage(image);
 							long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 							System.out.println(mem0);
@@ -87,6 +104,8 @@ public class CanvasControlsPanel extends JCPanel {
 									"<br>The operation is aborted. </html>",	"Error", 
 									JOptionPane.ERROR_MESSAGE);
 							return;
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
 
 					}
@@ -132,19 +151,34 @@ public class CanvasControlsPanel extends JCPanel {
 			public void actionPerformed(final ActionEvent e) {
 				float zoomValue = (Float.valueOf((String) zoomCombo.getSelectedItem())) / 100;
 				canvas.setZoomFactor( zoomValue);
-				zoomSlider.setValue(Integer.valueOf((String) zoomCombo.getSelectedItem()));
 				canvas.repaint();
 			}
 		});
+		zoomCombo.addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					float zoomValue = (Float.valueOf((String) zoomCombo.getSelectedItem())) / 100;
+					canvas.setZoomFactor( zoomValue);
+					canvas.repaint();
+				}
+			}
+
+			public void keyReleased(KeyEvent e) {}
+
+			public void keyTyped(KeyEvent e) {}
+			
+		});
+		
 
 		final JLabel lblZoom = new JLabel(bundle.getString("Zoom")+":");
 
-		zoomSlider = new JSlider(10, 500, 100);
+		zoomSlider = new JSlider(0, 500, 100);
 		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
-		labels.put(new Integer(10), new JLabel("0.1x"));
-		labels.put(new Integer(100), new JLabel("1x"));
-		labels.put(new Integer(250), new JLabel("2.5x"));
-		labels.put(new Integer(500), new JLabel("5x"));
+		labels.put(10, new JLabel("0.1x"));
+		labels.put(100, new JLabel("1x"));
+		labels.put(250, new JLabel("2.5x"));
+		labels.put(500, new JLabel("5x"));
 		zoomSlider.setLabelTable(labels);
 		zoomSlider.setMajorTickSpacing(100);
 		zoomSlider.setSnapToTicks(true);
@@ -156,7 +190,6 @@ public class CanvasControlsPanel extends JCPanel {
 			public void stateChanged(final ChangeEvent e) {
 				final int zoomValue = ((JSlider)e.getSource()).getValue();
 				canvas.setZoomFactor( (Float.valueOf(zoomValue)) / 100);
-				zoomCombo.setSelectedItem("" + zoomValue);
 				canvas.repaint();
 			}
 
@@ -198,21 +231,32 @@ public class CanvasControlsPanel extends JCPanel {
 						BufferedImage.TYPE_4BYTE_ABGR));
 		final JScrollPane scrollViewPane = new JScrollPane(canvas);
 		scrollViewPane.setPreferredSize(new Dimension(700,300));
-		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane, zoomSlider);
+		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane);
 		canvas.addMouseMotionListener(scrollCanvasListener);
-		canvas.addMouseWheelListener(scrollCanvasListener);
+//		canvas.addMouseWheelListener(scrollCanvasListener);
+		canvas.addKeyListener(scrollCanvasListener);
+		canvas.setFocusable(true);
+		canvas.requestFocus();
+
+		canvas.addMouseListener(new MouseListener() {
+			public void mouseClicked(MouseEvent e) {
+				canvas.requestFocus();
+			}
+			public void mouseEntered(MouseEvent arg0) {}
+			public void mouseExited(MouseEvent arg0) {}
+			public void mousePressed(MouseEvent arg0) {}
+			public void mouseReleased(MouseEvent arg0) {}
+		});
+		
 		canvas.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 		canvas.addAncestorListener(new AncestorListener() {
-
 			public void ancestorAdded(final AncestorEvent arg0) {}
-
 			public void ancestorMoved(final AncestorEvent arg0) {
 				//				canvas.repaint();
 				/*Rectangle bounds = canvas.getBounds();
 				scrollcanvas.repaint(new Rectangle(bounds.x+bounds.width, 80));*/
 				scrollViewPane.repaint();
 			}
-
 			public void ancestorRemoved(final AncestorEvent arg0) {	}
 		});
 

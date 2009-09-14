@@ -96,7 +96,8 @@ public class ActionExport extends BasicAction {
 				ImageIO.write(image, "png", file);
 			}				
 			
-
+			out.close();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
