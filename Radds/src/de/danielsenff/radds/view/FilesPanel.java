@@ -123,7 +123,6 @@ public class FilesPanel extends JCPanel {
 		}
 
 		public void mouseClicked(MouseEvent click) {
-			System.gc();
 			if(click.getClickCount() == 2) {
 				FileSystemTree fileTree = (FileSystemTree) click.getSource();
 				TreeNode node = (TreeNode) fileTree.getSelectionPath().getLastPathComponent();

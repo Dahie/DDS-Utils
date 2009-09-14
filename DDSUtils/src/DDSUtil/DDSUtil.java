@@ -191,8 +191,6 @@ public class DDSUtil {
 		System.out.println("write DDSImage");
 		
 		writeDDSImage(destnationfile, mipmapBuffer, width, height, pixelformat);
-
-		System.gc();
 	}
 	
 	
