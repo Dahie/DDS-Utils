@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.JList;
@@ -16,9 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.tree.TreeNode;
 
-import de.danielsenff.radds.controller.Application;
-
 import Model.DDSImageFile;
+import de.danielsenff.radds.controller.Application;
 
 /**
  * @author danielsenff

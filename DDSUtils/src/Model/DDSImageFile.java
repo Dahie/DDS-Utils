@@ -146,6 +146,7 @@ public class DDSImageFile extends DDSFile {
 			}
 		}  else {
 			//TODO here is an arrayindexoutofbound and I don't know why
+			System.err.println("number of mipmaps: "+ getNumMipMaps());
 			buffer[TOP_MOST_MIP_MAP] = ddsimage.getMipMap(TOP_MOST_MIP_MAP).getData();
 		}
 			
