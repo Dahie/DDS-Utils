@@ -87,24 +87,7 @@ public class CanvasControlsPanel extends JCPanel {
 
 				for (int i = 0; i < files.length; i++) {
 					File file = files[i];
-					if(file.getAbsolutePath().toLowerCase().contains(".dds") && !file.isDirectory()) {
-						try {
-							DDSImageFile image;
-							image = new DDSImageFile(file.getAbsolutePath());
-							controller.getView().setImage(image);
-							long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-							System.out.println(mem0);
-						} catch (OutOfMemoryError ex) {
-							ex.printStackTrace();
-							long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-							JOptionPane.showMessageDialog(controller.getView(), 
-									"<html>Error: Out of memory: " + mem0 +
-									"<br>The operation is aborted. </html>",	"Error", 
-									JOptionPane.ERROR_MESSAGE);
-							return;
-						}
-
-					}
+					controller.setImage(file);
 				}
 
 			}   // end filesDropped

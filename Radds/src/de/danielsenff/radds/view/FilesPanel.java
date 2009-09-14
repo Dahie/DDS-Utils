@@ -137,34 +137,7 @@ public class FilesPanel extends JCPanel {
 			final String filename = node.toString();
 			final File file = new File(filename);
 			if(filename.toLowerCase().contains(".dds") && !file.isDirectory()) {
-				try {
-					if(DDSImageFile.isValidDDSImage(file)) {
-
-						DDSFile ddsfile = new DDSFile(filename);
-						if(ddsfile.getTextureType() == DDSFile.TextureType.CUBEMAP ||
-								ddsfile.getTextureType() == DDSFile.TextureType.VOLUME) {
-							JOptionPane.showMessageDialog(null, 
-									"<html>Error: This programm doesn't support cubemaps or volume textures." +
-									"<br>"+ddsfile.getFile().getName()+" can not be loaded.</html>",	"Attention", 
-									JOptionPane.INFORMATION_MESSAGE);
-							return;
-						} 
-						
-						DDSImageFile image = new DDSImageFile(filename);
-						controller.getView().setImage(image);
-						final long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-						System.out.println(mem0);
-					}
-				} catch (final OutOfMemoryError ex) {
-					ex.printStackTrace();
-					final long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-					JOptionPane.showMessageDialog(controller.getView(), 
-							"<html>Error: Out of memory: " + mem0 +
-							"<br>The operation is aborted. </html>",	"Error", 
-							JOptionPane.ERROR_MESSAGE);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				controller.setImage(file);
 			}
 		}
 
