@@ -168,7 +168,7 @@ public class CanvasControlsPanel extends JCPanel {
 
 		final JLabel lblZoom = new JLabel(bundle.getString("Zoom")+":");
 
-		zoomSlider = new JSlider(10, 500, 100);
+		zoomSlider = new JSlider(0, 500, 100);
 		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
 		labels.put(10, new JLabel("0.1x"));
 		labels.put(100, new JLabel("1x"));
