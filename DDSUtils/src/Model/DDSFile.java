@@ -248,7 +248,7 @@ public class DDSFile {
 	
 	@Override
 	public boolean equals(Object second) {
-		if(second instanceof DDSFile) {
+		if(second != null && second instanceof DDSFile) {
 			DDSFile secondFile = (DDSFile) second;
 			boolean isEqual = (this.getFile().getAbsoluteFile().equals(secondFile.getFile().getAbsoluteFile()) && 
 					this.hasMipMaps() == secondFile.hasMipMaps() &&
