@@ -44,9 +44,10 @@ public class DDSCubeImageFile extends DDSImageFile {
 
 	/**
 	 * @param file
+	 * @throws IOException 
 	 * @throws IOException
 	 */
-	public DDSCubeImageFile(File file) {
+	public DDSCubeImageFile(File file) throws IOException {
 		super(file);
 
 	}
