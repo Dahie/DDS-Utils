@@ -39,7 +39,7 @@ public class ImageFileChooser extends JFileChooser {
 	private FileFilter bmpFilter;
 	private FileFilter jpgFilter;
 	
-	public static final String[] compressions = {
+	protected static final String[] compressions = {
 			"Uncompressed", "DXT1", "DXT3", "DXT5"
 	};
 	final static int UNCOMPRESSED = 0;

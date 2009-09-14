@@ -82,14 +82,14 @@ public class DDSFile {
 	 */
 	public DDSFile(final File file) {
 		this.file = file;
-		DDSImage ddsimage;
+		DDSImage ddsimage = null;
 		try {
 			ddsimage = DDSImage.read(file);
 			initDdsValues(ddsimage);
+//			ddsimage.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -101,6 +101,7 @@ public class DDSFile {
 	public DDSFile(final File file, final DDSImage ddsimage) {
 		this.file = file;
 		initDdsValues(ddsimage);
+//		ddsimage.close();
 	}
 	
 	/**
@@ -113,7 +114,10 @@ public class DDSFile {
 		this(new File(filename), ddsimage);
 	}
 
-	protected void initDdsValues(DDSImage ddsimage) {
+	/**
+	 * @param ddsimage
+	 */
+	protected void initDdsValues(final DDSImage ddsimage) {
 		this.height 		= ddsimage.getHeight();
 		this.width  		= ddsimage.getWidth();
 		this.depth 			= ddsimage.getDepth();
@@ -245,13 +249,16 @@ public class DDSFile {
 	
 	@Override
 	public boolean equals(Object second) {
-		DDSFile secondFile = (DDSFile) second;
-		boolean isEqual = (this.getFile().getAbsoluteFile().equals(secondFile.getFile().getAbsoluteFile()) && 
-				this.hasMipMaps() == secondFile.hasMipMaps() &&
-				this.getPixelformat() == secondFile.getPixelformat() &&
-				this.getHeight() == secondFile.getHeight() &&
-				this.getWidth() == secondFile.getWidth());
-		return isEqual;
+		if(second != null && second instanceof DDSFile) {
+			DDSFile secondFile = (DDSFile) second;
+			boolean isEqual = (this.getFile().getAbsoluteFile().equals(secondFile.getFile().getAbsoluteFile()) && 
+					this.hasMipMaps() == secondFile.hasMipMaps() &&
+					this.getPixelformat() == secondFile.getPixelformat() &&
+					this.getHeight() == secondFile.getHeight() &&
+					this.getWidth() == secondFile.getWidth());
+			return isEqual;	
+		}
+		return false;
 	}
 	
 	/**
@@ -360,6 +367,10 @@ public class DDSFile {
 		}
 	}
 	
+	/**
+	 * @param pixelformat
+	 * @return
+	 */
 	protected int convertPixelformat(final PixelFormat pixelformat) {
 		int format;
 		switch(pixelformat) {
@@ -432,6 +443,8 @@ public class DDSFile {
 	
 	/**
 	 * Checks if the {@link File} is a valid DDS-Image
+	 * @param file 
+	 * @return 
 	 * @throws IOException 
 	 * 
 	 */

@@ -36,7 +36,7 @@ public class SelectionHelper {
             
             for (int i = minIndex; i <= maxIndex; i++) {
                 if (lsm.isSelectedIndex(i)) {
-                    selectedIndecies.add(new Integer(i));
+                    selectedIndecies.add(i);
                 }
             }
         }
