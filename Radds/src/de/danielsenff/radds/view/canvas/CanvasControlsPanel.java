@@ -140,10 +140,10 @@ public class CanvasControlsPanel extends JCPanel {
 
 		zoomSlider = new JSlider(10, 500, 100);
 		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
-		labels.put(new Integer(10), new JLabel("0.1x"));
-		labels.put(new Integer(100), new JLabel("1x"));
-		labels.put(new Integer(250), new JLabel("2.5x"));
-		labels.put(new Integer(500), new JLabel("5x"));
+		labels.put(10, new JLabel("0.1x"));
+		labels.put(100, new JLabel("1x"));
+		labels.put(250, new JLabel("2.5x"));
+		labels.put(500, new JLabel("5x"));
 		zoomSlider.setLabelTable(labels);
 		zoomSlider.setMajorTickSpacing(100);
 		zoomSlider.setSnapToTicks(true);
