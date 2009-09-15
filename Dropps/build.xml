@@ -9,19 +9,18 @@
 	<property name="src" location="src"/>
 	<property name="lib" location="lib"/>
 	<property name="tools" location="tools"/>
-	<property name="antlib" location="${tools}/antlib"/>
-	<property name="manifest" location="${tools}/manifest"/>
-	<property name="onejar" location="${tools}/onejar"/>
-	<property name="autoupdate" location="${tools}/autoupdate"/>
-	<property name="atomfile" value="${name}.xml"/>
-	<property name="atompath" location="${atomfile}"/>
+		<property name="antlib" location="${tools}/antlib"/>
+		<property name="manifest" location="${tools}/manifest"/>
+		<property name="onejar" location="${tools}/onejar"/>
+		<property name="autoupdate" location="${tools}/autoupdate"/>
+			<property name="atomfile" value="${name}.xml"/>
+			<property name="atompath" location="${atomfile}"/>
 		<property name="jarbundler" location="${tools}/jarbundler"/>
 		<property name="jsmooth" location="${tools}/jsmooth"/>
 			<property name="jsmooth.edit" location="${jsmooth}/editor"/>
 			<property name="jsmooth.infile" location="${jsmooth}/ant.jsmooth"/>
 		<property name="applejava" location="${tools}/applejava"/>
 		<property name="google" location="${tools}/google"/>
-	
 	<!-- Output Directories -->
 	<property name="build" location="build"/>
 		<property name="bin" location="${build}/bin"/>
@@ -29,11 +28,11 @@
 			<property name="jarfile" location="${dist}/${name}.jar"/>
 			<property name="appfile" location="${dist}/${name}.app"/>
 			<property name="exefile" location="${dist}/${name}.exe"/>
-		<property name="jsmooth.outfile" location="${dist}/${name}.jsmooth"/>
+			<property name="jsmooth.outfile" location="${dist}/${name}.jsmooth"/>
 		<property name="jar" location="${build}/jar"/>
-		<property name="jar.main" location="${jar}/main"/>
-		<property name="jar.lib" location="${jar}/lib"/>
-		<property name="jarfile.main" location="${jar.main}/main.jar"/>
+			<property name="jar.main" location="${jar}/main"/>
+			<property name="jar.lib" location="${jar}/lib"/>
+			<property name="jarfile.main" location="${jar.main}/main.jar"/>
 		<property name="app" location="${build}/app"/>
 		<property name="exe" location="${build}/exe"/>
 	
@@ -56,7 +55,19 @@
 		<fileset refid="ant.jars"/>
 	</path>
 	<taskdef name="ftp" classname="org.apache.tools.ant.taskdefs.optional.net.FTP" classpathref="ant.path"/>
-	
+
+	<fileset id="antlib.jars" dir="${antlib}">
+		<include name="**/*.jar"/>
+	</fileset>
+	<path id="antlib.id">
+		<fileset refid="antlib.jars"/>
+	</path>
+	<pathconvert property="antlib.classpath" pathsep=";">
+		<path refid="antlib.id"/>
+	</pathconvert>
+	<!--<taskdef classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp" classpath="${antlib.classpath}" name="scp"/>-->
+	<taskdef classname="com.jameslow.Substring" classpath="${antlib}" name="substring"/>
+
 	<condition property="onejar.do">
 		<istrue value="${onejar.use}"/>
 	</condition>
@@ -130,6 +141,7 @@
 	<path id="lib.path">
 		<fileset refid="lib.jars"/>
 		<pathelement path="${applejava}/AppleJavaExtensions.jar"/>
+		<pathelement path="${jsmooth}/jnismooth.jar"/>
 	</path>
 	
 	<target name="compile.onejar" description="Compile onejar">
@@ -142,6 +154,22 @@
 	
 	<target name="compile.autoupdate" description="Compile autoupdate">
 		<javac srcdir="${autoupdate}" destdir="${autoupdate}"
+			source="1.4" target="1.4"
+			failonerror="true"
+			includes="**/*.java">
+		</javac>
+	</target>
+	
+	<target name="compile.base64" description="Compile Base64 for versions of ant below 1.7">
+		<javac srcdir="${google}" destdir="${google}"
+			source="1.4" target="1.4"
+			failonerror="true"
+			includes="**/*.java">
+		</javac>
+	</target>
+	
+	<target name="compile.utils" description="Compile additional ant utils">
+		<javac srcdir="${antlib}" destdir="${antlib}"
 			source="1.4" target="1.4"
 			failonerror="true"
 			includes="**/*.java">
@@ -215,14 +243,13 @@
 		<echo message="Placing library jars witin main jar, onejar.use=${onejar.use}."/>
 		<copy todir="${jar.lib}">
 			<fileset dir="${lib}"/>
-			
 		</copy>
-		
+		<!--
 		<manifestclasspath property="jar.classpath" jarfile="${jarfile.main}">
 			<classpath refid="lib.path"/>
 		</manifestclasspath>
 			<attribute name="Class-Path" value="${jar.classpath}" />
-		
+		-->
 		<jar jarfile="${jarfile.main}" basedir="${bin}" manifest="${manifest}/main-MANIFEST.MF">
 		</jar>
 		<jar jarfile="${jarfile}" manifest="${manifest}/onejar-MANIFEST.MF">
@@ -253,11 +280,10 @@
 			shortname="${name}"
 			icon="${application.osx.icon}"
 			jvmversion="${build.jvm}+"
-			vmoptions="${vmoptions}"
 			build="${build.number}"
 			version="${build.version}"
 			dir="${dist}"
-			mainclass="${main.class}"
+			mainclass="${mainclass}"
 			jar="${jarfile}"/>
 	</target>
 	<target name="app.run" depends="app" if="is.mac">
