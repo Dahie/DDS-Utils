@@ -38,7 +38,7 @@ public class XMLHelper {
 			Document document = builder.newDocument();
 			setElement((Element) document.appendChild(document.createElement(root)));
 		} catch (ParserConfigurationException e) {
-			//TODO: Not quite sure when this would happen
+			//Not quite sure when this would happen
 			severe("Could not extantiate XML builder: " + e.getMessage());
 		}
 	}
@@ -65,7 +65,7 @@ public class XMLHelper {
 				warning("Could not load XML file: " + e.getMessage());
 			}
 		} catch (ParserConfigurationException e) {
-			//TODO: Not quite sure when this would happen
+			//Not quite sure when this would happen
 			severe("Could not extantiate XML builder: " + e.getMessage());
 		}
 	}
