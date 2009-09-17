@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
+import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -98,7 +99,27 @@ public class ByteBufferedImage extends BufferedImage {
 	public static byte[] convertBIintoARGBArray(final BufferedImage bi) {
 		
 		WritableRaster r = bi.getRaster();
+		SampleModel sampleModel = bi.getSampleModel();
 	    DataBuffer db = r.getDataBuffer();
+	    
+	    /*bi.getColorModel();
+	    Point location;
+		int scanlineStride;
+		int[] bankIndices;
+		int[] bandOffsets;
+		WritableRaster rARGB = WritableRaster.createBandedRaster(
+	    		r.getDataBuffer(), 
+	    		bi.getWidth(), bi.getHeight(), 
+	    		scanlineStride, bankIndices, bandOffsets, location);*/ 
+	    
+		/*int[] bands = {0,1,2,3};
+		SampleModel sModel2 = sampleModel.getSamples(0, 0, bi.getWidth(), bi.getHeight(), 4, bands, sampleModel.createDataBuffer());
+		
+		
+		sampleModel.createSubsetSampleModel(bands)
+		r.get*/
+		
+		
 	    if (db instanceof DataBufferByte) {
 	        DataBufferByte dbi = (DataBufferByte) db;
 	        return dbi.getData();

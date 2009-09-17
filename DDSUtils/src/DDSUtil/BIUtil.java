@@ -69,33 +69,6 @@ public class BIUtil {
 		return newBi;
 	}
 	
-	/**
-	 * Returns RGBA-Channel of a {@link BufferedImage}
-	 * @param sourceBi
-	 * @return
-	 */
-	/*public static BufferedImage getRGBChannel(final BufferedImage sourceBi) {
-
-		if (sourceBi.getType() == BufferedImage.TYPE_4BYTE_ABGR ||
-				sourceBi.getType() == BufferedImage.TYPE_4BYTE_ABGR_PRE ||
-				sourceBi.getType() == BufferedImage.TYPE_INT_ARGB) {
-
-			for (int y = 0; y < sourceBi.getHeight(); y++) {
-				for (int x = 0; x < sourceBi.getWidth(); x++) {
-					
-					int[] argb = ImageOperations.readPixelARGB(sourceBi.getRGB(x,y)); 
-					//sysoRGBA(argb);
-					//newBi.setRGB(x, y, writePixelRGB(argb[1],argb[2],argb[3]));
-					sourceBi.setRGB(x,y, ImageOperations.writePixelARGB(255, argb[1],argb[2],argb[3]));
-					//sysoRGBA(readPixelARGB((newBi.getRGB(x,y))));
-				}
-			}
-			
-		}
-		
-		return sourceBi;
-	}*/
-	
 	
 	/**
 	 * Get an {@link BufferedImage} from an {@link Image}-Object
