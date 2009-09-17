@@ -145,14 +145,14 @@ public class DDSUtil {
 	
 	/**
 	 * Writes a DDS-Image to disc.
-	 * @param destnationfile 
+	 * @param destinationfile 
 	 * @param sourceImage 
 	 * @param pixelformat 
 	 * @param generateMipMaps 
 	 * @throws IOException 
 	 * 
 	 */
-	public static void write(final File destnationfile, 
+	public static void write(final File destinationfile, 
 			BufferedImage sourceImage, 
 			final int pixelformat,
 			boolean generateMipMaps) throws IOException {
@@ -160,14 +160,8 @@ public class DDSUtil {
 		int width = sourceImage.getWidth();
 		int height = sourceImage.getHeight();
 		
-		System.out.println("build mipmaps");
-		
 		//convert RGB to RGBA image
 		if(!sourceImage.getColorModel().hasAlpha()) {
-			System.out.println("create alpha for image");
-//			BufferedImage rgbaImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-//			rgbaImage.setData(sourceImage.getData());
-//			sourceImage = rgbaImage;
 			sourceImage = ImageUtils.convert(sourceImage, BufferedImage.TYPE_4BYTE_ABGR);
 		}
 		
@@ -179,8 +173,6 @@ public class DDSUtil {
 			maps = new SingleTextureMap(sourceImage);
 		}
 		
-		System.out.println("compress mipmaps");
-		
 		ByteBuffer[] mipmapBuffer = null;
 		if (isDXTCompressed(pixelformat)) {
 			mipmapBuffer = maps.getDXTCompressedBuffer(pixelformat);
@@ -188,9 +180,7 @@ public class DDSUtil {
 			mipmapBuffer = maps.getUncompressedBuffer();
 		}
 		
-		System.out.println("write DDSImage");
-		
-		writeDDSImage(destnationfile, mipmapBuffer, width, height, pixelformat);
+		writeDDSImage(destinationfile, mipmapBuffer, width, height, pixelformat);
 	}
 	
 	

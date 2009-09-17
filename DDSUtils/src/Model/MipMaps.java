@@ -141,12 +141,17 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		return this.mipmaps;
 	}
 	
+	/**
+	 * Returns an Array of {@link BufferedImage}s of MipMaps.
+	 * @return
+	 */
 	public BufferedImage[] getAllMipMapsArray() {
-		BufferedImage[] array = new BufferedImage[numMipMaps];
+		/*final BufferedImage[] array = new BufferedImage[numMipMaps];
 		for (int i = 0; i < numMipMaps; i++) {
 			array[i] = getMipMap(i);
-		}
-		return array;
+		}*/
+		
+		return (BufferedImage[]) this.mipmaps.toArray();
 	}
 
 	/* (non-Javadoc)
