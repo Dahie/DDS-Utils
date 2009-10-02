@@ -161,10 +161,9 @@ public class SaveOperationWorker extends OperationWorker {
 //			System.out.println(mem0);
 			
 			BufferedImage bidata = runOperations(bufferedImage, operations);
-//			BufferedImage bidata = bufferedImage;
 
 			((FileProgressDialog)dialog).setStatus("Compressing and saving ...");
-			new PreviewFrame(null,imagefile.getFile().getName() + " scaled",  bidata).setVisible(true);
+//			new PreviewFrame(null,imagefile.getFile().getName() + " scaled",  bidata).setVisible(true);
 			DDSUtil.write(targetFile, bidata, pixelformat, hasGeneratedMipMaps);
 
 		} catch (IOException ey) {
