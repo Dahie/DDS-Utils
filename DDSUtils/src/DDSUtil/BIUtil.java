@@ -5,9 +5,7 @@ package DDSUtil;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 
 import DDSUtil.ImageOperations.ChannelMode;
 
@@ -69,7 +67,6 @@ public class BIUtil {
 		return newBi;
 	}
 	
-	
 	/**
 	 * Get an {@link BufferedImage} from an {@link Image}-Object
 	 * @param image
@@ -85,8 +82,6 @@ public class BIUtil {
         return result;
     }
 	
-
-	
 	/**
 	 * Extracts the Alpha channel from a {@link ChannelMode} 
 	 * and returns it in a new BufferedImage
@@ -96,8 +91,5 @@ public class BIUtil {
 	public static Image getAlphaChannel(final BufferedImage sourceBi) {	
 		return getChannel(sourceBi, ChannelMode.ALPHA);
 	}
-	 
-
-
 	
 }

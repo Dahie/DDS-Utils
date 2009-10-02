@@ -33,6 +33,8 @@ public class ScaleOperation implements Operation{
 	}
 	
 	/**
+	 * @param newWidth 
+	 * @param newHight 
 	 * 
 	 */
 	public ScaleOperation(final int newWidth, final int newHight) {

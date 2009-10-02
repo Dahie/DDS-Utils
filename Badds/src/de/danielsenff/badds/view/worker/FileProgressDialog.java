@@ -126,22 +126,31 @@ public class FileProgressDialog extends ProgressDialog {
 		this.lblStatus.invalidate();
 	}
 
+	/**
+	 * @return
+	 */
 	public String getFilename() {
 		return this.filename;
 	}
 
-	public void setFilename(String filename) {
+	/**
+	 * @param filename
+	 */
+	public void setFilename(final String filename) {
 		this.lblFilename.setText(filename);
 		this.currentFileCount++;
 		this.lblFileCount.setText(this.currentFileCount + " / " + this.maxFileCount);
 		this.lblFilename.invalidate();
 	}
 	
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		new FileProgressDialog(null, 10);
 	}
 
-	public void setPreview(Image scaledInstance) {
+	/**
+	 * @param scaledInstance
+	 */
+	public synchronized void setPreview(final Image scaledInstance) {
 		this.previewImage = scaledInstance;
 		this.invalidate();
 	}
