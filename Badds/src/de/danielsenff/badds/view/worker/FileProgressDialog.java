@@ -48,7 +48,7 @@ public class FileProgressDialog extends ProgressDialog {
 	
 	public FileProgressDialog(View view, int maxValue, String status, String filename) {
 		super(view, maxValue);
-		setSize(new Dimension(400, 200));
+		setSize(new Dimension(300, 100));
 		
 		this.status = status;
 		this.filename = filename;
