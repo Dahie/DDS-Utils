@@ -76,7 +76,7 @@ public class FileProgressDialog extends ProgressDialog {
 			
 		};
 		preview.setPreferredSize(new Dimension(150,150));
-		add(preview, BorderLayout.LINE_START);
+//		add(preview, BorderLayout.LINE_START);
 		
 		// line for file information
 		maxFileCount = maxValue;
