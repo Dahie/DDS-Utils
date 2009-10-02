@@ -39,12 +39,12 @@ public class ImageRescaler extends Rescaler {
 		public BufferedImage rescaleBI(final BufferedImage image,
 				final int width, final int height) {
 
-			Image rescale = image.getScaledInstance(width, height, scaleAlgorithm);
+			Image rescaledImage = image.getScaledInstance(width, height, scaleAlgorithm);
 			BufferedImage bi;
-			if(rescale instanceof BufferedImage)
-				bi = (BufferedImage)rescale;
+			if(rescaledImage instanceof BufferedImage)
+				bi = (BufferedImage)rescaledImage;
 			else
-				bi = BIUtil.convertImageToBufferedImage(rescale, BufferedImage.TYPE_4BYTE_ABGR);
+				bi = BIUtil.convertImageToBufferedImage(rescaledImage, BufferedImage.TYPE_4BYTE_ABGR);
 			//rescale.flush();
 			
 			return bi;

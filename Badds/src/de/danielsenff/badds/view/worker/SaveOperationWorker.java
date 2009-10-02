@@ -72,7 +72,7 @@ public class SaveOperationWorker extends OperationWorker {
 		this.makeBackup = exportOptions.isMakeBackup();
 		this.keepOriginal = exportOptions.isKeepOriginal();
 		
-		operations.add(new ScaleOperation(newWidth, newHeight));
+//		operations.add(new ScaleOperation(newWidth, newHeight));
 		if(pixelformat == DDSImage.D3DFMT_DXT1 && exportOptions.isPaintWhiteAlpha()) {
 			operations.add(new ChannelBrightness(3, 1.0f));
 		}
@@ -121,15 +121,18 @@ public class SaveOperationWorker extends OperationWorker {
 		DDSImageFile imagefile;
 
 		try {
-			if(hasGeneratedMipMaps &&
-					!DDSImageFile.isPowerOfTwo(sourceDDS.getWidth()) 
+			if(hasGeneratedMipMaps 
+					&& !DDSImageFile.isPowerOfTwo(sourceDDS.getWidth()) 
 					&& !DDSImageFile.isPowerOfTwo(sourceDDS.getHeight())) 
 				throw new NonCubicDimensionException();
 
 			imagefile = new DDSImageFile(sourceDDS.getFile());
+			BufferedImage bufferedImage = imagefile.getData();
+			
+			
 			((FileProgressDialog)dialog).setPreview(
-					imagefile.getData().getScaledInstance(150, 150, Image.SCALE_AREA_AVERAGING));
-//			new PreviewFrame(null,imagefile.getFile().getName(),  imagefile.getData()).setVisible(true);
+					bufferedImage.getScaledInstance(150, 150, Image.SCALE_AREA_AVERAGING));
+//			new PreviewFrame(null,imagefile.getFile().getName(),  bufferedImage).setVisible(true);
 
 			File targetFile = sourceDDS.getFile();
 			
@@ -147,19 +150,20 @@ public class SaveOperationWorker extends OperationWorker {
 				}
 			}
 			
-			
-
 			if (pixelformat == 0) {		// keep original format
 				pixelformat = imagefile.getPixelformat();
 			}
+			
+			
 			((FileProgressDialog)dialog).setStatus("Pixel operations ...");
 //			long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 //			System.out.println(mem0);
 			
-			BufferedImage bidata = runOperations(imagefile.getData(), operations);
+			BufferedImage bidata = runOperations(bufferedImage, operations);
+//			BufferedImage bidata = bufferedImage;
 
 			((FileProgressDialog)dialog).setStatus("Compressing and saving ...");
-			new PreviewFrame(null,imagefile.getFile().getName() + " scaled",  bidata);
+			new PreviewFrame(null,imagefile.getFile().getName() + " scaled",  bidata).setVisible(true);
 			DDSUtil.write(targetFile, bidata, pixelformat, hasGeneratedMipMaps);
 
 		} catch (IOException ey) {
