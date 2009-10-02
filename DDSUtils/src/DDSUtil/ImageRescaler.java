@@ -22,7 +22,10 @@ public class ImageRescaler extends Rescaler {
 			scaleAlgorithm = Image.SCALE_SMOOTH;
 		}
 		
-		public ImageRescaler(int scaleMethod) {
+		/**
+		 * @param scaleMethod
+		 */
+		public ImageRescaler(final int scaleMethod) {
 			scaleAlgorithm = scaleMethod;
 		}
 		
@@ -32,21 +35,32 @@ public class ImageRescaler extends Rescaler {
 		 * @param height
 		 * @return
 		 */
-		public BufferedImage rescaleBI(BufferedImage image,
-				int width, int height) {
+		@Override
+		public BufferedImage rescaleBI(final BufferedImage image,
+				final int width, final int height) {
 
 			Image rescale = image.getScaledInstance(width, height, scaleAlgorithm);
-			BufferedImage bi = BIUtil.convertImageToBufferedImage(rescale, BufferedImage.TYPE_4BYTE_ABGR);
-			rescale.flush();
+			BufferedImage bi;
+			if(rescale instanceof BufferedImage)
+				bi = (BufferedImage)rescale;
+			else
+				bi = BIUtil.convertImageToBufferedImage(rescale, BufferedImage.TYPE_4BYTE_ABGR);
+			//rescale.flush();
 			
 			return bi;
 		}
 
+		/**
+		 * @return
+		 */
 		public int getScaleAlgorithm() {
 			return this.scaleAlgorithm;
 		}
 
-		public void setScaleAlgorithm(int scaleAlgorithm) {
+		/**
+		 * @param scaleAlgorithm
+		 */
+		public void setScaleAlgorithm(final int scaleAlgorithm) {
 			this.scaleAlgorithm = scaleAlgorithm;
 		}
 	
