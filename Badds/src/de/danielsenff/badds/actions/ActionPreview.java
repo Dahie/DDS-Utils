@@ -7,6 +7,7 @@ import gr.zdimensions.jsquish.Squish;
 
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import javax.swing.JOptionPane;
@@ -73,6 +74,8 @@ public class ActionPreview extends BasicAction {
 			JOptionPane.showMessageDialog(controller.getView(), 
 					"<html>Java is out of memory. Please close other previews before opening yet another.</html>",	"Out of memory", 
 					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
