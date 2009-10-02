@@ -41,7 +41,7 @@ public class ScaleOperation implements Operation{
 		this.newHeight = newHight;
 		this.newWidth  = newWidth;
 		this.postprocess = false;
-		this.rescaler = new ImageRescaler(BufferedImage.SCALE_DEFAULT);
+		this.rescaler = new ImageScalingRescaler();
 	}
 	
 	
