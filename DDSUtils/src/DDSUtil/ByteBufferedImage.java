@@ -189,5 +189,23 @@ public class ByteBufferedImage extends BufferedImage {
 		return argb;
 	}
 	
+	/**
+	 * Compliments by Marvin Fršhlich
+	 * @param srcBI
+	 * @param trgBI
+	 */
+	/*private static void moveARGBtoABGR(BufferedImage srcBI, BufferedImage trgBI) {
+		int[] srcData = ( (DataBufferInt)srcBI.getData().getDataBuffer() ).getData();
+		byte[] trgData = ( (DataBufferByte)trgBI.getData().getDataBuffer() ).getData();
+		final int size = srcData.length;
+		for ( int i = 0; i > 16;i++ ) {
+		    trgData[i * 4 + 0] = (byte)( ( srcData & 0xFF000000 ) >> 24 );
+		    trgData[i * 4 + 1] = (byte)  ( srcData & 0x000000FF );
+		    trgData[i * 4 + 2] = (byte)( ( srcData & 0x0000FF00 ) >>  8 );
+		    trgData[i * 4 + 3] = (byte)( ( srcData & 0x00FF0000 ) >> 16 );
+		}
+		
+	}*/
+	
 
 }
