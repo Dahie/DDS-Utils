@@ -121,14 +121,15 @@ public class SaveOperationWorker extends OperationWorker {
 		DDSImageFile imagefile;
 
 		try {
-			if(!DDSImageFile.isPowerOfTwo(sourceDDS.getWidth()) 
+			if(hasGeneratedMipMaps &&
+					!DDSImageFile.isPowerOfTwo(sourceDDS.getWidth()) 
 					&& !DDSImageFile.isPowerOfTwo(sourceDDS.getHeight())) 
 				throw new NonCubicDimensionException();
 
 			imagefile = new DDSImageFile(sourceDDS.getFile());
 			((FileProgressDialog)dialog).setPreview(
 					imagefile.getData().getScaledInstance(150, 150, Image.SCALE_AREA_AVERAGING));
-			new PreviewFrame(null,imagefile.getFile().getName(),  imagefile.getData()).setVisible(false);
+//			new PreviewFrame(null,imagefile.getFile().getName(),  imagefile.getData()).setVisible(true);
 
 			File targetFile = sourceDDS.getFile();
 			
@@ -158,7 +159,7 @@ public class SaveOperationWorker extends OperationWorker {
 			BufferedImage bidata = runOperations(imagefile.getData(), operations);
 
 			((FileProgressDialog)dialog).setStatus("Compressing and saving ...");
-//			new PreviewFrame(null,imagefile.getFile().getName(),  bidata);
+			new PreviewFrame(null,imagefile.getFile().getName() + " scaled",  bidata);
 			DDSUtil.write(targetFile, bidata, pixelformat, hasGeneratedMipMaps);
 
 		} catch (IOException ey) {
@@ -179,6 +180,7 @@ public class SaveOperationWorker extends OperationWorker {
 		if(!operations.isEmpty()) {
 			BufferedImage newbi = null;
 			for (Operation op : operations) {
+				System.out.println(op);
 				newbi = op.run(srcbi);
 				srcbi = newbi;
 			}
