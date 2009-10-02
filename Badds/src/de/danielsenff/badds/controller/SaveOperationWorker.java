@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.danielsenff.badds.view.worker;
+package de.danielsenff.badds.controller;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -19,6 +19,7 @@ import de.danielsenff.badds.operations.ScaleOperation;
 import de.danielsenff.badds.util.FileHelper;
 import de.danielsenff.badds.view.View;
 import de.danielsenff.badds.view.GUI.PreviewFrame;
+import de.danielsenff.badds.view.worker.FileProgressDialog;
 
 import DDSUtil.DDSUtil;
 import DDSUtil.NonCubicDimensionException;
@@ -72,7 +73,7 @@ public class SaveOperationWorker extends OperationWorker {
 		this.makeBackup = exportOptions.isMakeBackup();
 		this.keepOriginal = exportOptions.isKeepOriginal();
 		
-//		operations.add(new ScaleOperation(newWidth, newHeight));
+		operations.add(new ScaleOperation(newWidth, newHeight));
 		if(pixelformat == DDSImage.D3DFMT_DXT1 && exportOptions.isPaintWhiteAlpha()) {
 			operations.add(new ChannelBrightness(3, 1.0f));
 		}
