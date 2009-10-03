@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.danielsenff.badds.view.worker;
+package de.danielsenff.badds.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -13,6 +13,8 @@ import de.danielsenff.badds.model.SwingWorker;
 import de.danielsenff.badds.operations.Operation;
 import de.danielsenff.badds.util.FileHelper;
 import de.danielsenff.badds.view.View;
+import de.danielsenff.badds.view.worker.FileProgressDialog;
+import de.danielsenff.badds.view.worker.ProgressDialog;
 
 import DDSUtil.NonCubicDimensionException;
 import Model.DDSFile;
