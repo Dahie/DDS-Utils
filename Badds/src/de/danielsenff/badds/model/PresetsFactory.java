@@ -4,12 +4,8 @@
 package de.danielsenff.badds.model;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
-import de.danielsenff.badds.util.ResourceLoader;
-
 
 /**
  * @author danielsenff
@@ -17,8 +13,8 @@ import de.danielsenff.badds.util.ResourceLoader;
  */
 public class PresetsFactory {
 
-	private static final String PRESETS_FILE = "presets.csv"; // filename in jar root
-	
+	private static final String PRESETS_FILE = "presets.csv";
+	private static final String resourcesDir = "/de/danielsenff/badds/resources/";
 
 	
 	/**
@@ -38,10 +34,10 @@ public class PresetsFactory {
 	
 	/**
 	 * Returns the {@link PresetsComboModel} from a default local file
+	 * @return 
 	 */
 	public static PresetsComboModel getInstanceFromDefaultLocalFile() {
-		PresetsComboModel model = new PresetsComboModel(getResourceStream());
-		return model;
+		return new PresetsComboModel(getResourceStream());
 	}
 	
 	
@@ -55,27 +51,11 @@ public class PresetsFactory {
 	
 	
 	/**
-	 * Either gets the Inputstream of the in-jar presets or of the local file in the directory
-	 * @param presets_file2
+	 * Either gets the InputStream of the in-jar presets
 	 * @return 
 	 */
 	private static InputStream getResourceStream() {
-		InputStream fis = null;
-		final File localPresetsFile = new File(PRESETS_FILE);
-		
-		try {
-			if ( localPresetsFile.exists() ) {
-				// read from local directory
-				fis = new FileInputStream(localPresetsFile.getAbsolutePath());
-			} else {
-				// read from jar
-				fis = ResourceLoader.getResourceAsStream("/"+PRESETS_FILE);
-			}
-		} catch (final FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		return fis;
+		return Object.class.getResourceAsStream(resourcesDir + PRESETS_FILE);
 	}
 	
 }
