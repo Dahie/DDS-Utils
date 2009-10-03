@@ -4,14 +4,10 @@
 package de.danielsenff.dropps.models;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import sun.rmi.rmic.newrmic.Resources;
-
 import de.danielsenff.dropps.Dropps;
-import de.danielsenff.dropps.util.ResourceLoader;
 
 /**
  * @author danielsenff
@@ -20,7 +16,7 @@ import de.danielsenff.dropps.util.ResourceLoader;
 public class PresetsFactory {
 
 	private static final String PRESETS_FILE = "presets.csv";
-	static File resourcesDir = new File(Dropps.getInstance().getContext().getResourceMap().getResourcesDir());
+	private static final String resourcesDir = "/de/danielsenff/dropps/resources/";
 
 	
 	/**
@@ -40,6 +36,7 @@ public class PresetsFactory {
 	
 	/**
 	 * Returns the {@link PresetsComboModel} from a default local file
+	 * @return 
 	 */
 	public static PresetsComboModel getInstanceFromDefaultLocalFile() {
 		return new PresetsComboModel(getResourceStream());
@@ -56,30 +53,11 @@ public class PresetsFactory {
 	
 	
 	/**
-	 * Either gets the Inputstream of the in-jar presets or of the local file in the directory
-	 * @param presets_file2
+	 * Either gets the InputStream of the in-jar presets
 	 * @return 
 	 */
 	private static InputStream getResourceStream() {
-		InputStream fis = null;
-		final File localPresetsFile = new File(resourcesDir + File.separator+ PRESETS_FILE);
-		
-		Dropps.getInstance().getContext().getResourceMap();
-		
-		/*try {
-			if ( localPresetsFile.exists() ) {
-				// read from local directory
-				fis = new FileInputStream(localPresetsFile);
-//			} else {
-				// read from jar
-				 */
-				fis = Dropps.class.getResourceAsStream(File.separator+localPresetsFile);
-		/*	 }
-		} catch (final FileNotFoundException e) {
-			e.printStackTrace();
-		}*/
-		
-		return fis;
+		return Dropps.class.getResourceAsStream(resourcesDir + PRESETS_FILE);
 	}
 	
 }
