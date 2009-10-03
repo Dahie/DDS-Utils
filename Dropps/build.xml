@@ -254,18 +254,34 @@
 		</jar>
 		<jar jarfile="${jarfile}" manifest="${manifest}/onejar-MANIFEST.MF">
 			<fileset dir="${jar}"/>
-			<fileset dir="${onejar}" includes="**/*.class"/>
+			<fileset dir="${onejar}" includes="**/*.class" />
 		</jar>
 	</target>
+	
+	<!-- remove possible signature files from library jars 
+	 https://issues.apache.org/bugzilla/show_bug.cgi?id=34403 -->
+	<target name="jar.clean_sf" depends="jar.include" if="include.do">
+		<tempfile property="templib" destdir="${dist}/tmp" />
+		<move tofile="${templib}" file="${jarfile}"/>
+		<zip destfile="${jarfile}">
+			<zipfileset src="${templib}">
+				<exclude name="META-INF/*.SF"/>	
+			<!-- EXAMPLE: excludes the existing sign information, which confuse
+		JavaWebstart -->
+			</zipfileset>
+		</zip>
+		<delete file="${templib}" />
+	</target>
+	
 	<target name="jar.include" depends="compile" if="include.do">
 		<echo message="Extracting and including library jars in main jar, onejar.use=${onejar.use}."/>
 		<jar jarfile="${jarfile}" basedir="${bin}" manifest="${manifest}/main-MANIFEST.MF">
 			<!-- Merge library jars into final jar file -->
-			<zipgroupfileset refid="lib.jars"/>
+			<zipgroupfileset refid="lib.jars" />
 		</jar>
 	</target>
 
-	<target name="jar" depends="jar.onejar,jar.include" description="Build jar">
+	<target name="jar" depends="jar.onejar,jar.include,jar.clean_sf" description="Build jar">
 		<!-- At the moment jar requires nothing else -->
 	</target>
 	<target name="exe" depends="jar,create.jsmooth" description="Build exe">
@@ -274,6 +290,7 @@
 	<target name="exe.run" depends="exe">
 		<exec dir="${dist}" executable="${dist}/${name}.exe"/>
 	</target>
+	
 	<target name="app" depends="jar" description="Build app">
 		<jarbundler
 			name="${name}"
@@ -335,6 +352,8 @@
 			<fileset dir=".">
 				<include name="**"/>
 				<exclude name="**/.svn/**"/>
+				<exclude name="**/.git/**"/>
+				<exclude name="**/CVS/**"/>
 				<exclude name="**/build/**"/>
 				<exclude name="secret.temp.properties"/>
 			</fileset>
