@@ -32,6 +32,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 	private final Collection<File> fileList;
 	private ProgressStatus status;
 	private ExportOptions options;
+	private ConvertController converter;
 	
 	/**
 	 * @param app
@@ -41,7 +42,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 	public ConvertFilesTask(final Application app, 
 			final Collection<File> fileList, 
 			final ExportOptions options) {
-		super(app);
+		super(app, "convertFiles");
 		this.fileList = fileList;
 		this.options = options;
 	}
