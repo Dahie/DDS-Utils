@@ -27,6 +27,7 @@ import de.danielsenff.dropps.models.ExportOptions;
 import de.danielsenff.dropps.models.Preset;
 import de.danielsenff.dropps.models.PresetsComboModel;
 import de.danielsenff.dropps.models.PresetsFactory;
+import de.danielsenff.dropps.util.TextAreaLabel;
 
 
 /**
@@ -218,6 +219,15 @@ public class SettingsPanel extends JPanel implements PropertyChangeListener {
 //		add(chkKeepOriginal,c);
 		
 //		comboPresets.setSelectedIndex(0); // set to default texture size
+		
+		String text = "This programm automatically converts " + '\n' +
+				"supported image files to DirectDrawSurface format." + '\n' +
+				"Just drop the files into the white area and the " +'\n' +
+				"conversion will start immidiately.";
+		TextAreaLabel description = new TextAreaLabel(text);
+		c.gridx = 0;
+		c.gridy = 7;
+		add(description);
 		
 	}
 

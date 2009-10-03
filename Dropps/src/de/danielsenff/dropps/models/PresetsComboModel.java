@@ -50,7 +50,7 @@ public class PresetsComboModel extends DefaultComboBoxModel {
 	
 	/**
 	 * Construct PresetsComboModel from {@link FileInputStream}
-	 * @param fis
+	 * @param is 
 	 */
 	public PresetsComboModel(final InputStream is) {
 		
@@ -90,8 +90,8 @@ public class PresetsComboModel extends DefaultComboBoxModel {
 		
 		
 		if(tokenizer.hasMoreTokens()){
-			JOptionPane.showMessageDialog(null, "Folgende Datei ist beschädigt:\n" +
-					"orte.csv enthält fehlerhafte Daten", "Korrupte Datei", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "The following file seems to be damaged:\n" +
+					"presets.csv has faulty data", "Corrupt file", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		return new Preset(name, width, height, DDSFile.verbosePixelformat(pixelformat), mipmaps);
