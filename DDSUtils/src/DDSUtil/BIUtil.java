@@ -5,9 +5,7 @@ package DDSUtil;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 
 import DDSUtil.ImageOperations.ChannelMode;
 
@@ -70,34 +68,6 @@ public class BIUtil {
 	}
 	
 	/**
-	 * Returns RGBA-Channel of a {@link BufferedImage}
-	 * @param sourceBi
-	 * @return
-	 */
-	/*public static BufferedImage getRGBChannel(final BufferedImage sourceBi) {
-
-		if (sourceBi.getType() == BufferedImage.TYPE_4BYTE_ABGR ||
-				sourceBi.getType() == BufferedImage.TYPE_4BYTE_ABGR_PRE ||
-				sourceBi.getType() == BufferedImage.TYPE_INT_ARGB) {
-
-			for (int y = 0; y < sourceBi.getHeight(); y++) {
-				for (int x = 0; x < sourceBi.getWidth(); x++) {
-					
-					int[] argb = ImageOperations.readPixelARGB(sourceBi.getRGB(x,y)); 
-					//sysoRGBA(argb);
-					//newBi.setRGB(x, y, writePixelRGB(argb[1],argb[2],argb[3]));
-					sourceBi.setRGB(x,y, ImageOperations.writePixelARGB(255, argb[1],argb[2],argb[3]));
-					//sysoRGBA(readPixelARGB((newBi.getRGB(x,y))));
-				}
-			}
-			
-		}
-		
-		return sourceBi;
-	}*/
-	
-	
-	/**
 	 * Get an {@link BufferedImage} from an {@link Image}-Object
 	 * @param image
 	 * @param type
@@ -112,8 +82,6 @@ public class BIUtil {
         return result;
     }
 	
-
-	
 	/**
 	 * Extracts the Alpha channel from a {@link ChannelMode} 
 	 * and returns it in a new BufferedImage
@@ -123,8 +91,5 @@ public class BIUtil {
 	public static Image getAlphaChannel(final BufferedImage sourceBi) {	
 		return getChannel(sourceBi, ChannelMode.ALPHA);
 	}
-	 
-
-
 	
 }

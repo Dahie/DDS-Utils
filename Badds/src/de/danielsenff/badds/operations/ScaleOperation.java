@@ -33,13 +33,15 @@ public class ScaleOperation implements Operation{
 	}
 	
 	/**
+	 * @param newWidth 
+	 * @param newHight 
 	 * 
 	 */
 	public ScaleOperation(final int newWidth, final int newHight) {
 		this.newHeight = newHight;
 		this.newWidth  = newWidth;
 		this.postprocess = false;
-		this.rescaler = new ImageRescaler(BufferedImage.SCALE_DEFAULT);
+		this.rescaler = new ImageScalingRescaler();
 	}
 	
 	

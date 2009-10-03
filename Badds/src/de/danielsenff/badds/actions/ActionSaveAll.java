@@ -11,10 +11,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import de.danielsenff.badds.controller.Application;
+import de.danielsenff.badds.controller.SaveOperationWorker;
 import de.danielsenff.badds.model.ExportOptions;
 import de.danielsenff.badds.operations.Operation;
 import de.danielsenff.badds.operations.SourceOperation;
-import de.danielsenff.badds.view.worker.SaveOperationWorker;
 
 import Model.DDSFile;
 
