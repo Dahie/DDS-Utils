@@ -298,6 +298,7 @@
 			icon="${application.osx.icon}"
 			jvmversion="${build.jvm}+"
 			build="${build.number}"
+			vmoptions="${vmoptions}"
 			version="${build.version}"
 			dir="${dist}"
 			mainclass="${mainclass}"

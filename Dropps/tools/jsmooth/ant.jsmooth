@@ -11,7 +11,7 @@
 	<embeddedJar>true</embeddedJar>
 	<iconLocation>@icofile@</iconLocation>
 	<executableName>@exefile@</executableName>
-	<initialMemoryHeap>50331648</initialMemoryHeap>
+	<initialMemoryHeap>@initheapmemory@</initialMemoryHeap>
 	<jarLocation>@jarfile@</jarLocation>
 	<javaProperties>
 		<name>nom1</name>
@@ -38,7 +38,7 @@
 		<value>${EXECUTABLENAME}</value>
 	</javaProperties>
 	<mainClassName>@mainclass@</mainClassName>
-	<maximumMemoryHeap>67108864</maximumMemoryHeap>
+	<maximumMemoryHeap>@maxheapmemory@</maximumMemoryHeap>
 	<maximumVersion></maximumVersion>
 	<minimumVersion>1.4</minimumVersion>
 	<skeletonName>@exewrapper@</skeletonName>
