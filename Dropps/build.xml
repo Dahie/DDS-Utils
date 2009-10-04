@@ -211,6 +211,8 @@
 		<copy file="${jsmooth.infile}" tofile="${jsmooth.outfile}"/>
 		<replace file="${jsmooth.outfile}" token="@icofile@" value="${application.win.icon}"/>
 		<replace file="${jsmooth.outfile}" token="@exefile@" value="${name}.exe"/>
+		<replace file="${jsmooth.outfile}" token="@initheapmemory@" value="${initheap}"/>
+		<replace file="${jsmooth.outfile}" token="@maxheapmemory@" value="${maxheap}"/>
 		<replace file="${jsmooth.outfile}" token="@jarfile@" value="${name}.jar"/>
 		<replace file="${jsmooth.outfile}" token="@mainclass@" value="${mainclass}"/>
 		<replace file="${jsmooth.outfile}" token="@exewrapper@" value="${build.exewrapper}"/>
