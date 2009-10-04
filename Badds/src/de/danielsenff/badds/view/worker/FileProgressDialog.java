@@ -48,7 +48,7 @@ public class FileProgressDialog extends ProgressDialog {
 	
 	public FileProgressDialog(View view, int maxValue, String status, String filename) {
 		super(view, maxValue);
-		setSize(new Dimension(400, 200));
+		setSize(new Dimension(300, 100));
 		
 		this.status = status;
 		this.filename = filename;
@@ -76,7 +76,7 @@ public class FileProgressDialog extends ProgressDialog {
 			
 		};
 		preview.setPreferredSize(new Dimension(150,150));
-		add(preview, BorderLayout.LINE_START);
+//		add(preview, BorderLayout.LINE_START);
 		
 		// line for file information
 		maxFileCount = maxValue;
@@ -126,22 +126,31 @@ public class FileProgressDialog extends ProgressDialog {
 		this.lblStatus.invalidate();
 	}
 
+	/**
+	 * @return
+	 */
 	public String getFilename() {
 		return this.filename;
 	}
 
-	public void setFilename(String filename) {
+	/**
+	 * @param filename
+	 */
+	public void setFilename(final String filename) {
 		this.lblFilename.setText(filename);
 		this.currentFileCount++;
 		this.lblFileCount.setText(this.currentFileCount + " / " + this.maxFileCount);
 		this.lblFilename.invalidate();
 	}
 	
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		new FileProgressDialog(null, 10);
 	}
 
-	public void setPreview(Image scaledInstance) {
+	/**
+	 * @param scaledInstance
+	 */
+	public synchronized void setPreview(final Image scaledInstance) {
 		this.previewImage = scaledInstance;
 		this.invalidate();
 	}
