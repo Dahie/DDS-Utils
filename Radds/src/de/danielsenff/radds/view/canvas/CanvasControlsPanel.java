@@ -203,9 +203,13 @@ public class CanvasControlsPanel extends JCPanel {
 	}
 
 
+	private ImageIcon getResourceIcon(String file){
+		return new ImageIcon(Class.class.getResource(file));
+	}
+	
 	private JScrollPane initScrollCanvas(final Application controller) {
 
-		final ImageIcon defaultImage = ResourceLoader.getResourceIcon("/de/danielsenff/radds/resources/defaultimage.png");
+		final ImageIcon defaultImage = getResourceIcon("/de/danielsenff/radds/resources/defaultimage.png");
 
 		canvas = new BICanvas(controller, 
 				BIUtil.convertImageToBufferedImage(defaultImage.getImage(), 
