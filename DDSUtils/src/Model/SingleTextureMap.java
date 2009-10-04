@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import DDSUtil.ByteBufferedImage;
 
 /**
+ * TextureMap without MipMaps
  * @author danielsenff
  *
  */
@@ -18,12 +19,15 @@ public class SingleTextureMap extends AbstractTextureMap {
 
 	BufferedImage bi;
 	
+	/**
+	 * @param bi
+	 */
 	public SingleTextureMap(final BufferedImage bi) {
 		this.bi = bi;
 	}
 	
 	/**
-	 * 
+	 * @return 
 	 */
 	public BufferedImage getData() {
 		return this.bi;

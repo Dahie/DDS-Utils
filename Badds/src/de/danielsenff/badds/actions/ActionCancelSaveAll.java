@@ -6,8 +6,8 @@ package de.danielsenff.badds.actions;
 import java.awt.event.ActionEvent;
 
 import de.danielsenff.badds.controller.Application;
+import de.danielsenff.badds.controller.OperationWorker;
 import de.danielsenff.badds.util.ResourceLoader;
-import de.danielsenff.badds.view.worker.OperationWorker;
 
 
 

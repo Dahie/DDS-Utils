@@ -40,7 +40,7 @@ abstract public class BasicAction extends AbstractAction {
 				hotkey = bundle.getString(name+".hotkey");
 			}
 			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(hotkey));
-			if(!bundle.getString(name+".icon").equals("null")){
+			if(!bundle.getString(name+".icon").equals("")){
 				putValue(SMALL_ICON, ResourceLoader.getResourceIcon(bundle.getString(name+".icon")));
 			
 			}

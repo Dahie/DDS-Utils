@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.Hashtable;
 
 import javax.swing.DefaultComboBoxModel;
@@ -36,12 +37,12 @@ import javax.swing.event.ChangeListener;
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
 import Model.DDSImageFile;
-import de.danielsenff.radds.actions.ActionCopy;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
 import de.danielsenff.radds.util.ResourceLoader;
 import de.danielsenff.radds.view.JCPanel;
+import de.danielsenff.radds.view.View;
 
 /**
  * Control-Panel for the {@link BICanvas}. 
@@ -56,13 +57,15 @@ public class CanvasControlsPanel extends JCPanel {
 	private static final long serialVersionUID = -3204480115770320549L;
 	private BICanvas canvas;
 	private JComboBox zoomCombo;
-	private JSlider zoomSlider; 
+	private JSlider zoomSlider;
+	private View view;
 
 	/**
 	 * @param controller
 	 */
-	public CanvasControlsPanel(final Application controller) {
+	public CanvasControlsPanel(final View view, final Application controller) {
 		super(controller);
+		this.view = view;
 
 		setLayout(new BorderLayout());
 		final JPanel navigateCanvas = initNavigationPanel();
@@ -79,7 +82,6 @@ public class CanvasControlsPanel extends JCPanel {
 				}
 			}
 		});
-
 
 		new FileDrop( scrollViewPane, new FileDrop.Listener(){   
 			public void filesDropped( java.io.File[] files ) {   
@@ -100,6 +102,9 @@ public class CanvasControlsPanel extends JCPanel {
 	private JPanel initNavigationPanel() {
 		final JPanel panel = new JPanel();
 		
+		final JButton copyButton = new JButton(view.getActionCopy());
+		panel.add(copyButton);
+		
 		final JComboBox channelCombo = new JComboBox(composeColorChannelModel());
 		channelCombo.addActionListener(new ActionListener() {
 
@@ -112,12 +117,10 @@ public class CanvasControlsPanel extends JCPanel {
 		});
 
 		
-		final JButton copyButton = new JButton(new ActionCopy(controller));
-		panel.add(copyButton);
-		
 
 		final JLabel lblChannelCombo = new JLabel(bundle.getString("Channels")+":");
 
+		panel.add(copyButton);
 		panel.add(lblChannelCombo);
 		panel.add(channelCombo);
 

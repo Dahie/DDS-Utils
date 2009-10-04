@@ -220,7 +220,7 @@ public class View extends JCFrame {
 		bar.addSeparator();
 		bar.add(actionSaveAll);
 		
-//		add(bar, BorderLayout.NORTH);
+		add(bar, BorderLayout.NORTH);
 	}
 
 

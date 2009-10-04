@@ -1,13 +1,9 @@
 package Model;
 
 import gr.zdimensions.jsquish.Squish;
-import gr.zdimensions.jsquish.Squish.CompressionType;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-
-import Compression.DXTBufferCompressor;
-import DDSUtil.DDSUtil;
 
 /**
  * Interface for TextureMaps.
@@ -18,11 +14,13 @@ public interface TextureMap {
 
 
 	/**
+	 * Height of the topmost MipMap.
 	 * @return
 	 */
 	public abstract int getHeight();
 	
 	/**
+	 * Width of the topmost MipMap.
 	 * @return
 	 */
 	public abstract int getWidth();
@@ -43,15 +41,18 @@ public interface TextureMap {
 	public abstract ByteBuffer[] getUncompressedBuffer();
 	
 	/**
+	 * Returns a ByteBuffer for each MipMap.
 	 * @param pixelformat
 	 * @return
 	 */
 	public ByteBuffer[] getDXTCompressedBuffer(final int pixelformat);
 	
 	/**
+	 * Compress a single {@link BufferedImage} into a ByteBuffer.
 	 * @param bi
 	 * @param compressionType
 	 * @return
 	 */
-	public ByteBuffer compress(final BufferedImage bi, final Squish.CompressionType compressionType); 
+	public ByteBuffer compress(final BufferedImage bi, 
+			final Squish.CompressionType compressionType); 
 }
