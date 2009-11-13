@@ -157,15 +157,15 @@ public class DXTBufferCompressor {
 	 * @param compressionType
 	 * @return
 	 */
-	private static ByteBuffer squishCompress(final byte[] rgba, 
-			final int width, 
-			final int height, 
-			final Squish.CompressionType compressionType) {
-		
-		
-		ByteBuffer buffer = ByteBuffer.wrap(squishCompress(rgba, width, height, compressionType));
-		return buffer;
-	}
+//	private static ByteBuffer squishCompress(final byte[] rgba, 
+//			final int width, 
+//			final int height, 
+//			final Squish.CompressionType compressionType) {
+//		
+//		
+//		ByteBuffer buffer = ByteBuffer.wrap(squishCompressToArray(rgba, width, height, compressionType));
+//		return buffer;
+//	}
 
 
 	/**
@@ -226,12 +226,12 @@ public class DXTBufferCompressor {
 	 * @param compressionType
 	 * @return
 	 */
-	private static ByteBuffer squishCompress(final ByteBuffer bytebuffer, 
-			final int width ,final int height, final Squish.CompressionType compressionType) {
-		
-		//byte[] rgba = toByteArray(bytebuffer);
-		return squishCompress(byteBuffer, width, height, compressionType);
-	}
+//	private static ByteBuffer squishCompress(final ByteBuffer bytebuffer, 
+//			final int width ,final int height, final Squish.CompressionType compressionType) {
+//		
+//		//byte[] rgba = toByteArray(bytebuffer);
+//		return squishCompress(byteBuffer, width, height, compressionType);
+//	}
 
 	private static byte[] toByteArray(final ByteBuffer bytebuffer) {
 		byte[] rgba = new byte[bytebuffer.capacity()];
