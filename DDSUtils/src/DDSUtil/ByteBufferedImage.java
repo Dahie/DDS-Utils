@@ -4,8 +4,8 @@
 package DDSUtil;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
 import java.nio.Buffer;
@@ -136,10 +136,67 @@ public class ByteBufferedImage extends BufferedImage {
  
 		// read channel count
 		int componentCount = bi.getColorModel().getNumComponents() ;
- 
-		return convertDataBufferToArray(bi.getWidth(), bi.getHeight(), dataBuffer, componentCount);
+		
+		return convertBiToArray(bi.getWidth(), bi.getHeight(), bi);
+		//return convertDataBufferToArray(bi.getWidth(), bi.getHeight(), dataBuffer, componentCount);
 	}
 
+
+	private static byte[] convertBiToArray(final int width, final int height,
+			BufferedImage bi) {
+		int length = height * width * 4;
+		byte[] argb = new byte[length];
+		ColorModel colorspace = bi.getColorModel();
+		int numPixels = bi.getWidth()*bi.getHeight();
+		
+		int r, g, b, a;
+		int i;
+		int count = 0;
+		//for (int i = 0; i < length; i=i+4) {
+		for (int pixel = 0; pixel < numPixels; pixel=pixel+4) {
+			// databuffer has unsigned integers, they must be converted to signed byte 
+ 
+			// original order from BufferedImage
+ 
+ 
+			if(colorspace.hasAlpha()) {
+				// 32bit image
+ 
+				/* not working with png+alpha
+				b =  (dataBuffer.getElem(i) );
+				g =  (dataBuffer.getElem(i+1));
+				r =  (dataBuffer.getElem(i+2));
+				a =  (dataBuffer.getElem(i+3));*/
+				
+				a =  colorspace.getAlpha(pixel);
+				r =  colorspace.getRed(pixel);
+				g =  colorspace.getGreen(pixel);
+				b =  colorspace.getBlue(pixel);
+ 
+				i = pixel*4;
+				argb[i] =   (byte) (a & 0xFF);
+				argb[i+1] = (byte) (r & 0xFF);
+				argb[i+2] = (byte) (g & 0xFF);
+				argb[i+3] = (byte) (b & 0xFF);
+			} 
+			else 
+			{ //24bit image
+				
+				r =  colorspace.getRed(pixel);
+				g =  colorspace.getGreen(pixel);
+				b =  colorspace.getBlue(pixel);
+ 
+				i = pixel*4;
+				argb[i] =   (byte) (255);
+				argb[i+1] = (byte) (r & 0xFF);
+				argb[i+2] = (byte) (g & 0xFF);
+				argb[i+3] = (byte) (b & 0xFF);
+			}
+		}
+		// aim should be ARGB order
+		return argb;
+	}
+	
 	private static byte[] convertDataBufferToArray(final int width, final int height,
 			DataBuffer dataBuffer, int componentCount) {
 		int length = height * width * 4;
@@ -156,10 +213,16 @@ public class ByteBufferedImage extends BufferedImage {
 			if(componentCount > 3) {
 				// 32bit image
  
+				/* not working with png+alpha
 				b =  (dataBuffer.getElem(i) );
 				g =  (dataBuffer.getElem(i+1));
 				r =  (dataBuffer.getElem(i+2));
-				a =  (dataBuffer.getElem(i+3));
+				a =  (dataBuffer.getElem(i+3));*/
+				
+				a =  (dataBuffer.getElem(i) );
+				r =  (dataBuffer.getElem(i+1));
+				g =  (dataBuffer.getElem(i+2));
+				b =  (dataBuffer.getElem(i+3));
  
 				argb[i] =   (byte) (a & 0xFF);
 				argb[i+1] = (byte) (r & 0xFF);
