@@ -140,7 +140,7 @@ public class ByteBufferedImage extends BufferedImage {
 		return convertBiToArray(bi.getWidth(), bi.getHeight(), bi);
 		//return convertDataBufferToArray(bi.getWidth(), bi.getHeight(), dataBuffer, componentCount);
 	}
-
+	
 
 	private static byte[] convertBiToArray(final int width, final int height,
 			BufferedImage bi) {
@@ -153,7 +153,7 @@ public class ByteBufferedImage extends BufferedImage {
 		int i;
 		int count = 0;
 		//for (int i = 0; i < length; i=i+4) {
-		for (int pixel = 0; pixel < numPixels; pixel=pixel+4) {
+		for (int pixel = 0; pixel < numPixels; pixel=pixel) {
 			// databuffer has unsigned integers, they must be converted to signed byte 
  
 			// original order from BufferedImage
