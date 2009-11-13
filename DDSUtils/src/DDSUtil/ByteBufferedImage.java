@@ -139,18 +139,15 @@ public class ByteBufferedImage extends BufferedImage {
 		int componentCount = bi.getColorModel().getNumComponents() ;
 		
 		
-		System.out.println(bi.isAlphaPremultiplied());
-		System.out.println(bi.getSampleModel());
-		System.out.println(bi.getColorModel());
-		System.out.println(bi.getTransparency());
 		byte[] convertDataBufferToArray = convertDataBufferToArray(bi.getWidth(), bi.getHeight(), dataBuffer, componentCount);
 //		return convertBiToArray(bi.getWidth(), bi.getHeight(), bi);
 		return convertDataBufferToArray;
 	}
 	
 
-	private static byte[] convertBiToArray(final int width, final int height,
-			BufferedImage bi) {
+	private static byte[] convertBiToArray(final int width, 
+			final int height,
+			final BufferedImage bi) {
 		int length = height * width * 4;
 		byte[] argb = new byte[length];
 		ColorModel colorspace = bi.getColorModel();

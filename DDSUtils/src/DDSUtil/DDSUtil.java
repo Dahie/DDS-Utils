@@ -120,7 +120,7 @@ public class DDSUtil {
 	 * @param compressionType
 	 * @return
 	 */
-	public static ByteBuffer compressTexture(final Image image, 
+	public static ByteBuffer compressTexture(final BufferedImage image, 
 			final Squish.CompressionType compressionType) {
 		
 		return new DXTBufferCompressor(image, compressionType).getByteBuffer();
@@ -131,9 +131,8 @@ public class DDSUtil {
 	 * @param compressionType
 	 * @return
 	 */
-	public static byte[] compressTextureToArray(final Image image, 
+	public static byte[] compressTextureToArray(final BufferedImage image, 
 			final Squish.CompressionType compressionType) {
-
 		return new DXTBufferCompressor(image, compressionType).getArray();
 	}
 	
