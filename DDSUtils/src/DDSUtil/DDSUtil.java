@@ -289,6 +289,13 @@ public class DDSUtil {
 	 */
 	public static Squish.CompressionType selectedCompression(final int compressionType) {
 		
+		// TODO maybe do as hasmap?
+//		 Hashtable numbers = new Hashtable();
+//	     numbers.put("one", new Integer(1));
+//	     numbers.put("two", new Integer(2));
+//	     numbers.put("three", new Integer(3));
+	 
+		
 		switch(compressionType) {
 			default:
 			case DDSImage.D3DFMT_A8R8G8B8:
