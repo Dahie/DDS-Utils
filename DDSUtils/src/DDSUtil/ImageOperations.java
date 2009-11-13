@@ -51,9 +51,9 @@ public class ImageOperations {
 	public static int[] readPixelRGB(final int c) {
 		int[] color = { 
 					255,
-					(c & 0xff0000) >> 16, 
-					(c & 0x00ff00) >> 8, 
-					(c & 0x0000ff)};
+					(c & 0x00ff0000) >> 16, 
+					(c & 0x0000ff00) >> 8, 
+					(c & 0x000000ff)};
 		return color;
 	}
 	
