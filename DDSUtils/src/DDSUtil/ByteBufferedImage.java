@@ -139,7 +139,8 @@ public class ByteBufferedImage extends BufferedImage {
 		int componentCount = bi.getColorModel().getNumComponents() ;
 		
 		
-		byte[] convertDataBufferToArray = convertDataBufferToArray(bi.getWidth(), bi.getHeight(), dataBuffer, componentCount);
+		byte[] convertDataBufferToArray = convertDataBufferToArray(bi.getWidth(), 
+				bi.getHeight(), dataBuffer, componentCount, bi.getType());
 //		return convertBiToArray(bi.getWidth(), bi.getHeight(), bi);
 		return convertDataBufferToArray;
 	}
@@ -161,7 +162,6 @@ public class ByteBufferedImage extends BufferedImage {
 			// databuffer has unsigned integers, they must be converted to signed byte 
  
 			// original order from BufferedImage
- 
  
 			if(colorspace.hasAlpha()) {
 				// 32bit image
@@ -204,7 +204,8 @@ public class ByteBufferedImage extends BufferedImage {
 	private static byte[] convertDataBufferToArray(final int width, 
 			final int height,
 			final DataBuffer dataBuffer, 
-			final int componentCount) {
+			final int componentCount,
+			final int bufferedImageType) {
 		int length = height * width * 4;
 		byte[] argb = new byte[length];
  
@@ -219,18 +220,20 @@ public class ByteBufferedImage extends BufferedImage {
 			if(componentCount > 3) {
 				// 32bit image
  
-				/* not working with png+alpha */
-				b =  (dataBuffer.getElem(i) );
-				g =  (dataBuffer.getElem(i+1));
-				r =  (dataBuffer.getElem(i+2));
-				a =  (dataBuffer.getElem(i+3));
-				
-				/* working with png+alpha
-				a =  (dataBuffer.getElem(i) );
-				r =  (dataBuffer.getElem(i+1));
-				g =  (dataBuffer.getElem(i+2));
-				b =  (dataBuffer.getElem(i+3));*/
- 
+				if (bufferedImageType != BufferedImage.TYPE_4BYTE_ABGR) {
+					/* working with png+alpha */
+					a =  (dataBuffer.getElem(i) );
+					r =  (dataBuffer.getElem(i+1));
+					g =  (dataBuffer.getElem(i+2));
+					b =  (dataBuffer.getElem(i+3));
+				} else {
+					/* not working with png+alpha */
+					b =  (dataBuffer.getElem(i) );
+					g =  (dataBuffer.getElem(i+1));
+					r =  (dataBuffer.getElem(i+2));
+					a =  (dataBuffer.getElem(i+3));
+				}
+					
 				argb[i] =   (byte) (a & 0xFF);
 				argb[i+1] = (byte) (r & 0xFF);
 				argb[i+2] = (byte) (g & 0xFF);
