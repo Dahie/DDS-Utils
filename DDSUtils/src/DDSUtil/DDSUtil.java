@@ -1,8 +1,8 @@
 package DDSUtil;
 
+
 import gr.zdimensions.jsquish.Squish;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileLockInterruptionException;
 
 import util.ImageUtils;
-
 import Compression.DXTBufferCompressor;
 import Compression.DXTBufferDecompressor;
 import JOGL.DDSImage;
@@ -120,7 +119,7 @@ public class DDSUtil {
 	 * @param compressionType
 	 * @return
 	 */
-	public static ByteBuffer compressTexture(final Image image, 
+	public static ByteBuffer compressTexture(final BufferedImage image, 
 			final Squish.CompressionType compressionType) {
 		
 		return new DXTBufferCompressor(image, compressionType).getByteBuffer();
@@ -131,9 +130,8 @@ public class DDSUtil {
 	 * @param compressionType
 	 * @return
 	 */
-	public static byte[] compressTextureToArray(final Image image, 
+	public static byte[] compressTextureToArray(final BufferedImage image, 
 			final Squish.CompressionType compressionType) {
-
 		return new DXTBufferCompressor(image, compressionType).getArray();
 	}
 	

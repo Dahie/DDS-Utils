@@ -22,7 +22,8 @@ import DDSUtil.ImageOperations;
 public class DXTBufferCompressor {
 
 //	byte[] compressedData;
-	protected byte[] data;
+	protected byte[] byteData;
+	protected int[] intData;
 	protected Dimension dimension;
 	protected CompressionType compressionType;
 	
@@ -59,7 +60,7 @@ public class DXTBufferCompressor {
 	 * @param image
 	 * @param compressionType
 	 */
-	public DXTBufferCompressor(final Image image, 
+	public DXTBufferCompressor(final BufferedImage image, 
 			final Squish.CompressionType compressionType) {
 		
 		this(ByteBufferedImage.convertBIintoARGBArray((BufferedImage) image),
@@ -75,7 +76,15 @@ public class DXTBufferCompressor {
 	public DXTBufferCompressor(final byte[] data, 
 			final Dimension dimension, 
 			final Squish.CompressionType compressionType) {
-		this.data = data;
+		this.byteData = data;
+		this.dimension = dimension;
+		this.compressionType = compressionType;
+	}
+	
+	public DXTBufferCompressor(final int[] data, 
+			final Dimension dimension, 
+			final Squish.CompressionType compressionType) {
+		this.intData = data;
 		this.dimension = dimension;
 		this.compressionType = compressionType;
 	}
@@ -90,12 +99,12 @@ public class DXTBufferCompressor {
 			
 			// the data-Array given to the squishCompressToArray is expected to be
 			// width * height * 4 -> with RGBA, which means, if we got RGB, we need to add A!
-			if(data.length < dimension.height*dimension.width*4) {
+			if(byteData.length < dimension.height*dimension.width*4) {
 				System.out.println("blow up array from RGB to ARGB");
-				data = convertRGBArraytiRGBAArray(data, dimension);
+				byteData = convertRGBArraytiRGBAArray(byteData, dimension);
 			}
 			
-			compressedData = squishCompressToArray(data, dimension.width, dimension.height, compressionType);
+			compressedData = squishCompressToArray(byteData, dimension.width, dimension.height, compressionType);
 			return ByteBuffer.wrap(compressedData);
 		} catch (DataFormatException e) {
 			e.printStackTrace();
@@ -128,16 +137,16 @@ public class DXTBufferCompressor {
 	}
 
 	/**
-	 * Get the Byte-array hold by this object.
+	 * Get the Byte-array held by this object.
 	 * @return
 	 */
 	public byte[] getArray() {
 		try {
-			return squishCompressToArray(data, dimension.width, dimension.height, compressionType);
+			return squishCompressToArray(byteData, dimension.width, dimension.height, compressionType);
 		} catch (final DataFormatException e) {
 			e.printStackTrace();
 		}
-		return data;
+		return byteData;
 	}
 
 	/**
@@ -148,23 +157,16 @@ public class DXTBufferCompressor {
 	 * @param compressionType
 	 * @return
 	 */
-	private static ByteBuffer squishCompress(final byte[] rgba, 
-			final int width, final int height, final Squish.CompressionType compressionType) {
-		
-		int storageRequirements = Squish.getStorageRequirements(width, height, compressionType);
-		 
-		byte[] compressedData = Squish.compressImage(rgba, 
-				width, 
-				height, 
-				new byte[storageRequirements], 
-				compressionType, 
-				Squish.CompressionMethod.CLUSTER_FIT);
-		ByteBuffer buffer = ByteBuffer.wrap(compressedData);
-		return buffer;
-	}
+//	private static ByteBuffer squishCompress(final byte[] rgba, 
+//			final int width, 
+//			final int height, 
+//			final Squish.CompressionType compressionType) {
+//		
+//		
+//		ByteBuffer buffer = ByteBuffer.wrap(squishCompressToArray(rgba, width, height, compressionType));
+//		return buffer;
+//	}
 
-
-	
 
 	/**
 	 * Compresses the RGBA-byte-array into a DXT-compressed byte-array.
@@ -195,6 +197,25 @@ public class DXTBufferCompressor {
 				Squish.CompressionMethod.CLUSTER_FIT);
 	} 
 	
+	private static byte[] squishCompressToArray(final int[] rgba, 
+			final int width, 
+			final int height, 
+			final Squish.CompressionType compressionType) throws DataFormatException {
+		
+		// expected array length
+		int length = width * height * 4;
+		if (rgba.length != length) throw new DataFormatException("unexpected length:" + 
+				rgba.length +  " instead of "+ length);
+		
+		int storageRequirements = Squish.getStorageRequirements(width, height, compressionType);
+		
+		return Squish.compressImage(rgba, 
+				width, 
+				height, 
+				new byte[storageRequirements], 
+				compressionType, 
+				Squish.CompressionMethod.CLUSTER_FIT);
+	} 
 	
 	
 	/**
@@ -205,12 +226,12 @@ public class DXTBufferCompressor {
 	 * @param compressionType
 	 * @return
 	 */
-	private static ByteBuffer squishCompress(final ByteBuffer bytebuffer, 
-			final int width ,final int height, final Squish.CompressionType compressionType) {
-		
-		byte[] rgba = toByteArray(bytebuffer);
-		return squishCompress(rgba, width, height, compressionType);
-	}
+//	private static ByteBuffer squishCompress(final ByteBuffer bytebuffer, 
+//			final int width ,final int height, final Squish.CompressionType compressionType) {
+//		
+//		//byte[] rgba = toByteArray(bytebuffer);
+//		return squishCompress(byteBuffer, width, height, compressionType);
+//	}
 
 	private static byte[] toByteArray(final ByteBuffer bytebuffer) {
 		byte[] rgba = new byte[bytebuffer.capacity()];

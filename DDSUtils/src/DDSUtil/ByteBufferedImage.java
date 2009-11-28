@@ -6,6 +6,7 @@ package DDSUtil;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
 import java.nio.Buffer;
@@ -71,16 +72,16 @@ public class ByteBufferedImage extends BufferedImage {
 	/**
 	 * @return
 	 */
-	public int[] getPixels() {
-		return convertBIintoIntArray(this);
-	}
+//	public int[] getPixels() {
+//		return convertBIintoIntArray(this);
+//	}
 
 	/**
 	 * @return
 	 */
-	public IntBuffer getPixelBuffer() {
-		return IntBuffer.wrap(getPixels());
-	}
+//	public IntBuffer getPixelBuffer() {
+//		return IntBuffer.wrap(getPixels());
+//	}
 	
 	/**
 	 * @return
@@ -137,12 +138,16 @@ public class ByteBufferedImage extends BufferedImage {
 		// read channel count
 		int componentCount = bi.getColorModel().getNumComponents() ;
 		
-//		return convertBiToArray(bi.getWidth(), bi.getHeight(), bi);
-		return convertDataBufferToArray(bi.getWidth(), bi.getHeight(), dataBuffer, componentCount);
+		byte[] convertDataBufferToArray = convertDataBufferToArray(bi.getWidth(), 
+				bi.getHeight(), dataBuffer, componentCount, bi.getType());
+		return convertDataBufferToArray;
 	}
 	
-	private static byte[] convertDataBufferToArray(final int width, final int height,
-			final DataBuffer dataBuffer, final int componentCount) {
+	private static byte[] convertDataBufferToArray(final int width, 
+			final int height,
+			final DataBuffer dataBuffer, 
+			final int componentCount,
+			final int bufferedImageType) {
 		int length = height * width * 4;
 		byte[] argb = new byte[length];
  
@@ -157,17 +162,20 @@ public class ByteBufferedImage extends BufferedImage {
 			if(componentCount > 3) {
 				// 32bit image
  
-				/* not working with png+alpha
-				b =  (dataBuffer.getElem(i) );
-				g =  (dataBuffer.getElem(i+1));
-				r =  (dataBuffer.getElem(i+2));
-				a =  (dataBuffer.getElem(i+3));*/
-				
-				a =  (dataBuffer.getElem(i) );
-				r =  (dataBuffer.getElem(i+1));
-				g =  (dataBuffer.getElem(i+2));
-				b =  (dataBuffer.getElem(i+3));
- 
+				if (bufferedImageType != BufferedImage.TYPE_4BYTE_ABGR) {
+					/* working with png+alpha */
+					a =  (dataBuffer.getElem(i) );
+					r =  (dataBuffer.getElem(i+1));
+					g =  (dataBuffer.getElem(i+2));
+					b =  (dataBuffer.getElem(i+3));
+				} else {
+					/* not working with png+alpha */
+					b =  (dataBuffer.getElem(i) );
+					g =  (dataBuffer.getElem(i+1));
+					r =  (dataBuffer.getElem(i+2));
+					a =  (dataBuffer.getElem(i+3));
+				}
+					
 				argb[i] =   (byte) (a & 0xFF);
 				argb[i+1] = (byte) (r & 0xFF);
 				argb[i+2] = (byte) (g & 0xFF);
@@ -201,18 +209,28 @@ public class ByteBufferedImage extends BufferedImage {
 	 * @param srcBI
 	 * @param trgBI
 	 */
-	/*private static void moveARGBtoABGR(BufferedImage srcBI, BufferedImage trgBI) {
+	private static void moveARGBtoABGR(BufferedImage srcBI, BufferedImage trgBI) {
 		int[] srcData = ( (DataBufferInt)srcBI.getData().getDataBuffer() ).getData();
 		byte[] trgData = ( (DataBufferByte)trgBI.getData().getDataBuffer() ).getData();
 		final int size = srcData.length;
 		for ( int i = 0; i > 16;i++ ) {
-		    trgData[i * 4 + 0] = (byte)( ( srcData & 0xFF000000 ) >> 24 );
-		    trgData[i * 4 + 1] = (byte)  ( srcData & 0x000000FF );
-		    trgData[i * 4 + 2] = (byte)( ( srcData & 0x0000FF00 ) >>  8 );
-		    trgData[i * 4 + 3] = (byte)( ( srcData & 0x00FF0000 ) >> 16 );
+		    trgData[i * 4 + 0] = (byte)( ( srcData[i] & 0xFF000000 ) >> 24 );
+		    trgData[i * 4 + 1] = (byte)  ( srcData[i] & 0x000000FF );
+		    trgData[i * 4 + 2] = (byte)( ( srcData[i] & 0x0000FF00 ) >>  8 );
+		    trgData[i * 4 + 3] = (byte)( ( srcData[i] & 0x00FF0000 ) >> 16 );
 		}
-		
-	}*/
+	}
+	
+	
+//	public static byte[] intArraytobyteArry(int[] srcArray) {
+//		byte[] byteArray = new byte[srcArray.length*4];
+//		for (int i = 0; i < srcArray.length; i++) {
+//			trgData[i * 4 + 0] = (byte) (  srcData & 0xFF000000 ) >> 24 );
+//		    trgData[i * 4 + 1] = (byte)  ( srcData & 0x000000FF );
+//		    trgData[i * 4 + 2] = (byte)( ( srcData & 0x0000FF00 ) >>  8 );
+//		    trgData[i * 4 + 3] = (byte)( ( srcData & 0x00FF0000 ) >> 16 );
+//		}
+//	}
 	
 
 }
