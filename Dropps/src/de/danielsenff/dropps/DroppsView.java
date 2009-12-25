@@ -1,7 +1,10 @@
 package de.danielsenff.dropps;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -14,6 +17,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.Timer;
 import javax.swing.border.EtchedBorder;
 
@@ -153,6 +157,8 @@ public class DroppsView extends FrameView {
 	
 	private void initComponents() {
 
+		this.getFrame().setResizable(false);
+		
         mainPanel = new javax.swing.JPanel();
         mainPanel.setName("mainPanel"); // NOI18N
         mainPanel.setLayout(new BorderLayout());
@@ -196,11 +202,28 @@ public class DroppsView extends FrameView {
         
 //        final JPanel dropPanel = new JPanel();
         final DefaultListModel dlm = new DefaultListModel();
-        dropPanel = new JList(dlm);
+        dropPanel = new JList(dlm) {
+        	@Override
+        	public void paintComponent(Graphics g) {
+        		super.paintComponent(g);
+        		
+        		final int fontsize = 24;
+        		final Font font = g.getFont();
+        		final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
+        		g.setFont(newFont);
+        		g.setColor(new Color(220, 220, 220));
+        		// and if even now to small, then cut
+        		g.drawString("Drop your images", 15, 25);
+        		g.setFont(font);
+        		g.drawString("Supports BMP, JPG and PNG", 15, 45);
+        	}
+        };
 //        dropPanel.setBackground(Color.white);
-        dropPanel.setPreferredSize(new Dimension(350, 190));
+        
         dropPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        mainPanel.add(dropPanel, BorderLayout.CENTER);
+        JScrollPane scrollpane = new JScrollPane(dropPanel);
+        scrollpane.setPreferredSize(new Dimension(350, 190));
+        mainPanel.add(scrollpane, BorderLayout.CENTER);
         
         new FileDrop( null, dropPanel, /*dragBorder,*/ new FileDrop.Listener()
         {   
