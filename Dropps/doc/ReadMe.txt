@@ -39,12 +39,8 @@ This version of Dropps is released as three separate files:
       
   * Dropps-other-%version%.zip
  
-      This is the main release file for Windows XP or later. 
-      It contains all you need to run
-      the application. To install the application, 
-      drag the application icon  wherever you want to put 
-      it onto your file system.
-      Next, run the application by clicking on the icon.
+      This is the main release file for all Java6 supporting 
+      platforms. Run the application by clicking on the jar.
 
   * Dropps-source-%version%.zip
 
@@ -70,14 +66,19 @@ more general feedback, etc.
 
 * CREDITS
 
-First and foremost thanks are in order for the guys of the Java OpenGL-Project, who's DDSImage-Class was a great starting point for this endeavor.
-Secondly big thanks to Patriarhou Kyrillou for creating a Java implementation of the Squish DXT-compression library by Simon Brown.
+First and foremost thanks are in order for the guys of the Java OpenGL-Project, 
+who's DDSImage-Class was a great starting point for this endeavor.
+Secondly big thanks to Patriarhou Kyrillou for creating a Java implementation 
+of the Squish DXT-compression library by Simon Brown.
 
-I also thank Marcel Offermann and Marvin Fršhlich, the latter from the Xith3d-Project, for answering my occasional questions.
+I also thank Marcel Offermann and Marvin Fršhlich, the latter from the 
+Xith3d-Project, for answering my occasional questions.
 
-Furthermore I'd like to thank my hosts in South Tyrol, where I lived when I wrote the majority of the code.
+Furthermore I'd like to thank my hosts in South Tyrol, where I lived 
+when I wrote the majority of the code.
 
-Thanks to the guys at CTDP (http://www.ctdp.net), for inspiring me to do this app and for their feedback during development.
+Thanks to the guys at CTDP (http://www.ctdp.net), for inspiring me to 
+do this app and for their feedback during development.
 
 
 * CONTACT DETAILS
