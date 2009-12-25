@@ -224,6 +224,7 @@
 	</target>
 	<target name="version.default" depends="version.input">
 		<property name="new.version" value="${build.version}"/>
+		<replace file="${dist}/ReadMe.txt" token="%version%" value="${build.version}"/>
 	</target>
 	<target name="version" depends="version.input,version.default" description="Prompt user to enter new version">
 		<!-- At the moment version requires nothing else -->

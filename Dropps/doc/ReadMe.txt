@@ -1,11 +1,13 @@
 ----------------------------------------------------------------------
-  Dropps, Version 0.9 Beta
+  Dropps, Version %version%
 ----------------------------------------------------------------------
 
 * INTRODUCTION
 
-Dropps is a utility for converting JPG, BMP and PNG images to the DirectDrawSurfaces DDS texture format. Simply drop the file you want to convert onto the application and the new DDS-image is created.
-Supports DXT1-5 compression.
+Dropps is a utility for converting JPG, BMP and PNG images to the 
+DirectDrawSurfaces DDS texture format. 
+Simply drop the file you want to convert onto the application 
+and the new DDS-image is created. It supports DXT1-5 compression.
 
 
 * SYSTEM REQUIREMENTS
@@ -17,7 +19,7 @@ Supports DXT1-5 compression.
 
 This version of Dropps is released as three separate files:
 
-  * Dropps-mac-0.9.dmg
+  * Dropps-mac-%version%.dmg
  
       This is the main release file for Mac OS X. 
       It contains all you need to run
@@ -26,7 +28,16 @@ This version of Dropps is released as three separate files:
       folder, or wherever you want to put it onto your file system.
       Next, run the application by clicking on the icon.
 
-  * Dropps-win-0.9.zip
+  * Dropps-win-%version%.zip
+ 
+      This is the main release file for Windows XP or later. 
+      It contains all you need to run
+      the application. To install the application, 
+      drag the application icon  wherever you want to put 
+      it onto your file system.
+      Next, run the application by clicking on the icon.
+      
+  * Dropps-other-%version%.zip
  
       This is the main release file for Windows XP or later. 
       It contains all you need to run
@@ -35,7 +46,7 @@ This version of Dropps is released as three separate files:
       it onto your file system.
       Next, run the application by clicking on the icon.
 
-  * Dropps-source-0.9.zip
+  * Dropps-source-%version%.zip
 
       This contains the source code of the application. It consists of
       the Java source code of the app and the used libraries, as well 
