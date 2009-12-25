@@ -70,7 +70,7 @@ public class ImageFileChooser extends JFileChooser {
 //        this.addChoosableFileFilter(addFileFilter("bmp", "Windows Bitmap (*.bmp)"));
 //        this.addChoosableFileFilter(addFileFilter("jpg", "JPEG (*.jpg)"));
 		String[] extensions = {"dds"};
-        this.addChoosableFileFilter(addMultipleFileFilter(extensions, bundle.getString("All_supported_graphics") + " (*.bmp, *.dds)"));
+        //this.addChoosableFileFilter(addMultipleFileFilter(extensions, bundle.getString("All_supported_graphics") + " (*.dds)"));
 	}
 
 
