@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Template" default="build" basedir=".">
+<project name="Limegreen" default="build" basedir=".">
 	<property name="props" value="build.properties"/>
 	<property name="secret" value="secret.properties"/>
+	<property name="secret.example" value="secret.example.properties"/>
+	<property name="secret.temp" value="secret.temp.properties"/>
 	<property file="${props}"/>
-	<property file="${secret}"/>
 	<property name="name" value="${application.name}"/>
 	<!-- Preexisitng Directories -->
 	<property name="src" location="src"/>
+	<property name="doc" location="doc"/>
 	<property name="lib" location="lib"/>
 	<property name="tools" location="tools"/>
 		<property name="antlib" location="${tools}/antlib"/>
@@ -34,19 +36,38 @@
 			<property name="jar.lib" location="${jar}/lib"/>
 			<property name="jarfile.main" location="${jar.main}/main.jar"/>
 		<property name="app" location="${build}/app"/>
+			<property name="new.stub" location="${app}/${name}"/>
 		<property name="exe" location="${build}/exe"/>
-	
-	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler"  classpath="${jarbundler}/jarbundler-1.9.jar"/>
-	<taskdef name="jsmoothgen" classname="net.charabia.jsmoothgen.ant.JSmoothGen" classpath="${jsmooth}/jsmoothgen-ant.jar"/>
-	<condition property="google.classpath"
-		value="${google};${google}/ant-googlecode-0.0.1.jar"
-		else="${google}/ant-googlecode-0.0.1.jar">
-		<not>
-			<available classname="org.apache.tools.ant.util.Base64Converter"/>
-		</not>
+
+	<available file="${secret}" property="secret.present"/>
+	<condition property="copy.do">
+		<isfalse value="${secret.present}"/>
 	</condition>
-	<echo message="Google classpath set to ${google.classpath}"/>
-	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${google.classpath}" name="gcupload"/>
+	<condition property="copy.dont">
+		<istrue value="${secret.present}"/>
+	</condition>
+
+	<fileset id="jar.jars" dir="${jarbundler}">
+		<include name="**/*.jar"/>
+	</fileset>
+	<path id="jar.path">
+		<fileset refid="jar.jars"/>
+	</path>
+	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" classpathref="jar.path"/>
+	<fileset id="jsmooth.jars" dir="${jsmooth}">
+		<include name="**/*.jar"/>
+	</fileset>
+	<path id="jsmooth.path">
+		<fileset refid="jsmooth.jars"/>
+	</path>
+	<taskdef name="jsmoothgen" classname="net.charabia.jsmoothgen.ant.JSmoothGen" classpathref="jsmooth.path"/>
+	<fileset id="google.jars" dir="${google}">
+		<include name="**/*.jar"/>
+	</fileset>
+	<path id="google.path">
+		<fileset refid="google.jars"/>
+	</path>
+	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpathref="google.path" name="gcupload"/>
 	<taskdef classname="com.jameslow.update.Generator" classpath="${autoupdate}" name="autoupdate"/>
 	<fileset id="ant.jars" dir="${antlib}">
 		<include name="**/*.jar"/>
@@ -65,7 +86,7 @@
 	<pathconvert property="antlib.classpath" pathsep=";">
 		<path refid="antlib.id"/>
 	</pathconvert>
-	<!--<taskdef classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp" classpath="${antlib.classpath}" name="scp"/>-->
+	<!-- <taskdef classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp" classpath="${antlib.classpath}" name="scp"/> -->
 	<taskdef classname="com.jameslow.Substring" classpath="${antlib}" name="substring"/>
 
 	<condition property="onejar.do">
@@ -144,6 +165,13 @@
 		<pathelement path="${jsmooth}/jnismooth.jar"/>
 	</path>
 	
+	<target name="secret.copy" description="Copy secret file if it doesn't exist" if="copy.do">
+		<copy file="${secret.example}" tofile="${secret}" overwrite="false"/>
+	</target>
+	<target name="secret" depends="secret.copy" description="Source the secret file">
+		<property file="${secret}"/>
+	</target>
+	
 	<target name="compile.onejar" description="Compile onejar">
 		<javac srcdir="${onejar}" destdir="${onejar}"
 			source="1.4" target="1.4"
@@ -160,14 +188,6 @@
 		</javac>
 	</target>
 	
-	<target name="compile.base64" description="Compile Base64 for versions of ant below 1.7">
-		<javac srcdir="${google}" destdir="${google}"
-			source="1.4" target="1.4"
-			failonerror="true"
-			includes="**/*.java">
-		</javac>
-	</target>
-	
 	<target name="compile.utils" description="Compile additional ant utils">
 		<javac srcdir="${antlib}" destdir="${antlib}"
 			source="1.4" target="1.4"
@@ -176,7 +196,7 @@
 		</javac>
 	</target>
 	
-	<target name="prepare" description="Create build dirs">
+	<target name="prepare" depends="secret" description="Create build dirs">
 		<mkdir dir="${build}"/>
 			<mkdir dir="${bin}"/>
 			<mkdir dir="${dist}"/>
@@ -185,6 +205,9 @@
 				<mkdir dir="${jar.lib}"/>
 			<mkdir dir="${app}"/>
 			<mkdir dir="${exe}"/>
+		<copy todir="${dist}">
+			<fileset dir="${doc}" includes="*.txt"/>
+		</copy>
 	</target>
 	
 	<target name="version.input" depends="prepare" if="version.do">
@@ -201,6 +224,7 @@
 	</target>
 	<target name="version.default" depends="version.input">
 		<property name="new.version" value="${build.version}"/>
+		<replace file="${dist}/ReadMe.txt" token="%version%" value="${build.version}"/>
 	</target>
 	<target name="version" depends="version.input,version.default" description="Prompt user to enter new version">
 		<!-- At the moment version requires nothing else -->
@@ -211,9 +235,9 @@
 		<copy file="${jsmooth.infile}" tofile="${jsmooth.outfile}"/>
 		<replace file="${jsmooth.outfile}" token="@icofile@" value="${application.win.icon}"/>
 		<replace file="${jsmooth.outfile}" token="@exefile@" value="${name}.exe"/>
+		<replace file="${jsmooth.outfile}" token="@jarfile@" value="${name}.jar"/>
 		<replace file="${jsmooth.outfile}" token="@initheapmemory@" value="${initheap}"/>
 		<replace file="${jsmooth.outfile}" token="@maxheapmemory@" value="${maxheap}"/>
-		<replace file="${jsmooth.outfile}" token="@jarfile@" value="${name}.jar"/>
 		<replace file="${jsmooth.outfile}" token="@mainclass@" value="${mainclass}"/>
 		<replace file="${jsmooth.outfile}" token="@exewrapper@" value="${build.exewrapper}"/>
 	</target>
@@ -256,11 +280,11 @@
 		</jar>
 		<jar jarfile="${jarfile}" manifest="${manifest}/onejar-MANIFEST.MF">
 			<fileset dir="${jar}"/>
-			<fileset dir="${onejar}" includes="**/*.class" />
+			<fileset dir="${onejar}" includes="**/*.class"/>
 		</jar>
 	</target>
 	
-	<!-- remove possible signature files from library jars 
+		<!-- remove possible signature files from library jars 
 	 https://issues.apache.org/bugzilla/show_bug.cgi?id=34403 -->
 	<target name="jar.clean_sf" depends="jar.include" if="include.do">
 		<tempfile property="templib" destdir="${dist}/tmp" />
@@ -279,7 +303,7 @@
 		<echo message="Extracting and including library jars in main jar, onejar.use=${onejar.use}."/>
 		<jar jarfile="${jarfile}" basedir="${bin}" manifest="${manifest}/main-MANIFEST.MF">
 			<!-- Merge library jars into final jar file -->
-			<zipgroupfileset refid="lib.jars" />
+			<zipgroupfileset refid="lib.jars"/>
 		</jar>
 	</target>
 
@@ -292,31 +316,48 @@
 	<target name="exe.run" depends="exe">
 		<exec dir="${dist}" executable="${dist}/${name}.exe"/>
 	</target>
-	
-	<target name="app" depends="jar" description="Build app">
+	<target name="app.other" depends="jar" if="not.mac">
+		<copy file="${jarbundler}/JavaApplicationStub" tofile="${new.stub}"/>
+	</target>
+	<target name="app" depends="app.other" description="Build app">
 		<jarbundler
 			name="${name}"
 			shortname="${name}"
 			icon="${application.osx.icon}"
 			jvmversion="${build.jvm}+"
 			build="${build.number}"
-			vmoptions="${vmoptions}"
 			version="${build.version}"
+			vmoptions="${vmoptions}"
 			dir="${dist}"
 			mainclass="${mainclass}"
-			jar="${jarfile}"/>
+			jar="${jarfile}"
+			stubfile="${new.stub}"/>
 	</target>
 	<target name="app.run" depends="app" if="is.mac">
 		<exec dir="${dist}" executable="open">
 			<arg line="-a ${name}.app"/>
 		</exec>
 	</target>
-	<target name="mac.zip" depends="version,app" description="Make mac zip">
+	<target name="mac.zip.mac" depends="version,app" description="Make mac zip on osx" if="is.mac">
 		<property name="mac.zip" value="${name}-mac-${new.version}.zip"/>
 		<property name="mac.zip.full" location="${dist}/${mac.zip}"/>
 		<zip destfile="${mac.zip.full}"
 			basedir="${dist}"
-			includes="${name}.app/**" />
+			includes="${name}.app/**, *.txt" />
+	</target>
+	<target name="mac.zip.other" depends="version,app" description="Make mac zip windows/unix/other" if="not.mac">
+		<property name="mac.zip" value="${name}-mac-${new.version}.zip"/>
+		<property name="mac.zip.full" location="${dist}/${mac.zip}"/>
+		<zip destfile="${mac.zip.full}"
+			basedir="${dist}"
+			includes="${name}.app/**, *.txt">
+			<zipfileset dir="${dist}/${name}.app/Contents/MacOS" filemode="755" prefix="${name}.app/Contents/MacOS">
+				<include name="${name}"/>
+			</zipfileset>
+		</zip>
+	</target>
+	<target name="mac.zip" depends="mac.zip.mac,mac.zip.other" description="Make mac zip">
+
 	</target>
 	<target name="notdmg" description="Set distribution if not using dmg" if="not.mac">
 		<property name="mac.dmg" value="${mac.zip}"/>
@@ -337,20 +378,20 @@
 		<property name="win.zip.full" location="${dist}/${win.zip}"/>
 		<zip destfile="${win.zip.full}"
 			basedir="${dist}"
-			includes="${name}.exe" />
+			includes="${name}.exe, *.txt" />
 	</target>
 	<target name="other.zip" depends="version,jar" description="Make other zip">
 		<property name="other.zip" value="${name}-other-${new.version}.zip"/>
 		<property name="other.zip.full" location="${dist}/${other.zip}"/>
 		<zip destfile="${other.zip.full}"
 			basedir="${dist}"
-			includes="${name}.jar" />
+			includes="${name}.jar, *.txt" />
 	</target>
 	<target name="source.zip" depends="version,jar" description="Make source zip">
 		<property name="source.zip" value="${name}-source-${new.version}.zip"/>
 		<property name="source.zip.full" location="${dist}/${source.zip}"/>
-		<move file="${secret}" tofile="secret.temp.properties"/>
-		<copy file="secret.example.properties" tofile="${secret}"/>
+		<move file="${secret}" tofile="${secret.temp}"/>
+		<copy file="${secret.example}" tofile="${secret}"/>
 		<zip destfile="${source.zip.full}">
 			<fileset dir=".">
 				<include name="**"/>
@@ -358,11 +399,11 @@
 				<exclude name="**/.git/**"/>
 				<exclude name="**/CVS/**"/>
 				<exclude name="**/build/**"/>
-				<exclude name="secret.temp.properties"/>
+				<exclude name="${secret.temp}"/>
 			</fileset>
 		</zip>
-		<delete file="secret.properties"/>
-		<move file="secret.temp.properties" tofile="secret.properties"/>
+		<delete file="${secret}"/>
+		<move file="${secret.temp}" tofile="${secret}"/>
 	</target>
 
 	<target name="run" depends="jar" description="Run jar file">

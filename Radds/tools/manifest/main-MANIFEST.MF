@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Ant-Version: Apache Ant 1.7.0
-Created-By: 14.1-b02-90 (Apple Inc.)
-Main-Class: de.danielsenff.radds.controller.Radds
+Ant-Version: Apache Ant 1.7.1
+Created-By: 14.3-b01-101 (Apple Inc.)
+Main-Class: de.danielsenff.dropps.Dropps
 
