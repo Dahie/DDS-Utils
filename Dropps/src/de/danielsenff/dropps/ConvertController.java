@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 import DDSUtil.DDSUtil;
 import DDSUtil.MipMapsUtil;
@@ -105,6 +106,14 @@ public class ConvertController implements IProgressObserverable {
 		} catch (IOException e) {
 			e.printStackTrace();
 			//			showErrorDialog(e.getMessage());
+		} catch (OutOfMemoryError e) {
+			e.printStackTrace();
+			final long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+			JOptionPane.showMessageDialog(null, 
+					"<html>Error: Out of memory: " + mem0 +
+					"<br>The operation is aborted. </html>",	"Error", 
+					JOptionPane.ERROR_MESSAGE);
+			
 		}
 		dlm.removeElement(file);
 		

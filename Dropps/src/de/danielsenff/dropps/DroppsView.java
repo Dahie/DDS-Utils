@@ -206,21 +206,19 @@ public class DroppsView extends FrameView {
         	@Override
         	public void paintComponent(Graphics g) {
         		super.paintComponent(g);
-        		
-        		final int fontsize = 24;
-        		final Font font = g.getFont();
-        		final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
-        		g.setFont(newFont);
-        		g.setColor(new Color(220, 220, 220));
-        		// and if even now to small, then cut
-        		g.drawString("Drop your images", 15, 25);
-        		g.setFont(font);
-        		g.drawString("Supports BMP, JPG and PNG", 15, 45);
+        		if(this.getModel().getSize() == 0) {
+        			final int fontsize = 24;
+        			final Font font = g.getFont();
+        			final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
+        			g.setFont(newFont);
+        			g.setColor(new Color(128, 128, 128));
+        			// and if even now to small, then cut
+        			g.drawString("Drop your images", 15, 25);
+        			g.setFont(font);
+        			g.drawString("Supports BMP, JPG and PNG", 15, 45);
+        		}
         	}
         };
-//        dropPanel.setBackground(Color.white);
-        
-        dropPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         JScrollPane scrollpane = new JScrollPane(dropPanel);
         scrollpane.setPreferredSize(new Dimension(350, 190));
         mainPanel.add(scrollpane, BorderLayout.CENTER);
