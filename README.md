@@ -4,10 +4,10 @@ DDS-Utils are a selection of tools to work with DirectDrawSurfaces textures in J
 
 ## DDS-Utils Provides
 
-Badds - Batch a DDS, Rescale and Batch-process DDS-files.
-Radds - Review a DDS, Lightweight DDS-viewer
-Dropps - Simple DDS-image-converter
-DDSUtil - Wannabe-library for DDS-conversion
+- Badds - Batch a DDS, Rescale and Batch-process DDS-files.
+- Radds - Review a DDS, Lightweight DDS-viewer
+- Dropps - Simple DDS-image-converter
+- DDSUtil - Wannabe-library for DDS-conversion
 
 Each subproject has it's own project folder in the repository. 
 I use eclipse to check each one out. The Tools require the DDSUtils-project in their buildpath.
@@ -24,8 +24,7 @@ I'm sure there are things that can be nicer and I'm open for feedback and critic
 Please see the [wiki][wiki]
 
 ## Author
-Imageflow is written by 
-[Daniel Senff][dahie]
+DDS-Utils are written by [Daniel Senff][dahie]
 
 ## License
 Released under a [Gnu General Public License v3][license].
