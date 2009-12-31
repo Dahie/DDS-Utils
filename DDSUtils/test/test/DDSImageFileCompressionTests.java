@@ -6,10 +6,13 @@ package test;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Test;
+
 import junit.framework.TestCase;
-import Helper.Stopwatch;
+import util.Stopwatch;
 import JOGL.DDSImage;
-import Model.DDSImageFile;
+import Model.DDSFile;
+import static org.junit.Assert.*;
 
 /**
  * @author danielsenff
@@ -18,46 +21,47 @@ import Model.DDSImageFile;
 public class DDSImageFileCompressionTests extends DDSTestCase {
 
 	
-	
+	@Test
 	public void testOriginal() {
-		DDSImageFile ddsimage;
+		DDSFile ddsimage;
 		try {
-			ddsimage = new DDSImageFile(textureDDS1024);
+			ddsimage = new DDSFile(textureDDS1024);
+			ddsimage.loadImageData();
 
 			// write
 			File newFile = new File(outputDirectory+"RAIKKONENEXTRA0_original.dds");
 			ddsimage.write(newFile);
 
-
 			// test
-			DDSImageFile newddsimage;
-
-			newddsimage = new DDSImageFile(newFile);
+			DDSFile newddsimage;
+			newddsimage = new DDSFile(newFile);
 			assertDDSImage(ddsimage, newddsimage);
-			ddsimage.close();
-			newddsimage.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		System.gc();
 	}
-	
+
+	@Test
 	public void testDXT5() {
 		writeWithOriginalBuffer(DDSImage.D3DFMT_DXT5, outputDirectory+"RAIKKONENEXTRA0_dxt5resave.dds");
 	}
 	
+	@Test
 	public void testDXT3() {
 		writeWithOriginalBuffer(DDSImage.D3DFMT_DXT3, outputDirectory+"RAIKKONENEXTRA0_dxt3resave.dds");
 	}
 	
+	@Test
 	public void testDXT1() {
 		writeWithOriginalBuffer(DDSImage.D3DFMT_DXT1, outputDirectory+"RAIKKONENEXTRA0_dxt1resave.dds");
 	}
 
+	@Test
 	private void writeWithOriginalBuffer(final int format,  final String filename) {
-		DDSImageFile ddsimage;
+		DDSFile ddsimage;
 		try {
-			ddsimage = new DDSImageFile(textureDDS1024);
+			ddsimage = new DDSFile(textureDDS1024);
+			ddsimage.loadImageData();
 
 			ddsimage.setPixelformat(format);
 
@@ -67,66 +71,49 @@ public class DDSImageFileCompressionTests extends DDSTestCase {
 
 
 			// test
-			DDSImageFile newddsimage = new DDSImageFile(newFile);
+			DDSFile newddsimage = new DDSFile(newFile);
+			ddsimage.loadImageData();
 
 			assertEquals(ddsimage.getHeight(), newddsimage.getHeight());
 			assertEquals(ddsimage.getWidth(), newddsimage.getWidth());
 			assertEquals(true, newddsimage.isCompressed());
 			assertEquals(format, newddsimage.getPixelformat());
-
-
-			ddsimage.close();
-			newddsimage.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			assertEquals(true, false);
 		}
-		System.gc();
 	}
-		public void testBuildDDSImageFile() {
-//		buildnewDDSImageFile(DDSImage.D3DFMT_DXT5, true, 
-//				directory + "RAIKKONENEXTRA0_buildDDSImageDXT5.dds");
-	}
-	
-	private void buildnewDDSImageFile(int format, boolean canCreateMipmaps, String filename) {
+
+	private void buildnewDDSImageFile(int format, boolean hasMipmaps, String filename) {
 		
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.start();
 		
 		File newFile = new File(filename);
-		DDSImageFile ddsimage;
+		DDSFile ddsimage;
 		try {
-			ddsimage = new DDSImageFile(textureDDS1024.getAbsolutePath());
+			ddsimage = new DDSFile(textureDDS1024.getAbsolutePath());
 
 			// Compress again
 			if (format != -1) {
 				// not original compression
 				ddsimage.setPixelformat(format);
 			}
-			ddsimage.activateMipMaps(canCreateMipmaps);
+			ddsimage.setHasMipMaps(hasMipmaps);
 
-			DDSImageFile buildDDSimage = new DDSImageFile(filename, ddsimage.getData(),format, canCreateMipmaps );
-
+			DDSFile buildDDSimage = new DDSFile(new File(filename), ddsimage.getData(), format, hasMipmaps );
 
 			stopwatch.stop();
 			stopwatch.printMilliseconds("Time for test:");
 
 			// test
-			//DDSImageFile newddsimage = new DDSImageFile(newFile);
 			assertDDSImage(ddsimage, buildDDSimage);
-			assertEquals(canCreateMipmaps, buildDDSimage.hasMipMaps());
+			assertEquals(hasMipmaps, buildDDSimage.hasMipMaps());
 			if(format != -1)
 				assertEquals(format, buildDDSimage.getPixelformat());
-			
-
-			ddsimage.close();
-			buildDDSimage.close();
 		} catch (IllegalArgumentException e2) {
 			e2.printStackTrace();
 			assertEquals(true, false);
 		}
-		System.gc();
 	}
-
-
 }

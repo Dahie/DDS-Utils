@@ -8,7 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import org.junit.Test;
+
 import JOGL.DDSImage;
+import static org.junit.Assert.*;
 
 
 /**
@@ -17,11 +20,12 @@ import JOGL.DDSImage;
  */
 public class DDSImageTests extends DDSTestCase {
 
-	
+	@Test
 	public void testFourCC() throws FileNotFoundException, IOException {
 		assertTrue("is a dds image", DDSImage.isDDSImage(new FileInputStream(textureDDS1024)));
 	}
 	
+	@Test
 	public void testByteBuffer() {
 		try {
 			DDSImage image = DDSImage.read(textureDDS1024);
@@ -30,9 +34,9 @@ public class DDSImageTests extends DDSTestCase {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
+	@Test
 	public void testByteBufferGet() {
 		try {
 			DDSImage image = DDSImage.read(textureDDS1024);
@@ -44,7 +48,5 @@ public class DDSImageTests extends DDSTestCase {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
-	
 }

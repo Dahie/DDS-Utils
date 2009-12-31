@@ -9,12 +9,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.junit.Test;
+
 import DDSUtil.DDSUtil;
 import DDSUtil.MipMapsUtil;
 import DDSUtil.NonCubicDimensionException;
-import Helper.Stopwatch;
+import util.Stopwatch;
 import JOGL.DDSImage;
-import Model.DDSImageFile;
+import Model.DDSFile;
+import static org.junit.Assert.*;
 
 /**
  * @author danielsenff
@@ -23,34 +26,42 @@ import Model.DDSImageFile;
 public class WriteNonSquareImages extends DDSTestCase {
 
 	
+	@Test
 	public void test512x512() {
 		saveNonSquareImages(DDSImage.D3DFMT_DXT5, true, inputDirectory +"512x512.bmp", outputDirectory + "test_nonsquare_512x512.dds");
 	}
 	
+	@Test
 	public void test512x256() {
 		saveNonSquareImages(DDSImage.D3DFMT_DXT5, true, inputDirectory +"512x256.bmp", outputDirectory + "test_nonsquare_512x256.dds");
 	}
 	
+	@Test
 	public void test512x512noMipMap() {
 		saveNonSquareImages(DDSImage.D3DFMT_DXT5, false, inputDirectory +"512x512.bmp", outputDirectory + "test_nonsquare_512x512noMipMap.dds");
 	}
 	
+	@Test
 	public void test512x256noMipMap() {
 		saveNonSquareImages(DDSImage.D3DFMT_DXT5, false, inputDirectory +"512x256.bmp", outputDirectory + "test_nonsquare_512x256noMipMap.dds");
 	}
 	
+	@Test
 	public void test512x240() {
 		saveNonSquareImages(DDSImage.D3DFMT_DXT5, true, inputDirectory +"512x240.bmp", outputDirectory + "test_nonsquare_512x240.dds");
 	}
 	
+	@Test
 	public void test512x240noMipMap() {
 		saveNonSquareImages(DDSImage.D3DFMT_DXT5, false, inputDirectory +"512x240.bmp", outputDirectory + "test_nonsquare_512x240noMipMap.dds");
 	}
 	
+	@Test
 	public void test423x240() {
 		saveNonSquareImages(DDSImage.D3DFMT_DXT5, true, inputDirectory +"423x240.bmp", outputDirectory + "test_nonsquare_523x240.dds");
 	}
 	
+	@Test
 	public void test423x240noMipMap() {
 		saveNonSquareImages(DDSImage.D3DFMT_DXT5, false, inputDirectory +"423x240.bmp", outputDirectory + "test_nonsquare_523x240noMipMap.dds");
 	}
@@ -65,7 +76,7 @@ public class WriteNonSquareImages extends DDSTestCase {
 
 	
 			// test
-			DDSImageFile newddsimage = new DDSImageFile(newFile);
+			DDSFile newddsimage = new DDSFile(newFile);
 			
 			assertEquals(canCreateMipmaps, newddsimage.hasMipMaps());
 			if(format != -1) // original or not?

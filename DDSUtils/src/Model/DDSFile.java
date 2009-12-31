@@ -78,7 +78,6 @@ public class DDSFile extends AbstractImageFile{
 		try {
 			ddsimage = DDSImage.read(file);
 			init(ddsimage);
-//			ddsimage.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -93,7 +92,6 @@ public class DDSFile extends AbstractImageFile{
 	public DDSFile(final File file, final DDSImage ddsimage) {
 		this.file = file;
 		init(ddsimage);
-//		ddsimage.close();
 	}
 	
 	/**

@@ -6,18 +6,17 @@ package test;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.TestCase;
 import JOGL.DDSImage;
 import Model.DDSFile;
-import Model.DDSImageFile;
+import static org.junit.Assert.*;
 
 /**
  * @author danielsenff
  *
  */
-public class DDSTestCase extends TestCase {
+public class DDSTestCase {
 
-	String outputDirectory = "/Users/danielsenff/Programming/Testing/";
+	String outputDirectory = "test/output/";
 	String inputDirectory = "test/resource/";
 	
 	File texturePNG2048 = new File(inputDirectory +"STRBahrain.png");
@@ -29,15 +28,9 @@ public class DDSTestCase extends TestCase {
 	File original2048 = new File(inputDirectory +"RAIKKONENEXTRA0.dds");
 	
 	
-	public static DDSImageFile loadDDSImageFile(File file) {
-		DDSImageFile ddsimage = null;
-		ddsimage = new DDSImageFile(file);
-		return ddsimage;
-	}
-	
 	public static DDSFile loadDDSFile(File file) {
 		DDSFile ddsimage = null;
-		ddsimage = new DDSImageFile(file);
+		ddsimage = new DDSFile(file);
 		return ddsimage;
 	}
 	
@@ -51,7 +44,7 @@ public class DDSTestCase extends TestCase {
 		return ddsimage;
 	}
 	
-	public static void assertDDSImage(final DDSImageFile ddsimage, final DDSImageFile newddsimage) {
+	public static void assertDDSImage(final DDSFile ddsimage, final DDSFile newddsimage) {
 		assertEquals("height",ddsimage.getHeight(), newddsimage.getHeight());
 		assertEquals("width", ddsimage.getWidth(), newddsimage.getWidth());
 		assertEquals("is compressed", ddsimage.isCompressed(), newddsimage.isCompressed());

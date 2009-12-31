@@ -384,15 +384,29 @@ public class TEXImage {
 		private Vector<EmbeddedBuffer> readHeaderTable(ByteBuffer buf) {
 			int offset, size;
 			Vector<EmbeddedBuffer> embeddedBuffer = new Vector<EmbeddedBuffer>();
-			for (int i = 0; i < 8; i++) {
-				offset = buf.getInt();
-				size = buf.getInt();
-				EmbeddedBuffer embBuffer = new EmbeddedBuffer();
-				byte[] ddsbuffer = new byte[size];
-				embBuffer.buffer = buf.get(ddsbuffer, offset, size);
-				embBuffer.size = size;
-				embBuffer.offset = offset;
-				embeddedBuffer.add(embBuffer);
+			/*
+			 *  iterate over 5 tables, mapping pixelformat
+			 *  Table #1 Ý r8g8b8, x8r8g8b8, r5g6b5, x1r5g5b5 
+			 *  Table #2 Ý a8r8g8b8, a4r4g4b4, DXT2, DXT3, DXT4 
+			 *	Table #3 Ý a1r5g5b5 
+			 * 	Table #4 Ý DXT1 
+			 *  Table #5 Ý DXT5
+			 */
+			for (int t = 0; t < 5; t++) {
+				// iterate over 8 maps
+				for (int i = 0; i < 8; i++) {
+					offset = buf.getInt();
+					size = buf.getInt();
+					EmbeddedBuffer embBuffer = new EmbeddedBuffer();
+					if(offset != 0xff && size != 0xff) { // if not blank
+						byte[] ddsbuffer = new byte[size];
+						embBuffer.buffer = buf.get(ddsbuffer, offset, size);
+						embBuffer.size = size;
+						embBuffer.offset = offset;
+						embeddedBuffer.add(embBuffer);	
+					}
+					
+				}
 			}
 			return embeddedBuffer;
 		}

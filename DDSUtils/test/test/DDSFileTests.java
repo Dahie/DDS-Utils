@@ -6,8 +6,11 @@ package test;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Test;
+
 import JOGL.DDSImage;
 import Model.DDSFile;
+import static org.junit.Assert.*;
 
 /**
  * @author danielsenff
@@ -21,16 +24,19 @@ public class DDSFileTests extends DDSTestCase {
 		assertEquals(1024, ddsimage.getWidth());
 	}
 	
+	@Test
 	public void testIsDXT5() {
 		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		assertEquals(DDSImage.D3DFMT_DXT5, ddsimage.getPixelformat());
 	}
 	
+	@Test
 	public void testHasMipMaps() {
 		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		assertEquals(true, ddsimage.hasMipMaps());
 	}
 
+	@Test
 	public void testNumMipMap() {
 		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		
@@ -42,7 +48,7 @@ public class DDSFileTests extends DDSTestCase {
 		}
 	}
 	
-	
+	@Test
 	public void testEquals() throws Exception {
 		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		DDSFile ddsimage2 = loadDDSFile(textureDDS1024);

@@ -10,8 +10,12 @@ import java.nio.IntBuffer;
 
 import javax.imageio.ImageIO;
 
+import org.junit.Test;
+
 import DDSUtil.ByteBufferedImage;
 import DDSUtil.ImageOperations;
+
+import static org.junit.Assert.*;
 
 /**
  * @author danielsenff
@@ -19,7 +23,7 @@ import DDSUtil.ImageOperations;
  */
 public class BufferedImageTests extends DDSTestCase {
 
-	
+	@Test
 	public void testCreateBIfromRGBIntBuffer() {
 		int height = 2, width = 3;
 		int[] pixels = new int[6];

@@ -9,10 +9,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.junit.Test;
+
 import DDSUtil.DDSUtil;
 import DDSUtil.MipMapsUtil;
 import JOGL.DDSImage;
-import Model.DDSImageFile;
+import Model.DDSFile;
+
+import static org.junit.Assert.*;
 
 /**
  * @author danielsenff
@@ -20,7 +24,7 @@ import Model.DDSImageFile;
  */
 public class TextureSaving extends DDSTestCase {
 
-	
+	@Test
 	public void testWriteBI2File_DXT5MipMaps() {
 		try {
 			System.out.println("start reading...");
@@ -36,6 +40,7 @@ public class TextureSaving extends DDSTestCase {
 		}
 	}
 	
+	@Test
 	public void testWriteBI2DDSFile_DXT5MipMaps() {
 		try {
 			System.out.println("start reading...");
@@ -43,7 +48,7 @@ public class TextureSaving extends DDSTestCase {
 			File file = new File(outputDirectory + "test_WriteBI2DDSFile_DXT5MipMaps.dds");
 			if(file.exists()) file.delete();
 			
-			DDSImageFile imagefile = new DDSImageFile(file, bi, DDSImage.D3DFMT_DXT5, true);
+			DDSFile imagefile = new DDSFile(file, bi, DDSImage.D3DFMT_DXT5, true);
 			
 			System.out.println("start writing...");
 			imagefile.write();
@@ -53,6 +58,7 @@ public class TextureSaving extends DDSTestCase {
 		}
 	}
 	
+	@Test
 	public void testWriteBI2DDSFileSetData_DXT5MipMaps() {
 		try {
 			System.out.println("start reading...");
@@ -60,7 +66,7 @@ public class TextureSaving extends DDSTestCase {
 			File file = new File(outputDirectory + "test_WriteBI2DDSFileSetData_DXT5MipMaps.dds");
 			if(file.exists()) file.delete();
 			
-			DDSImageFile imagefile = new DDSImageFile(file, bi, DDSImage.D3DFMT_DXT5, true);
+			DDSFile imagefile = new DDSFile(file, bi, DDSImage.D3DFMT_DXT5, true);
 			imagefile.setData(bi);
 			
 			System.out.println("start writing...");
@@ -71,6 +77,7 @@ public class TextureSaving extends DDSTestCase {
 		}
 	}
 
+	@Test
 	public void testWriteBI2File_DXT5NoMipMaps() {
 		try {
 			System.out.println("start reading...");

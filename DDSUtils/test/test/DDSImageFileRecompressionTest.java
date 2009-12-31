@@ -6,9 +6,11 @@ package test;
 import java.io.File;
 import java.io.IOException;
 
-import Helper.Stopwatch;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import JOGL.DDSImage;
-import Model.DDSImageFile;
+import Model.DDSFile;
 
 /**
  * @author danielsenff
@@ -16,37 +18,43 @@ import Model.DDSImageFile;
  */
 public class DDSImageFileRecompressionTest extends DDSTestCase {
 
-
+	@Test
 	public void testRecompressOriginal() {
 		writeRecompressedData(-1, false, 
 				outputDirectory + "RAIKKONENEXTRA0_originalrecomp.dds");
 	}
 	
+	@Test
 	public void testRecompressDXT5noMipmap() {
 		writeRecompressedData(DDSImage.D3DFMT_DXT5, false, 
 				outputDirectory + "RAIKKONENEXTRA0_dxt5recompnomipmap.dds");
 	}
 	
+	@Test
 	public void testRecompressDXT1noMipmap() {
 		writeRecompressedData(DDSImage.D3DFMT_DXT5, false, 
 				outputDirectory + "RAIKKONENEXTRA0_dxt1recompnomipmap.dds");
 	}
 	
+	@Test
 	public void testUncompressedNoMipmap() {	
 		writeRecompressedData(DDSImage.D3DFMT_A8R8G8B8, false, 
 				outputDirectory + "RAIKKONENEXTRA0_uncompressednomipmap.dds");
 	}
 	
+	@Test
 	public void testRecompressDXT1Mipmap() {
 		writeRecompressedData(DDSImage.D3DFMT_DXT1, true, 
 				outputDirectory + "RAIKKONENEXTRA0_dxt1recompmipmap.dds");
 	}
 	
+	@Test
 	public void testRecompressDXT5Mipmap() {
 		writeRecompressedData(DDSImage.D3DFMT_DXT5, true, 
 				outputDirectory + "RAIKKONENEXTRA0_dxt5recompmipmap.dds");
 	}
 	
+	@Test
 	public void testUncompressedMipmap() {
 		writeRecompressedData(DDSImage.D3DFMT_A8R8G8B8, true, 
 				outputDirectory + "RAIKKONENEXTRA0_uncompressedmipmap.dds");
@@ -56,7 +64,8 @@ public class DDSImageFileRecompressionTest extends DDSTestCase {
 		
 		File newFile = new File(filename);
 
-		 DDSImageFile ddsimage = new DDSImageFile(textureDDS1024);
+		 DDSFile ddsimage = new DDSFile(textureDDS1024);
+		 ddsimage.loadImageData();
 
 		// set new compression
 		if (format != -1) {
@@ -64,7 +73,7 @@ public class DDSImageFileRecompressionTest extends DDSTestCase {
 			ddsimage.setPixelformat(format);
 		}
 		System.out.println("create MipMaps:" + generateMipMaps);
-		ddsimage.activateMipMaps(generateMipMaps);
+		ddsimage.setHasMipMaps(generateMipMaps);
 
 		try {
 			ddsimage.write(newFile);
@@ -74,18 +83,12 @@ public class DDSImageFileRecompressionTest extends DDSTestCase {
 		System.out.println("image written to disc");
 
 		// test
-		DDSImageFile newddsimage = null;
-		newddsimage = new DDSImageFile(newFile);			
+		DDSFile newddsimage = null;
+		newddsimage = new DDSFile(newFile);			
 		assertDDSImage(ddsimage, newddsimage);
 		assertEquals("has activated mipmaps",generateMipMaps, newddsimage.hasMipMaps());
 		if(format != -1)
 			assertEquals(format, newddsimage.getPixelformat());
-
-
-		ddsimage.close();
-		newddsimage.close();
-
-		System.gc();
 	}
 	
 
