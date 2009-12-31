@@ -13,6 +13,7 @@ import util.ImageUtils;
 import Compression.DXTBufferCompressor;
 import Compression.DXTBufferDecompressor;
 import JOGL.DDSImage;
+import JOGL.TEXImage;
 import Model.MipMaps;
 import Model.SingleTextureMap;
 import Model.TextureMap;
@@ -35,10 +36,6 @@ public class DDSUtil {
 
 	private DDSUtil() {	}
 
-
-
-	
-	
 	/**
 	 * Create a {@link BufferedImage} from a DXT-compressed 
 	 * dds-texture {@link FileLockInterruptionException}.
@@ -47,21 +44,36 @@ public class DDSUtil {
 	 * @throws IOException
 	 */
 	public static BufferedImage decompressTexture(final File file) throws IOException {
-		return decompressTexture(DDSImage.read(file));
+		if(file.getName().contains(".dds"))
+			return decompressTexture(DDSImage.read(file));
+		else
+			return decompressTexture(TEXImage.read(file));
 	}
 	
 	/**
 	 * Create a {@link BufferedImage} from a DXT-compressed {@link DDSImage}
-	 * @param ddsimage
+	 * @param image
 	 * @return
 	 */
-	public static BufferedImage decompressTexture (final DDSImage ddsimage) {
-
+	public static BufferedImage decompressTexture (final DDSImage image) {
 		return decompressTexture(
-				ddsimage.getMipMap(0).getData(), 
-				ddsimage.getWidth(), 
-				ddsimage.getHeight(), 
-				findCompressionFormat(ddsimage));
+				image.getMipMap(0).getData(), 
+				image.getWidth(), 
+				image.getHeight(), 
+				findCompressionFormat(image));
+	}
+	
+	/**
+	 * Create a {@link BufferedImage} from a DXT-compressed {@link TEXImage}
+	 * @param image
+	 * @return
+	 */
+	public static BufferedImage decompressTexture (final TEXImage image) {
+		return decompressTexture(
+				image.getEmbeddedMaps(0).getMipMap(0).getData(), 
+				image.getWidth(), 
+				image.getHeight(), 
+				findCompressionFormat(image.getEmbeddedMaps(0)));
 	}
 	
 	/**
@@ -76,7 +88,6 @@ public class DDSUtil {
 			final int width, 
 			final int height, 
 			final Squish.CompressionType compressionType) {
-		 
 		return new DXTBufferDecompressor(compressedData, width, height, compressionType).getImage();
 	}
 
@@ -92,7 +103,6 @@ public class DDSUtil {
 			final int width, 
 			final int height, 
 			final Squish.CompressionType compressionType) {
-		
 		return new DXTBufferDecompressor(textureBuffer, width, height, compressionType).getImage();
 	}
 	
@@ -108,7 +118,6 @@ public class DDSUtil {
 			final int width, 
 			final int height, 
 			final int pixelformat) {
-	
 		Squish.CompressionType compressionType = getSquishCompressionFormat(pixelformat); 
 		return new DXTBufferDecompressor(textureBuffer, width, height, compressionType).getImage();
 	}
@@ -121,7 +130,6 @@ public class DDSUtil {
 	 */
 	public static ByteBuffer compressTexture(final BufferedImage image, 
 			final Squish.CompressionType compressionType) {
-		
 		return new DXTBufferCompressor(image, compressionType).getByteBuffer();
 	}
 	
@@ -135,14 +143,8 @@ public class DDSUtil {
 		return new DXTBufferCompressor(image, compressionType).getArray();
 	}
 	
-	
-
-
-
-
-	
 	/**
-	 * Writes a DDS-Image to disc.
+	 * Writes a DDS-Image file to disk.
 	 * @param destinationfile 
 	 * @param sourceImage 
 	 * @param pixelformat 
@@ -159,29 +161,24 @@ public class DDSUtil {
 		int height = sourceImage.getHeight();
 		
 		//convert RGB to RGBA image
-		if(!sourceImage.getColorModel().hasAlpha()) {
+		if(!sourceImage.getColorModel().hasAlpha()) 
 			sourceImage = ImageUtils.convert(sourceImage, BufferedImage.TYPE_4BYTE_ABGR);
-		}
 		
 		TextureMap maps;
 		if (generateMipMaps) {
 			maps = new MipMaps();
 			((MipMaps)maps).generateMipMaps(sourceImage);
-		} else {
+		} else
 			maps = new SingleTextureMap(sourceImage);
-		}
 		
 		ByteBuffer[] mipmapBuffer = null;
 		if (isDXTCompressed(pixelformat)) {
 			mipmapBuffer = maps.getDXTCompressedBuffer(pixelformat);
-		} else {
+		} else 
 			mipmapBuffer = maps.getUncompressedBuffer();
-		}
 		
 		writeDDSImage(destinationfile, mipmapBuffer, width, height, pixelformat);
 	}
-	
-	
 	
 	/**
 	 * TODO: what is with DXT1?
@@ -194,7 +191,6 @@ public class DDSUtil {
 	public void write(final File file, 
 			TextureMap map, 
 			final int pixelformat) throws IOException {
-		
 		writeDDSImage(file, map.getDXTCompressedBuffer(pixelformat), 
 				map.getWidth(), 
 				map.getHeight(), 
@@ -215,9 +211,6 @@ public class DDSUtil {
 		return writedds;
 	}
 	
-	
-	
-	
 	/**
 	 * Returns true if the pixelformat is compressed a kind of DXTn-Compression
 	 * TODO The {@link DDSImage} specifies isCompressed even on D3DFMT_A8R8G8B8, D3DFMT_R8G8B8 and D3DFMT_X8R8G8B8
@@ -226,7 +219,6 @@ public class DDSUtil {
 	 * @return boolean is compressed
 	 */
 	public static boolean isDXTCompressed(final int pixelformat) {
-		
 		switch(pixelformat) {
 			default:
 			case DDSImage.D3DFMT_A8R8G8B8:
@@ -278,7 +270,6 @@ public class DDSUtil {
 		}
 		return type;
 	}
-
 	
 	/**
 	 * Convert Integer-CompressionType of {@link DDSImage} to {@link Squish}-Enum
@@ -308,6 +299,4 @@ public class DDSUtil {
 				return null;
 			}
 	}
-
-	
 }
