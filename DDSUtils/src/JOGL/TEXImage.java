@@ -52,6 +52,8 @@ import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Vector;
 
+import JOGL.TEXImage.Header.EmbeddedBuffer;
+
 /** A reader and writer for Tex (.tex) files, which are
     used to describe textures. These files can contain multiple mipmap
     levels in one file. This class is currently minimal and does not
@@ -354,12 +356,11 @@ public class TEXImage {
 	private static final int MAGIC = 0x54455800;
 
 	static class Header {
-		public int flags;
 		int height;               // height of surface to be created
 		int width;                // width of input surface
 		int mipMapCountOrAux;     // number of mip-map levels requested (in this context), range of 1 to 8
 		int alphaBitDepth;        // depth of alpha buffer requested
-		private Vector<EmbeddedBuffer> embeddedMap;
+		Vector<EmbeddedBuffer> embeddedMap;
 
 		void read(ByteBuffer buf) throws IOException {
 			int magic                     = buf.getInt();
@@ -376,13 +377,13 @@ public class TEXImage {
 
 			embeddedMap = readHeaderTable(buf); // header data for embedded dds
 
-			for (EmbeddedBuffer embBuffer : embeddedMap) {
-				DDSImage image = DDSImage.read(embBuffer.buffer);
-			}
+//			for (EmbeddedBuffer embBuffer : embeddedMap) {
+//				DDSImage image = DDSImage.read(embBuffer.buffer);
+//			}
 		}
 
 		private Vector<EmbeddedBuffer> readHeaderTable(ByteBuffer buf) {
-			int offset, size;
+			int offset, size, currentPos;
 			Vector<EmbeddedBuffer> embeddedBuffer = new Vector<EmbeddedBuffer>();
 			/*
 			 *  iterate over 5 tables, mapping pixelformat
@@ -394,20 +395,30 @@ public class TEXImage {
 			 */
 			for (int t = 0; t < 5; t++) {
 				// iterate over 8 maps
+//				System.out.println("Table: "+t);
 				for (int i = 0; i < 8; i++) {
 					offset = buf.getInt();
 					size = buf.getInt();
+//					System.out.println("offset="+offset+" size="+size);
 					EmbeddedBuffer embBuffer = new EmbeddedBuffer();
-					if(offset != 0xff && size != 0xff) { // if not blank
+					if((offset != -1) && (size != -1)) { // if not blank
+						currentPos = buf.position();
 						byte[] ddsbuffer = new byte[size];
-						embBuffer.buffer = buf.get(ddsbuffer, offset, size);
+						buf.position(offset);
+						buf.get(ddsbuffer);
+						embBuffer.buffer = ByteBuffer.wrap(ddsbuffer);
 						embBuffer.size = size;
 						embBuffer.offset = offset;
-						embeddedBuffer.add(embBuffer);	
+						embeddedBuffer.add(embBuffer);
+						buf.position(currentPos);
 					}
-					
 				}
 			}
+			for (EmbeddedBuffer embeddedBuffer2 : embeddedBuffer) {
+				embeddedBuffer2.buffer.rewind();
+				embeddedBuffer2.buffer.order(ByteOrder.LITTLE_ENDIAN);
+			}
+			
 			return embeddedBuffer;
 		}
 
@@ -446,6 +457,7 @@ public class TEXImage {
 	}
 
 	private TEXImage() {
+		embeddedMap = new Vector<DDSImage>();
 	}
 
 	private void readFromFile(File file) throws IOException {
@@ -461,8 +473,9 @@ public class TEXImage {
 		buf.order(ByteOrder.LITTLE_ENDIAN);
 		header = new Header();
 		header.read(buf);
-		for (int i = 0; i < header.mipMapCountOrAux; i++) {
-			embeddedMap.add(DDSImage.read(header.embeddedMap.get(i).buffer));
+		for (EmbeddedBuffer embBuffer : header.embeddedMap) {
+			embBuffer.buffer.rewind();
+			embeddedMap.add(DDSImage.read(embBuffer.buffer));
 		}
 	}
 
