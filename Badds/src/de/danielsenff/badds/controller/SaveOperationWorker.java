@@ -12,20 +12,17 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import DDSUtil.DDSUtil;
+import DDSUtil.NonCubicDimensionException;
+import JOGL.DDSImage;
+import Model.DDSFile;
 import de.danielsenff.badds.model.ExportOptions;
 import de.danielsenff.badds.operations.ChannelBrightness;
 import de.danielsenff.badds.operations.Operation;
 import de.danielsenff.badds.operations.ScaleOperation;
 import de.danielsenff.badds.util.FileHelper;
 import de.danielsenff.badds.view.View;
-import de.danielsenff.badds.view.GUI.PreviewFrame;
 import de.danielsenff.badds.view.worker.FileProgressDialog;
-
-import DDSUtil.DDSUtil;
-import DDSUtil.NonCubicDimensionException;
-import JOGL.DDSImage;
-import Model.DDSFile;
-import Model.DDSImageFile;
 
 /**
  * @author danielsenff
@@ -119,15 +116,16 @@ public class SaveOperationWorker extends OperationWorker {
 	throws OutOfMemoryError {
 
 		((FileProgressDialog)dialog).setFilename(sourceDDS.getFile().getName());
-		DDSImageFile imagefile;
+		DDSFile imagefile;
 
 		try {
 			if(hasGeneratedMipMaps 
-					&& !DDSImageFile.isPowerOfTwo(sourceDDS.getWidth()) 
-					&& !DDSImageFile.isPowerOfTwo(sourceDDS.getHeight())) 
+					&& !DDSFile.isPowerOfTwo(sourceDDS.getWidth()) 
+					&& !DDSFile.isPowerOfTwo(sourceDDS.getHeight())) 
 				throw new NonCubicDimensionException();
 
-			imagefile = new DDSImageFile(sourceDDS.getFile());
+			imagefile = new DDSFile(sourceDDS.getFile());
+			imagefile.loadImageData();
 			BufferedImage bufferedImage = imagefile.getData();
 			
 			

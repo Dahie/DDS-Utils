@@ -18,7 +18,6 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableCellRenderer;
 
 import Model.DDSFile;
-import Model.DDSImageFile;
 
 /**
  * @author danielsenff

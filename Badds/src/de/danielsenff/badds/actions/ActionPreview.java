@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
 import javax.swing.JOptionPane;
 
 import Model.DDSFile;
-import Model.DDSImageFile;
 import de.danielsenff.badds.controller.Application;
 import de.danielsenff.badds.model.FilesListModel;
 import de.danielsenff.badds.model.SwingWorker;
@@ -62,10 +61,11 @@ public class ActionPreview extends BasicAction {
 		final int selectedRow = controller.getView().getOpenFilesTable().getSelectedRow();
 		final FilesListModel model = (FilesListModel<DDSFile>) controller.getFilesListModel();
 		final DDSFile ddsfile = (DDSFile) model.getRowItem(selectedRow);
-		final DDSImageFile ddsimagefile ;
+		final DDSFile ddsimagefile ;
 
 		try {
-			ddsimagefile = new DDSImageFile(ddsfile.getFile());
+			ddsimagefile = new DDSFile(ddsfile.getFile());
+			ddsimagefile.loadImageData();
 			BufferedImage bi = ddsimagefile.getData();
 			
 			System.out.println("create frame");
@@ -75,9 +75,7 @@ public class ActionPreview extends BasicAction {
 					"<html>Java is out of memory. Please close other previews before opening yet another.</html>",	"Out of memory", 
 					JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} 
 
 //		controller.getView().getProgressbar().setIndeterminate(false);
 		controller.getView().getWorkingView().endWorkingState("Preview loaded");
