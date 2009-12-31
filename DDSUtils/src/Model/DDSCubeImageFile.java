@@ -13,7 +13,7 @@ import JOGL.DDSImage;
  * @author danielsenff
  *
  */
-public class DDSCubeImageFile extends DDSImageFile {
+public class DDSCubeImageFile extends DDSFile {
 
 	/**
 	 * 0 - top
@@ -59,10 +59,9 @@ public class DDSCubeImageFile extends DDSImageFile {
 	 * @param hasmipmaps
 	 * @throws IOException
 	 */
-	public DDSCubeImageFile(String filename, BufferedImage bi, int pixelformat,
+	public DDSCubeImageFile(File file, BufferedImage bi, int pixelformat,
 			boolean hasmipmaps) {
-		super(filename, bi, pixelformat, hasmipmaps);
-
+		super(file, bi, pixelformat, hasmipmaps);
 	}
 
 	/**

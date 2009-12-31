@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
 import Model.DDSFile;
-import Model.DDSImageFile;
 
 
 /**
@@ -64,7 +63,7 @@ public class FilesListModel extends DefaultListModel {
 
 			if(!DDSFile.isValidDDSImage(file)) throw new IOException("DDSImage could not be read.");
 
-			DDSImageFile  ddsfile = new DDSImageFile(file);
+			DDSFile  ddsfile = new DDSFile(file);
 			if(!this.contains(ddsfile)) {
 
 				if (ddsfile.getTextureType() == DDSFile.TextureType.CUBEMAP ||

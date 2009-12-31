@@ -16,7 +16,6 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.Hashtable;
 
 import javax.swing.DefaultComboBoxModel;
@@ -25,7 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -36,11 +34,9 @@ import javax.swing.event.ChangeListener;
 
 import DDSUtil.BIUtil;
 import DDSUtil.ImageOperations;
-import Model.DDSImageFile;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
-import de.danielsenff.radds.util.ResourceLoader;
 import de.danielsenff.radds.view.JCPanel;
 import de.danielsenff.radds.view.View;
 

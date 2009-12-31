@@ -13,7 +13,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-import Model.DDSImageFile;
+import Model.DDSFile;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
@@ -38,7 +38,7 @@ public class ActionExport extends BasicAction {
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent arg0) {
-		BufferedImage bi = ((DDSImageFile) controller.getFilesListModel().getSelectedItem()).getData();
+		BufferedImage bi = ((DDSFile) controller.getFilesListModel().getSelectedItem()).getData();
 		
 		File file = controller.showImageFileChooser().showExportDialogue(); // where to save
 		if (file != null) {

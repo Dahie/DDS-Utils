@@ -9,15 +9,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.tree.TreeNode;
 
-import Model.DDSFile;
-import Model.DDSImageFile;
 import de.danielsenff.radds.controller.Application;
 
 /**
@@ -59,10 +55,7 @@ public class FilesPanel extends JCPanel {
 		list.setSelectionModel(filesListModel.getSelectionModel());
 		list.setCellRenderer(new FileCellRenderer());
 
-
-
 		list.addListSelectionListener(new ChangeSelection(controller));
-
 
 		JScrollPane listScroller = new JScrollPane(list);
 		listScroller.setPreferredSize(new Dimension(panelWidth, panelHeight));
@@ -83,15 +76,9 @@ public class FilesPanel extends JCPanel {
 		//		add(splitPane, BorderLayout.CENTER);
 		add(treeScroller, BorderLayout.CENTER);
 
-
-
 		// information
 		infoPanel = new InfoPanel(controller);
-
 		this.add(infoPanel, BorderLayout.SOUTH);
-
-
-
 	}
 
 	/**
@@ -101,58 +88,42 @@ public class FilesPanel extends JCPanel {
 		return this.infoPanel;
 	}
 
-
-
-
-
 	class LoadListener implements KeyListener, MouseListener {
 
 		public void keyPressed(final KeyEvent event) {
 			if(event.getKeyCode() == KeyEvent.VK_ENTER) {
 				final FileSystemTree fileTree = (FileSystemTree) event.getSource();
 				final TreeNode node = (TreeNode) fileTree.getSelectionPath().getLastPathComponent();
-
 				loadImage(node);
 			}
 		}
 
-		public void keyReleased(final KeyEvent e) {
-		}
-
-		public void keyTyped(final KeyEvent e) {
-		}
+		public void keyReleased(final KeyEvent e) {}
+		public void keyTyped(final KeyEvent e) {}
 
 		public void mouseClicked(final MouseEvent click) {
 			if(click.getClickCount() == 2) {
 				final FileSystemTree fileTree = (FileSystemTree) click.getSource();
 				final TreeNode node = (TreeNode) fileTree.getSelectionPath().getLastPathComponent();
-
 				loadImage(node);
 			}
 		}
 
 		private void loadImage(final TreeNode node) {
 			controller.getView().setBusyImage();
-			
+
 			final String filename = node.toString();
 			final File file = new File(filename);
-			if(filename.toLowerCase().contains(".dds") && !file.isDirectory()) {
+			if( (filename.toLowerCase().contains(".dds") 
+					|| filename.toLowerCase().contains(".tex") )
+					&& !file.isDirectory()) {
 				controller.setImage(file);
 			}
 		}
 
-		public void mouseEntered(final MouseEvent arg0) {
-		}
-
-		public void mouseExited(final MouseEvent arg0) {
-		}
-
-		public void mousePressed(final MouseEvent arg0) {
-		}
-
-		public void mouseReleased(final MouseEvent arg0) {
-		}
-
+		public void mouseEntered(final MouseEvent arg0) {}
+		public void mouseExited(final MouseEvent arg0) {}
+		public void mousePressed(final MouseEvent arg0) {}
+		public void mouseReleased(final MouseEvent arg0) {}
 	}
-
 }

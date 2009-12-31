@@ -16,10 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileFilter;
 
-import de.danielsenff.radds.models.ExampleFileFilter;
-
 import JOGL.DDSImage;
-import Model.DDSImageFile;
+import Model.DDSFile;
+import de.danielsenff.radds.models.ExampleFileFilter;
 
 
 /**
@@ -36,6 +35,7 @@ public class ImageFileChooser extends JFileChooser {
 	private JComboBox compressionList;
 	
 	private FileFilter ddsFilter;
+	private FileFilter texFilter;
 	private FileFilter bmpFilter;
 	private FileFilter jpgFilter;
 	
@@ -76,20 +76,17 @@ public class ImageFileChooser extends JFileChooser {
 		this.getAccessory().setVisible(false);
 
 		this.ddsFilter = new ExampleFileFilter("dds", "Direct Draw Surface texture");
+		this.texFilter = new ExampleFileFilter("tex", "Tex texture");
         this.bmpFilter = new ExampleFileFilter("bmp", "Windows Bitmap");
         String[] jpg= {"jpg", "jpeg" };
         this.jpgFilter = new ExampleFileFilter(jpg, "JPEG");
 		
 	}
 
-
-	
-
 	public void setSelectedCompression(final int index) {
 		this.compressionList.setSelectedIndex(index);
 		this.compressionList.revalidate();
 	}
-	
 	
 	public int getSelectedBICompression() {
 		switch(this.compressionList.getSelectedIndex()) {
@@ -220,7 +217,7 @@ public class ImageFileChooser extends JFileChooser {
 		return null;
 	}
 	
-	public File showSaveDialogue(DDSImageFile ddsImageFile) {
+	public File showSaveDialogue(DDSFile ddsImageFile) {
 	 	
 		removeChoosableFileFilter(bmpFilter);
 		

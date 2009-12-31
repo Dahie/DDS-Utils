@@ -35,27 +35,22 @@ public class FileSystemTree extends JTree {
 			public Component getTreeCellRendererComponent(JTree tree, Object value, 
 					boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) 
 			{
-
 				JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 				File f = (File)node.getUserObject();
 				label.setText(fileSystemView.getSystemDisplayName(f));
 				label.setIcon(fileSystemView.getSystemIcon(f));
 				return label;
-
 			}
-
 		});
 
 		addTreeExpansionListener(new TreeExpansionListener() 
 		{
-
 			public void treeCollapsed(TreeExpansionEvent event) 
 			{
 				TreePath path = event.getPath();
 				TreeNode collapsedNode = (TreeNode) path.getLastPathComponent();
 				TreePath selectedPath = getSelectionPath();
-
 				TreeNode selectedNode = null;
 
 				if (selectedPath != null) {
@@ -64,22 +59,18 @@ public class FileSystemTree extends JTree {
 						setSelectionPath(path);
 					}
 				}
-
 			}
 
 			private boolean isSelectedNodeInCollapsedNode(TreeNode selectedNodeParent, TreeNode collapsedNode){
 				if(selectedNodeParent == null){
 					return false;
-				}
-
-				else if(collapsedNode.equals(selectedNodeParent)){
+				} else if(collapsedNode.equals(selectedNodeParent)){
 					return true;
 				} else {
 					return isSelectedNodeInCollapsedNode(selectedNodeParent.getParent(), collapsedNode);
 				}
 			}
 			public void treeExpanded(TreeExpansionEvent event)    {
-
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
 				prepareChildTreeNodes(node);
 			}
@@ -94,7 +85,9 @@ public class FileSystemTree extends JTree {
 		File[] files = fileSystemView.getFiles(f, true);
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];
-			if (file.isDirectory() || file.getName().toLowerCase().endsWith("dds"))
+			if (file.isDirectory() 
+					|| file.getName().toLowerCase().endsWith("dds")
+					|| file.getName().toLowerCase().endsWith("tex"))
 				node.add(new DefaultMutableTreeNode(file));
 		}
 		return node;
@@ -102,15 +95,11 @@ public class FileSystemTree extends JTree {
 
 	private void prepareChildTreeNodes(DefaultMutableTreeNode node)
 	{
-
 		Enumeration<DefaultMutableTreeNode> e = node.children();
-
 		while (e.hasMoreElements())    
 		{
 			DefaultMutableTreeNode child = e.nextElement();
 			prepareTreeNode(child);
 		}
-
 	}
-
 }

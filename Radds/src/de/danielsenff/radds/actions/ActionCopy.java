@@ -11,8 +11,6 @@ import java.awt.image.BufferedImage;
 
 import de.danielsenff.radds.controller.Application;
 
-import Model.DDSImageFile;
-
 public class ActionCopy extends BasicAction implements ClipboardOwner {
 
 	private Clipboard myClipboard;

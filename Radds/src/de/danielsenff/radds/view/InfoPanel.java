@@ -83,7 +83,7 @@ public class InfoPanel extends JCPanel {
 		this.revalidate();
 	}
 	
-	public void setDDSFile(DDSFile ddsfile) {
+	public void setTextureFile(DDSFile ddsfile) {
 		this.setData(ddsfile.getNumMipMaps(), 
 				ddsfile.getWidth(), 
 				ddsfile.getHeight(),

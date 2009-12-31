@@ -55,8 +55,8 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	public void generateMipMaps(BufferedImage topmost) {
 		this.mipmaps.add(topmost);
 		
-		if(!DDSImageFile.isPowerOfTwo(topmost.getWidth()) 
-				&& !DDSImageFile.isPowerOfTwo(topmost.getHeight())) 
+		if(!DDSFile.isPowerOfTwo(topmost.getWidth()) 
+				&& !DDSFile.isPowerOfTwo(topmost.getHeight())) 
 			throw new NonCubicDimensionException();
 		
 		this.mipmaps = generateMipMapArray(this.mipmaps);	
