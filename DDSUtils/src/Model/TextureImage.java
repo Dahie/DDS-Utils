@@ -1,12 +1,37 @@
 package Model;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import Model.DDSFile.TextureType;
+import java.nio.ByteBuffer;
+import java.util.Vector;
 
 public interface TextureImage {
 
+	/**
+	 * TextureType describes what kind of Texture the DDS is. Regular 2D-Texture, Volume or Cubemap.
+	 *
+	 */
+	public enum TextureType {
+		/**
+		 * Regular texture (plus MipMaps) with one slice.
+		 */
+		TEXTURE, 
+		/**
+		 * Cubemaps contain 6 slices (including MipMaps) for 6 sides of a cube.
+		 */
+		CUBEMAP, 
+		/**
+		 * Volume-textures contain many slices (including MipMaps).
+		 */
+		VOLUME
+	}
+	
+	/**
+	 * Topmost MipMap Index 
+	 */
+	public static final int TOP_MOST_MIP_MAP = 0;
+	
 	/**
 	 * Pixelformat describes the way pixels are stored in the DDS.
 	 * Either uncompressed or with a special compression format.
@@ -124,4 +149,33 @@ public interface TextureImage {
 	 */
 	public void write(final File file) throws IOException;
 	
+	
+	/**
+	 * Returns the topmost MipMap
+	 * @return {@link BufferedImage}
+	 */
+	public BufferedImage getData();
+	
+	/**
+	 * Load the data from file into memory.
+	 */
+	public void loadImageData();
+	
+	/**
+	 * Returns the stored MipMaps as a {@link BufferedImage}-Array
+	 * @return
+	 */
+	public BufferedImage[] getAllMipMapsBI();
+	
+	/**
+	 * returns the stored MipMaps as {@link ByteBuffer}-Array
+	 * @return
+	 */
+	public Vector<BufferedImage> generateAllMipMaps();
+	
+	/**
+	 * Sets a new {@link BufferedImage} as the Topmost MipMap and generates new MipMaps accordingly.
+	 * @param bi
+	 */
+	public void setData(final BufferedImage bi);
 }

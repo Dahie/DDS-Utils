@@ -10,6 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 
 import Model.DDSFile;
+import Model.TEXFile;
+import Model.TextureImage;
 import de.danielsenff.radds.models.FilesListModel;
 import de.danielsenff.radds.view.View;
 
@@ -95,24 +97,24 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 		String filename = file.getAbsolutePath();
 		long mem0;
 		try {
+			TextureImage image = null;
 			if(DDSFile.isValidDDSImage(file)) {
-				DDSFile ddsfile = new DDSFile(filename);
-				if(ddsfile.getTextureType() == DDSFile.TextureType.CUBEMAP ||
-						ddsfile.getTextureType() == DDSFile.TextureType.VOLUME) {
+				image = new DDSFile(filename);
+				if(image.getTextureType() == DDSFile.TextureType.CUBEMAP ||
+						image.getTextureType() == DDSFile.TextureType.VOLUME) {
 					JOptionPane.showMessageDialog(null, 
 							"<html>Error: This programm doesn't support cubemaps or volume textures." +
-							"<br>"+ddsfile.getFile().getName()+" can not be loaded.</html>",	"Attention", 
+							"<br>"+image.getFile().getName()+" can not be loaded.</html>",	"Attention", 
 							JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} 
-				DDSFile image = new DDSFile(filename);
+			} else if (TEXFile.isValidTEXImage(file)) {
+				image = new TEXFile(filename);
+			}
+			if(image != null) {
 				image.loadImageData();
 				getView().setImage(image);
-			} /*else if (DDSFile.isValidDDSImage(file)) {
-				
-				DDSImageFile image = new DDSImageFile(filename);
-				getView().setImage(image);
-			}*/
+			}
 			mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 			// System.out.println(mem0);
 		} catch (final OutOfMemoryError ex) {
@@ -125,5 +127,6 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 }

@@ -13,6 +13,7 @@ import de.danielsenff.radds.view.GridBagConstraints.LabelConstraints;
 import de.danielsenff.radds.view.GridBagConstraints.RemainderConstraints;
 
 import Model.DDSFile;
+import Model.TextureImage;
 
 
 /**
@@ -83,12 +84,12 @@ public class InfoPanel extends JCPanel {
 		this.revalidate();
 	}
 	
-	public void setTextureFile(DDSFile ddsfile) {
-		this.setData(ddsfile.getNumMipMaps(), 
-				ddsfile.getWidth(), 
-				ddsfile.getHeight(),
-				ddsfile.getPixelformatVerbose(), 
-				ddsfile.getTextureType().toString());
+	public void setTextureFile(TextureImage texture) {
+		this.setData(texture.getNumMipMaps(), 
+				texture.getWidth(), 
+				texture.getHeight(),
+				texture.getPixelformatVerbose(), 
+				texture.getTextureType().toString());
 	}
 	
 }

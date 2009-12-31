@@ -15,7 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JProgressBar;
 import javax.swing.JSplitPane;
 
-import Model.DDSFile;
+import Model.TextureImage;
 import de.danielsenff.radds.actions.ActionCopy;
 import de.danielsenff.radds.actions.ActionExport;
 import de.danielsenff.radds.controller.Application;
@@ -153,7 +153,7 @@ public class View extends JCFrame {
 	 * Sets the image in the Canvas to the specified Image.
 	 * @param image
 	 */
-	public void setImage(final DDSFile image) {
+	public void setImage(final TextureImage image) {
 		getCanvas().setSourceBI(image.getData());
 		filesPanel.getInfoPanel().setTextureFile(image);
 		this.actionCopy.setEnabled(true);

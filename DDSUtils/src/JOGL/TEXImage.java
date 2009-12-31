@@ -174,7 +174,7 @@ public class TEXImage {
       @return true if input stream is DDS image or false otherwise
       @throws java.io.IOException if an I/O exception occurred
 	 */
-	public static boolean isTexImage(InputStream in) throws IOException {
+	public static boolean isTEXImage(InputStream in) throws IOException {
 		if (!(in instanceof BufferedInputStream)) {
 			in = new BufferedInputStream(in);
 		}
@@ -519,5 +519,9 @@ public class TEXImage {
 	 */
 	public DDSImage getEmbeddedMaps(int index) {
 		return embeddedMap.get(index);
+	}
+
+	public int getDepth() {
+		return embeddedMap.get(0).getDepth();
 	}
 }
