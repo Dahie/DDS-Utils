@@ -60,7 +60,6 @@ public class TEXFile  extends AbstractTextureImage {
 		outputTEX.close();
 	}
 	
-	@Override
 	public TextureType getTextureType() {
 		return TextureType.TEXTURE;
 	}

@@ -121,22 +121,6 @@ public class DDSFile extends AbstractTextureImage{
 							compressionType).getImage();
 	}
 	
-	/**
-	 * Gets the format in which pixels are stored as a verbose {@link String}.
-	 * @return
-	 */
-	public String getPixelformatVerbose() {
-		return verbosePixelformat(this.pixelformat);
-	}
-	
-	/**
-	 * Returns true if the dds-file is compressed as DXT1-5
-	 * @return boolean
-	 */
-	public boolean isCompressed() {
-		return DDSUtil.isDXTCompressed(pixelformat);
-	}
-	
 	@Override
 	public String toString() {
 		return this.file.getAbsolutePath()+verbosePixelformat(this.pixelformat);
@@ -169,7 +153,6 @@ public class DDSFile extends AbstractTextureImage{
 	 * Regular Texture, Volume-Texture and CubeMap
 	 * @return TextureType Type of Texture
 	 */
-	@Override
 	public TextureType getTextureType() {
 		return this.textureType;
 	}

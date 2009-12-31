@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import DDSUtil.DDSUtil;
 import DDSUtil.MipMapsUtil;
 import DDSUtil.NonCubicDimensionException;
 import JOGL.DDSImage;
@@ -117,23 +118,6 @@ public abstract class AbstractTextureImage implements TextureImage {
 		this.setPixelformat(convertPixelformat(pixelformat));
 	}
 
-	public String getPixelformatVerbose() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public TextureType getTextureType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public boolean isCompressed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
 	
 	/**
 	 * Returns whether or not the dds-file has MipMaps.
@@ -220,6 +204,22 @@ public abstract class AbstractTextureImage implements TextureImage {
 		} else {
 			return DDSImage.D3DFMT_UNKNOWN;
 		}
+	}
+	
+	/**
+	 * Returns true if the dds-file is compressed as DXT1-5
+	 * @return boolean
+	 */
+	public boolean isCompressed() {
+		return DDSUtil.isDXTCompressed(pixelformat);
+	}
+	
+	/**
+	 * Gets the format in which pixels are stored as a verbose {@link String}.
+	 * @return
+	 */
+	public String getPixelformatVerbose() {
+		return verbosePixelformat(this.pixelformat);
 	}
 	
 	/**

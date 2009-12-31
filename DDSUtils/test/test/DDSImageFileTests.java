@@ -3,17 +3,20 @@
  */
 package test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import junit.framework.TestCase;
-import Helper.Stopwatch;
+import org.junit.Test;
+
+import util.Stopwatch;
 import JOGL.DDSImage;
-import Model.DDSImageFile;
+import Model.DDSFile;
 
 /**
  * @author danielsenff
@@ -21,55 +24,59 @@ import Model.DDSImageFile;
  */
 public class DDSImageFileTests extends DDSTestCase {
 	
+	@Test
 	public void testFourCC() throws FileNotFoundException, IOException {
 		assertTrue("is a dds image", DDSImage.isDDSImage(new FileInputStream(textureDDS1024)));
 	}
 
+	@Test
 	public void testDimensions() {
-		DDSImageFile ddsimage = loadDDSImageFile(textureDDS1024);
+		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		assertEquals(1024, ddsimage.getHeight());
 		assertEquals(1024, ddsimage.getWidth());
 	}
 	
+	@Test
 	public void testIsDXT5() {
-		DDSImageFile ddsimage = loadDDSImageFile(textureDDS1024);
+		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		assertEquals(DDSImage.D3DFMT_DXT5, ddsimage.getPixelformat());
 	}
 	
+	@Test
 	public void testActivateMipMaps() {
-		DDSImageFile ddsimage = loadDDSImageFile(textureDDS1024);
+		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		assertEquals("activated mipmaps beforehand", true, ddsimage.hasMipMaps());
-		ddsimage.activateMipMaps(true);
+		ddsimage.setHasMipMaps(true);
 		assertEquals("activated mipmaps", true, ddsimage.hasMipMaps());
-		ddsimage.activateMipMaps(false);
+		ddsimage.setHasMipMaps(false);
 		assertEquals("deactivated mipmaps", false, ddsimage.hasMipMaps());
 	}
 	
+	@Test
 	public void testHasMipMaps() {
-		DDSImageFile ddsimage = loadDDSImageFile(textureDDS1024);
+		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		assertEquals("has MipMaps", true, ddsimage.hasMipMaps());
 	}
 
+	@Test
 	public void testNumMipMap() {
-		DDSImageFile ddsimage = loadDDSImageFile(textureDDS1024);
+		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		
 		try {
 			int numMipMaps = DDSImage.read(textureDDS1024).getNumMipMaps();
 			assertEquals("Number of MipMaps from original:",numMipMaps, ddsimage.getNumMipMaps());
-			assertEquals("calculated number of MipMaps", numMipMaps, DDSImageFile.calculateMaxNumberOfMipMaps(ddsimage.getWidth(), ddsimage.getHeight()));
+			assertEquals("calculated number of MipMaps", numMipMaps, DDSFile.calculateMaxNumberOfMipMaps(ddsimage.getWidth(), ddsimage.getHeight()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
+
+	@Test
 	public void testDecompressBufferedImage() {
 		
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.start();
-		DDSImageFile ddsimage = loadDDSImageFile(textureDDS1024);
+		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		BufferedImage originalImage = ddsimage.getData();
 		
 		stopwatch.stop();
@@ -81,13 +88,14 @@ public class DDSImageFileTests extends DDSTestCase {
 		assertEquals("File objects are identical", textureDDS1024.getAbsolutePath(), ddsimage.getAbsolutePath());
 	}
 	/*
+	@Test
 	public void testGetAllMipMapBuffer() {
 		DDSImageFile ddsimage = DDSImageFileTests.loadDDSImage(original1024);
 		assertMipMapBuffer(ddsimage.generateAllMipMapBuffer());
 	}*/
-
+	@Test
 	public void testMipMapBuffer() {
-		DDSImageFile ddsimage = loadDDSImageFile(textureDDS1024);
+		DDSFile ddsimage = loadDDSFile(textureDDS1024);
 		assertEquals("has mipmaps", true, ddsimage.hasMipMaps());
 		assertEquals("numMipMaps", 11, ddsimage.getNumMipMaps());
 //		assertMipMapBuffer(MipMapsUtil.compressMipMaps(ddsimage.getWidth(), 
@@ -109,15 +117,14 @@ public class DDSImageFileTests extends DDSTestCase {
 	    }
 	}
 	
+	@Test
 	public void testIsPowerOfTwo() {
-		assertEquals(true, DDSImageFile.isPowerOfTwo(2048));
-		assertEquals(true, DDSImageFile.isPowerOfTwo(1024));
-		assertEquals(true, DDSImageFile.isPowerOfTwo(512));
+		assertEquals(true, DDSFile.isPowerOfTwo(2048));
+		assertEquals(true, DDSFile.isPowerOfTwo(1024));
+		assertEquals(true, DDSFile.isPowerOfTwo(512));
 		
-		assertEquals(false, DDSImageFile.isPowerOfTwo(612));
-		assertEquals(false, DDSImageFile.isPowerOfTwo(33));
-		assertEquals(false, DDSImageFile.isPowerOfTwo(78));
-		
+		assertEquals(false, DDSFile.isPowerOfTwo(612));
+		assertEquals(false, DDSFile.isPowerOfTwo(33));
+		assertEquals(false, DDSFile.isPowerOfTwo(78));
 	}
-	
 }
