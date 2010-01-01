@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "Build project: $1"
+buildtype=$1
+
+cd Badds
+ant $buildtype
+cd ../Dropps/
+ant $buildtype
+cd ../Radds/
+ant $buildtype
+cd ../
