@@ -74,10 +74,17 @@ public class ConvertController implements IProgressObserverable {
 		notifyConversionBegin(file);
 		notifyProgressListeners(new ProgressStatus(i, filesCount, "progress"));
 
-		BufferedImage imageToConvert;
+		BufferedImage imageToConvert = null;
 		DefaultListModel dlm = (DefaultListModel) ((DroppsView)((Dropps)Dropps.getInstance()).getMainView()).getDropPanel().getModel();
 		try {
 			System.out.println("Read BufferedImage ...");
+			
+			//check if is folder
+			if(file.isDirectory()) {
+				dlm.removeElement(file);
+				notifyError(new ProgressStatus(i, filesCount, "unsupportedFolder_"+file.getName(), true));
+				return;
+			}
 			
 			// check supported fileformats
 			if(!isFiletypeSupported(file)) {
@@ -86,23 +93,35 @@ public class ConvertController implements IProgressObserverable {
 				return;
 			}
 			
-			imageToConvert = ImageIO.read(file);
-			String convertedFile = file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf('.'));
-			File newFile = new File(convertedFile+".dds");
-
-			// check image dimensions
-			
-			if (!MipMapsUtil.isPowerOfTwo(imageToConvert.getWidth())
-				&& !MipMapsUtil.isPowerOfTwo(imageToConvert.getHeight())
-				&& options.hasGeneratedMipMaps()) {
-				dlm.removeElement(file);
-				notifyError(new ProgressStatus(i, filesCount, "notPowerOf2_"+file.getName(), true));
-				return;
+			if(file.getName().toLowerCase().contains(".bmp")
+					|| file.getName().toLowerCase().contains(".png")
+					|| file.getName().toLowerCase().contains(".gif")
+					|| file.getName().toLowerCase().contains(".jpg")
+					|| file.getName().toLowerCase().contains(".jpeg")) {
+				imageToConvert = ImageIO.read(file);
+			} else if (file.getName().toLowerCase().contains(".tex")) {
+				imageToConvert = DDSUtil.decompressTexture(file);
 			}
 			
-			System.out.println("Begin conversion ...");
-			// exclude this into an Converter with appropriate listeners
-			DDSUtil.write(newFile, imageToConvert, options.getNewPixelformat(), options.hasGeneratedMipMaps());
+			if(imageToConvert != null) {
+				
+				String convertedFile = file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf('.'));
+				File newFile = new File(convertedFile+".dds");
+				
+				// check image dimensions
+				
+				if (!MipMapsUtil.isPowerOfTwo(imageToConvert.getWidth())
+						&& !MipMapsUtil.isPowerOfTwo(imageToConvert.getHeight())
+						&& options.hasGeneratedMipMaps()) {
+					dlm.removeElement(file);
+					notifyError(new ProgressStatus(i, filesCount, "notPowerOf2_"+file.getName(), true));
+					return;
+				}
+				
+				System.out.println("Begin conversion ...");
+				// exclude this into an Converter with appropriate listeners
+				DDSUtil.write(newFile, imageToConvert, options.getNewPixelformat(), options.hasGeneratedMipMaps());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			//			showErrorDialog(e.getMessage());
@@ -128,6 +147,9 @@ public class ConvertController implements IProgressObserverable {
 			if(file.getName().toLowerCase().contains(supportedMIMETypes[j]))
 				return true;
 		}
+		if(file.getName().toLowerCase().contains(".tex"))
+			return true;
+		
 		return false;
 	}
 

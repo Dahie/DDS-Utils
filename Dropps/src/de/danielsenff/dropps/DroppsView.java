@@ -213,9 +213,9 @@ public class DroppsView extends FrameView {
         			g.setFont(newFont);
         			g.setColor(new Color(128, 128, 128));
         			// and if even now to small, then cut
-        			g.drawString("Drop your images", 15, 25);
+        			g.drawString(resourceMap.getString("DropsPanel.title"), 15, 25);
         			g.setFont(font);
-        			g.drawString("Supports BMP, JPG and PNG", 15, 45);
+        			g.drawString(resourceMap.getString("DropsPanel.text"), 15, 45);
         		}
         	}
         };
