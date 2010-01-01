@@ -16,6 +16,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
 import Model.DDSFile;
+import Model.TextureImage.TextureType;
 
 import de.danielsenff.badds.controller.Application;
 
@@ -148,8 +149,8 @@ public class FilesListModel<E> extends AbstractTableModel implements Collection 
 
 			if(!this.contains(ddsfile)) {
 
-				if(ddsfile.getTextureType() == DDSFile.TextureType.CUBEMAP ||
-						ddsfile.getTextureType() == DDSFile.TextureType.VOLUME) {
+				if(ddsfile.getTextureType() == TextureType.CUBEMAP ||
+						ddsfile.getTextureType() == TextureType.VOLUME) {
 					JOptionPane.showMessageDialog(null, 
 							"<html>Error: This programm doesn't support cubemaps or volume textures." +
 							"<br>"+ddsfile.getFile().getName()+" can not be loaded.</html>",	"Error", 
