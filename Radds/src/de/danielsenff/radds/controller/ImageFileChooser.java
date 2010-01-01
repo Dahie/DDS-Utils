@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileFilter;
 
+import util.FileUtil;
+
 import JOGL.DDSImage;
 import Model.DDSFile;
 import de.danielsenff.radds.models.ExampleFileFilter;
@@ -229,7 +231,7 @@ public class ImageFileChooser extends JFileChooser {
         int res = showSaveDialog(null);
         if (res == JFileChooser.APPROVE_OPTION) {
             File file = getSelectedFile();
-            if (!file.getName().toLowerCase().endsWith(".dds")) {
+            if (!FileUtil.getFileSuffix(file).contains("dds")) {
             	file = new File(file.getAbsoluteFile() + ".dds");
             }
             

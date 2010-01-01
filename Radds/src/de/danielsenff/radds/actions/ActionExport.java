@@ -13,6 +13,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import util.FileUtil;
+
 import Model.DDSFile;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -64,7 +66,7 @@ public class ActionExport extends BasicAction {
 			FileOutputStream out = new FileOutputStream(file);
 			//			ImageIO.write(image, "wbmp", out);
 
-			if(file.getName().toLowerCase().contains(".bmp")) {
+			if(FileUtil.getFileSuffix(file).contains(".bmp")) {
 //				if (!ImageIO.write(image, "WBMP", file)) {
 					System.out.println("not via imagio");
 					
@@ -83,8 +85,8 @@ public class ActionExport extends BasicAction {
 						out.write((byte)dataBuffer.getElem(i));
 					}
 //				} 
-			} else if (file.getName().toLowerCase().contains(".jpg") ||
-					file.getName().toLowerCase().contains("jpeg")) {
+			} else if (FileUtil.getFileSuffix(file).contains("jpg") ||
+					FileUtil.getFileSuffix(file).contains("jpeg")) {
 //				ImageIO.write(image, "jpg", file);
 				
 				JPEGImageEncoder jpegImageEncoder = JPEGCodec.createJPEGEncoder(new FileOutputStream(file));
@@ -92,7 +94,7 @@ public class ActionExport extends BasicAction {
 				param.setQuality(0.5F, true);
 				jpegImageEncoder.encode(image, param);
 
-			} else if (file.getName().toLowerCase().contains(".png")) {
+			} else if (FileUtil.getFileSuffix(file).contains("png")) {
 				ImageIO.write(image, "png", file);
 			}				
 			

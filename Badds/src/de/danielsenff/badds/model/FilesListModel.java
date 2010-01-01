@@ -15,9 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
+import util.FileUtil;
 import Model.DDSFile;
 import Model.TextureImage.TextureType;
-
 import de.danielsenff.badds.controller.Application;
 
 
@@ -109,7 +109,6 @@ public class FilesListModel<E> extends AbstractTableModel implements Collection 
 	public String getColumnName(int column){
 			ResourceBundle bundle = Application.getBundle();
 			switch (column){ 
-			
 				case 0: return bundle.getString("File");
 				case 1: return bundle.getString("Wildcard");
 				case 2: return bundle.getString("Format");
@@ -141,14 +140,12 @@ public class FilesListModel<E> extends AbstractTableModel implements Collection 
 
 	public void addFile(File file) {
 		
-		if(!file.getName().toLowerCase().endsWith("dds") || file.isDirectory())
+		if(!FileUtil.getFileSuffix(file).contains("dds") || file.isDirectory())
 			return;
 		try {
 			if(!DDSFile.isValidDDSImage(file)) throw new IOException("DDSImage could not be read.");
 			DDSFile ddsfile = new DDSFile(file);
-
 			if(!this.contains(ddsfile)) {
-
 				if(ddsfile.getTextureType() == TextureType.CUBEMAP ||
 						ddsfile.getTextureType() == TextureType.VOLUME) {
 					JOptionPane.showMessageDialog(null, 
@@ -157,9 +154,7 @@ public class FilesListModel<E> extends AbstractTableModel implements Collection 
 							JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} 
-
 				this.add(ddsfile);
-
 			} else {
 				JOptionPane.showMessageDialog(null, 
 						"<html>The file is already added.</html>",	"Information", 

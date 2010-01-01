@@ -14,6 +14,8 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.tree.TreeNode;
 
+import util.FileUtil;
+
 import de.danielsenff.radds.controller.Application;
 
 /**
@@ -114,8 +116,8 @@ public class FilesPanel extends JCPanel {
 
 			final String filename = node.toString();
 			final File file = new File(filename);
-			if( (filename.toLowerCase().contains(".dds") 
-					|| filename.toLowerCase().contains(".tex") )
+			if( (FileUtil.getFileSuffix(file).contains("dds") 
+					|| FileUtil.getFileSuffix(file).contains("tex") )
 					&& !file.isDirectory()) {
 				controller.setImage(file);
 			}

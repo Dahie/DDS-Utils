@@ -15,6 +15,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import util.FileUtil;
+
 public class FileSystemTree extends JTree {
 
 	private FileSystemView fileSystemView = FileSystemView.getFileSystemView();
@@ -86,8 +88,8 @@ public class FileSystemTree extends JTree {
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];
 			if (file.isDirectory() 
-					|| file.getName().toLowerCase().endsWith("dds")
-					|| file.getName().toLowerCase().endsWith("tex"))
+					|| FileUtil.getFileSuffix(file).contains("dds")
+					|| FileUtil.getFileSuffix(file).contains("tex"))
 				node.add(new DefaultMutableTreeNode(file));
 		}
 		return node;

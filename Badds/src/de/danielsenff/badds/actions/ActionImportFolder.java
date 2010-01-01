@@ -9,6 +9,8 @@ import java.io.FileFilter;
 
 import javax.swing.JOptionPane;
 
+import util.FileUtil;
+
 import de.danielsenff.badds.controller.Application;
 import de.danielsenff.badds.util.ResourceLoader;
 
@@ -32,16 +34,14 @@ public class ActionImportFolder extends BasicAction {
 	 */
 	public void actionPerformed(ActionEvent arg0) {
 		try {
-			File directory = controller.showImageFileChooser().openDirectoryDialogue();
-
+			File directory = controller.showImageFileChooser().openDirectoryDialog();
 			File[] files = directory.listFiles(new FileFilter(){
-
 				public boolean accept(final File f) {
 					// TODO this could be done recursively through the filesystem
-					//return (f.isDirectory() || f.getName().toLowerCase().endsWith("." + "dds"));
-					return ( f.getName().toLowerCase().endsWith("." + "dds"));
+					//return (f.isDirectory() || FileUtil.getFileSuffix(file).contains("dds"));
+					if(f.isDirectory()) return false;
+					return FileUtil.getFileSuffix(f).contains("dds");
 				}
-
 			});
 			if(files.length > 0) {
 				controller.getFilesListModel().addFiles(files);
@@ -50,12 +50,6 @@ public class ActionImportFolder extends BasicAction {
 						"<html>The selected folder didn't include any DDSImages.</html>",	"No DDSImages found", 
 						JOptionPane.INFORMATION_MESSAGE);
 			}
-			
-
-		} catch (NullPointerException e1) {
-
-		}
-		
+		} catch (NullPointerException e1) {	}
 	}
-
 }

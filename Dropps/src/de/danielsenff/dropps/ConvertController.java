@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
+import util.FileUtil;
+
 import DDSUtil.DDSUtil;
 import DDSUtil.MipMapsUtil;
 import de.danielsenff.dropps.models.ExportOptions;
@@ -93,13 +95,9 @@ public class ConvertController implements IProgressObserverable {
 				return;
 			}
 			
-			if(file.getName().toLowerCase().contains(".bmp")
-					|| file.getName().toLowerCase().contains(".png")
-					|| file.getName().toLowerCase().contains(".gif")
-					|| file.getName().toLowerCase().contains(".jpg")
-					|| file.getName().toLowerCase().contains(".jpeg")) {
+			if(isImageIOSupported(file)) {
 				imageToConvert = ImageIO.read(file);
-			} else if (file.getName().toLowerCase().contains(".tex")) {
+			} else if (FileUtil.getFileSuffix(file).contains("tex")) {
 				imageToConvert = DDSUtil.decompressTexture(file);
 			}
 			
@@ -139,15 +137,18 @@ public class ConvertController implements IProgressObserverable {
 		notifyConversionEnd(file);
 	}
 	
-	
-	
-	private boolean isFiletypeSupported(File file) {
+	private boolean isImageIOSupported(File file) {
 		String[] supportedMIMETypes = ImageIO.getReaderFormatNames();
 		for (int j = 0; j < supportedMIMETypes.length; j++) {
-			if(file.getName().toLowerCase().contains(supportedMIMETypes[j]))
+			if(FileUtil.getFileSuffix(file).contains(supportedMIMETypes[j]))
 				return true;
 		}
-		if(file.getName().toLowerCase().contains(".tex"))
+		return false;
+	}
+	
+	private boolean isFiletypeSupported(File file) {
+		if(isImageIOSupported(file)
+				|| FileUtil.getFileSuffix(file).contains("tex"))
 			return true;
 		
 		return false;

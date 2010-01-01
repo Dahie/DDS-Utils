@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileFilter;
 
+import util.FileUtil;
+
 import JOGL.DDSImage;
 
 
@@ -80,7 +82,7 @@ public class ImageFileChooser extends JFileChooser {
 		return new javax.swing.filechooser.FileFilter(){
             @Override
 			public boolean accept(final File f) {
-                return (f.isDirectory() || f.getName().toLowerCase().endsWith("." + extension));
+                return (f.isDirectory() || FileUtil.getFileSuffix(f).contains(extension));
             }
             @Override
 			public String getDescription() {
@@ -97,13 +99,11 @@ public class ImageFileChooser extends JFileChooser {
             	if (f.isDirectory())
 					return true;
             	
-            	
 				for (int ext = 0; ext < extension.length; ext++) {
-					if (f.getName().toLowerCase().endsWith("." + extension[ext])) {
+					if (FileUtil.getFileSuffix(f).contains(extension[ext])) {
 						return true;
 					}
 				}
-				
 				return false;
             }
             @Override
@@ -117,7 +117,6 @@ public class ImageFileChooser extends JFileChooser {
 		this.compressionList.setSelectedIndex(index);
 		this.compressionList.revalidate();
 	}
-	
 	
 	public int getSelectedBICompression() {
 		switch(this.compressionList.getSelectedIndex()) {
@@ -147,12 +146,10 @@ public class ImageFileChooser extends JFileChooser {
 		case 3: // DXT5
 			return DDSImage.D3DFMT_DXT5;
 		}
-	
 		return DDSImage.D3DFMT_A8R8G8B8;
 	}
 	
 	private int selectedTypeFromBI(int compression) {
-
 		switch(compression) {
 		default:
 		case DDSImage.D3DFMT_A8R8G8B8: // uncompressed
@@ -168,11 +165,9 @@ public class ImageFileChooser extends JFileChooser {
 		}
 	}
 	
-	
 	private JComponent compressionSettings() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0,1));
-		
 		
 		Border paneEdge = BorderFactory.createEmptyBorder(0,5,5,5);
 		JLabel lblCompression = new JLabel(bundle.getString("Compression")+":");
@@ -183,14 +178,12 @@ public class ImageFileChooser extends JFileChooser {
 		lblMipmaps.setBorder(paneEdge);
 		
 		
-		
 		compressionList = new JComboBox(compressions);
 		lblCompression.setLabelFor(compressionList);
 		
 		panel.add(lblCompression);
 		panel.add(compressionList);
 		//panel.add(lblMipmaps);
-		
 		
 		return panel;
 	}
@@ -204,9 +197,7 @@ public class ImageFileChooser extends JFileChooser {
         this.setDialogTitle(bundle.getString("Open_file"));
 		this.setApproveButtonText(bundle.getString("Open_file"));
         final int res = showOpenDialog(null);
-        
         if (res == JFileChooser.APPROVE_OPTION) {
-        	
             final File file = getSelectedFile();
             return file;
         } 
@@ -221,16 +212,14 @@ public class ImageFileChooser extends JFileChooser {
 		this.setDialogTitle(bundle.getString("Open_files"));
 		this.setApproveButtonText(bundle.getString("Open_files"));
 		final int res = showOpenDialog(null);
-		
 		if (res == JFileChooser.APPROVE_OPTION) {
-
 			final File[] files = getSelectedFiles();
 			return files;
 		} 
 		return null;
 	}
 	
-	public File openDirectoryDialogue() {
+	public File openDirectoryDialog() {
 		
         getAccessory().setVisible(false);
         this.setMultiSelectionEnabled(false);
@@ -238,9 +227,7 @@ public class ImageFileChooser extends JFileChooser {
         this.setDialogTitle(bundle.getString("Import_files_from_folder"));
 		this.setApproveButtonText(bundle.getString("Import"));
         final int res = showOpenDialog(null);
-        
         if (res == JFileChooser.APPROVE_OPTION) {
-        	
             final File file = super.getSelectedFile();
             if(file.isDirectory())
             	return file;
