@@ -22,11 +22,11 @@ public class DDSTestCase {
 	String inputDirectory = "test/resource/";
 	
 	File texturePNG2048 = new File(inputDirectory +"STRBahrain.png");
-	File textureDDS1024 = new File(inputDirectory +"RAIKKONENEXTRA0.dds");
-	File textureBMP512x512 = new File(inputDirectory +"512x512.bmp");
+	protected File textureDDS1024 = new File(inputDirectory +"RAIKKONENEXTRA0.dds");
+	protected File textureBMP512x512 = new File(inputDirectory +"512x512.bmp");
 	File texturePNG64x64 = new File(inputDirectory + "SUAEXTRA3-1.png");
 	File imageBMP3 = new File(inputDirectory +"3x3.bmp");
-	File originalB1024 = new File(inputDirectory +"RAIKKONENEXTRA1.dds");
+	protected File originalB1024 = new File(inputDirectory +"RAIKKONENEXTRA1.dds");
 	File original2048 = new File(inputDirectory +"RAIKKONENEXTRA0.dds");
 	
 	
