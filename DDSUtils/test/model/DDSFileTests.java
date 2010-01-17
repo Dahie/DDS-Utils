@@ -1,15 +1,19 @@
 /**
  * 
  */
-package test;
+package model;
 
 import java.io.File;
 import java.io.IOException;
 
+import jogl.DDSImage;
+
+import model.DDSFile;
+
 import org.junit.Test;
 
-import JOGL.DDSImage;
-import Model.DDSFile;
+import test.DDSTestCase;
+
 import static org.junit.Assert.*;
 
 /**

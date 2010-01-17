@@ -37,7 +37,7 @@
  * and developed by Kenneth Bradley Russell and Christopher John Kline.
  */
 
-package JOGL;
+package jogl;
 
 import java.io.BufferedInputStream;
 import java.io.File;

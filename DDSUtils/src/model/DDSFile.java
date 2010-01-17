@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * 
@@ -14,11 +14,13 @@ import java.io.InvalidObjectException;
 import java.nio.ByteBuffer;
 import java.util.Vector;
 
-import Compression.DXTBufferDecompressor;
-import DDSUtil.DDSUtil;
-import DDSUtil.MipMapsUtil;
-import DDSUtil.NonCubicDimensionException;
-import JOGL.DDSImage;
+import jogl.DDSImage;
+
+import compression.DXTBufferDecompressor;
+import ddsutil.DDSUtil;
+import ddsutil.MipMapsUtil;
+import ddsutil.NonCubicDimensionException;
+
 
 /**
  * @author danielsenff

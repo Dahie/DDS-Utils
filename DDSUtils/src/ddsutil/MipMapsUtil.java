@@ -1,7 +1,7 @@
 /**
  * 
  */
-package DDSUtil;
+package ddsutil;
 
 import gr.zdimensions.jsquish.Squish;
 
@@ -10,7 +10,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
-import Model.MipMaps;
+import model.MipMaps;
+
 
 /**
  * @author danielsenff

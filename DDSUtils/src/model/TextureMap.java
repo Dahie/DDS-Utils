@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import gr.zdimensions.jsquish.Squish;
 

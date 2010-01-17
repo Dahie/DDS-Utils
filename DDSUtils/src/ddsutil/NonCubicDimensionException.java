@@ -1,7 +1,7 @@
 /**
  * 
  */
-package DDSUtil;
+package ddsutil;
 
 /**
  * @author danielsenff

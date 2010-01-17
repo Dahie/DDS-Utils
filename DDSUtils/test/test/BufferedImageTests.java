@@ -12,8 +12,9 @@ import javax.imageio.ImageIO;
 
 import org.junit.Test;
 
-import DDSUtil.ByteBufferedImage;
-import DDSUtil.ImageOperations;
+import ddsutil.ByteBufferedImage;
+import ddsutil.ImageOperations;
+
 
 import static org.junit.Assert.*;
 

@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import gr.zdimensions.jsquish.Squish.CompressionType;
 
@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Vector;
 
-import Compression.DXTBufferDecompressor;
-import DDSUtil.DDSUtil;
-import JOGL.DDSImage;
-import JOGL.TEXImage;
+import jogl.DDSImage;
+import jogl.TEXImage;
+
+import compression.DXTBufferDecompressor;
+import ddsutil.DDSUtil;
+
 
 public class TEXFile  extends AbstractTextureImage {
 

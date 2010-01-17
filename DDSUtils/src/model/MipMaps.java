@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Model;
+package model;
 
 import gr.zdimensions.jsquish.Squish;
 import gr.zdimensions.jsquish.Squish.CompressionType;
@@ -12,15 +12,17 @@ import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.Vector;
 
-import Compression.DXTBufferDecompressor;
-import DDSUtil.ByteBufferedImage;
-import DDSUtil.DDSUtil;
-import DDSUtil.ImageRescaler;
-import DDSUtil.MipMapsUtil;
-import DDSUtil.NonCubicDimensionException;
-import DDSUtil.Rescaler;
-import JOGL.DDSImage;
-import JOGL.DDSImage.ImageInfo;
+import jogl.DDSImage;
+import jogl.DDSImage.ImageInfo;
+
+import compression.DXTBufferDecompressor;
+import ddsutil.ByteBufferedImage;
+import ddsutil.DDSUtil;
+import ddsutil.ImageRescaler;
+import ddsutil.MipMapsUtil;
+import ddsutil.NonCubicDimensionException;
+import ddsutil.Rescaler;
+
 
 /**
  * MipMap Texture contains several layers of MipMaps, each is 1/4 the size of the one above.

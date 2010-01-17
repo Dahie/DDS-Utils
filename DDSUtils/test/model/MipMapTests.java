@@ -1,7 +1,7 @@
 /**
  * 
  */
-package test;
+package model;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,10 +11,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import model.MipMaps;
+
 import org.junit.Test;
 
-import DDSUtil.MipMapsUtil;
-import Model.MipMaps;
+import ddsutil.MipMapsUtil;
+
+import test.DDSTestCase;
+
 
 /**
  * @author danielsenff

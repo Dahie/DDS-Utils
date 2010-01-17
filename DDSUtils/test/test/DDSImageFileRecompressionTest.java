@@ -6,11 +6,13 @@ package test;
 import java.io.File;
 import java.io.IOException;
 
+import jogl.DDSImage;
+
+import model.DDSFile;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import JOGL.DDSImage;
-import Model.DDSFile;
 
 /**
  * @author danielsenff

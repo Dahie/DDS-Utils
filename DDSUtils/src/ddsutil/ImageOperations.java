@@ -1,4 +1,4 @@
-package DDSUtil;
+package ddsutil;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;

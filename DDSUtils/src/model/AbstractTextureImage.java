@@ -1,13 +1,15 @@
-package Model;
+package model;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import DDSUtil.DDSUtil;
-import DDSUtil.MipMapsUtil;
-import DDSUtil.NonCubicDimensionException;
-import JOGL.DDSImage;
+import ddsutil.DDSUtil;
+import ddsutil.MipMapsUtil;
+import ddsutil.NonCubicDimensionException;
+
+import jogl.DDSImage;
+
 
 public abstract class AbstractTextureImage implements TextureImage {
 

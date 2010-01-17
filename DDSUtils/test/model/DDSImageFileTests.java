@@ -1,7 +1,7 @@
 /**
  * 
  */
-package test;
+package model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -12,11 +12,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import jogl.DDSImage;
+
+import model.DDSFile;
+
 import org.junit.Test;
 
+import test.DDSTestCase;
 import util.Stopwatch;
-import JOGL.DDSImage;
-import Model.DDSFile;
 
 /**
  * @author danielsenff

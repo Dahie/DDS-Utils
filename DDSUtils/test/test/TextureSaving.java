@@ -9,12 +9,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import jogl.DDSImage;
+
+import model.DDSFile;
+
 import org.junit.Test;
 
-import DDSUtil.DDSUtil;
-import DDSUtil.MipMapsUtil;
-import JOGL.DDSImage;
-import Model.DDSFile;
+import ddsutil.DDSUtil;
+import ddsutil.MipMapsUtil;
+
 
 import static org.junit.Assert.*;
 

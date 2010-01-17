@@ -6,12 +6,13 @@ package test;
 import java.io.File;
 import java.io.IOException;
 
+import model.DDSFile;
+
 import org.junit.Test;
 
+import jogl.DDSImage;
 import junit.framework.TestCase;
 import util.Stopwatch;
-import JOGL.DDSImage;
-import Model.DDSFile;
 import static org.junit.Assert.*;
 
 /**

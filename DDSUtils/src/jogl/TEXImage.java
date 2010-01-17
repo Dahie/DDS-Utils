@@ -37,7 +37,7 @@
  * and developed by Kenneth Bradley Russell and Christopher John Kline.
  */
 
-package JOGL;
+package jogl;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -52,7 +52,8 @@ import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Vector;
 
-import JOGL.TEXImage.Header.EmbeddedBuffer;
+import jogl.TEXImage.Header.EmbeddedBuffer;
+
 
 /** A reader and writer for Tex (.tex) files, which are
     used to describe textures. These files can contain multiple mipmap

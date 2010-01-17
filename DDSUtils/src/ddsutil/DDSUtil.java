@@ -1,4 +1,4 @@
-package DDSUtil;
+package ddsutil;
 
 
 import gr.zdimensions.jsquish.Squish;
@@ -9,14 +9,17 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileLockInterruptionException;
 
+import jogl.DDSImage;
+import jogl.TEXImage;
+
+import compression.DXTBufferCompressor;
+import compression.DXTBufferDecompressor;
+
+import model.MipMaps;
+import model.SingleTextureMap;
+import model.TextureMap;
+
 import util.ImageUtils;
-import Compression.DXTBufferCompressor;
-import Compression.DXTBufferDecompressor;
-import JOGL.DDSImage;
-import JOGL.TEXImage;
-import Model.MipMaps;
-import Model.SingleTextureMap;
-import Model.TextureMap;
 
 
 

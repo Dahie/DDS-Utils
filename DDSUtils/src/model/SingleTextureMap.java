@@ -1,14 +1,15 @@
 /**
  * 
  */
-package Model;
+package model;
 
 import gr.zdimensions.jsquish.Squish.CompressionType;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
-import DDSUtil.ByteBufferedImage;
+import ddsutil.ByteBufferedImage;
+
 
 /**
  * TextureMap without MipMaps

@@ -1,13 +1,14 @@
 /**
  * 
  */
-package Model;
+package model;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import JOGL.DDSImage;
+import jogl.DDSImage;
+
 
 /**
  * @author danielsenff

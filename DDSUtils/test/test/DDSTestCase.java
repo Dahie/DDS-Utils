@@ -6,8 +6,10 @@ package test;
 import java.io.File;
 import java.io.IOException;
 
-import JOGL.DDSImage;
-import Model.DDSFile;
+import jogl.DDSImage;
+
+import model.DDSFile;
+
 import static org.junit.Assert.*;
 
 /**

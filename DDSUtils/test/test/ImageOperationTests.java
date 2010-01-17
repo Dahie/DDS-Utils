@@ -3,7 +3,7 @@
  */
 package test;
 
-import DDSUtil.ImageOperations;
+import ddsutil.ImageOperations;
 import junit.framework.TestCase;
 
 /**

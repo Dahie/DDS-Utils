@@ -1,16 +1,19 @@
 /**
  * 
  */
-package test;
+package model;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import jogl.DDSImage;
+
 import org.junit.Test;
 
-import JOGL.DDSImage;
+import test.DDSTestCase;
+
 import static org.junit.Assert.*;
 
 

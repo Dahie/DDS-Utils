@@ -1,13 +1,14 @@
 /**
  * 
  */
-package DDSUtil;
+package ddsutil;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import DDSUtil.ImageOperations.ChannelMode;
+import ddsutil.ImageOperations.ChannelMode;
+
 
 /**
  * @author danielsenff

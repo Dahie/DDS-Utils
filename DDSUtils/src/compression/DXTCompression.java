@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Compression;
+package compression;
 
 import gr.zdimensions.jsquish.Squish;
 import gr.zdimensions.jsquish.Squish.CompressionType;
@@ -9,7 +9,8 @@ import gr.zdimensions.jsquish.Squish.CompressionType;
 import java.awt.Dimension;
 import java.nio.ByteBuffer;
 
-import DDSUtil.ImageOperations;
+import ddsutil.ImageOperations;
+
 
 /**
  * @author danielsenff

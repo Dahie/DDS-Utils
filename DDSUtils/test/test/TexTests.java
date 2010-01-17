@@ -4,11 +4,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import jogl.TEXImage;
+
 import org.junit.Test;
+
+import ddsutil.DDSUtil;
 import static org.junit.Assert.*;
 
-import DDSUtil.DDSUtil;
-import JOGL.TEXImage;
 
 
 public class TexTests {
@@ -19,7 +21,7 @@ public class TexTests {
 	public void initFromFile() {
 		File tex = new File(pathname);
 		try {
-			TEXImage texImage = JOGL.TEXImage.read(tex);
+			TEXImage texImage = jogl.TEXImage.read(tex);
 			assertEquals(512, texImage.getWidth());
 			assertEquals(512, texImage.getHeight());
 			assertEquals(4, texImage.getNumMipMaps());
