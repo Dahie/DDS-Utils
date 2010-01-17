@@ -6,12 +6,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 
-import Model.DDSFile;
-import Model.TEXFile;
-import Model.TextureImage;
+import model.DDSFile;
+import model.TEXFile;
+import model.TextureImage;
+import util.ImageIOUtils;
+import ddsutil.DDSUtil;
 import de.danielsenff.radds.models.FilesListModel;
 import de.danielsenff.radds.view.View;
 
@@ -94,27 +97,20 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 	 * @param file
 	 */
 	public void setImage(File file) {
-		String filename = file.getAbsolutePath();
 		long mem0;
 		try {
-			TextureImage image = null;
-			if(DDSFile.isValidDDSImage(file)) {
-				image = new DDSFile(filename);
-				if(image.getTextureType() == DDSFile.TextureType.CUBEMAP ||
-						image.getTextureType() == DDSFile.TextureType.VOLUME) {
-					JOptionPane.showMessageDialog(null, 
-							"<html>Error: This programm doesn't support cubemaps or volume textures." +
-							"<br>"+image.getFile().getName()+" can not be loaded.</html>",	"Attention", 
-							JOptionPane.INFORMATION_MESSAGE);
-					return;
-				} 
-			} else if (TEXFile.isValidTEXImage(file)) {
-				image = new TEXFile(filename);
+			if(ImageIOUtils.isImageIOSupported(file)) {
+				readImageIOImage(file);
+			} else if (DDSUtil.isReadSupported(file))
+				readDDSUtilImage(file);
+			else {
+				JOptionPane.showMessageDialog(null, 
+						"<html>Error: This programm doesn't support this file format." +
+						"<br>"+file.getName()+" can not be loaded.</html>",	"Attention", 
+						JOptionPane.INFORMATION_MESSAGE);
+				return;
 			}
-			if(image != null) {
-				image.loadImageData();
-				getView().setImage(image);
-			}
+				
 			mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 			// System.out.println(mem0);
 		} catch (final OutOfMemoryError ex) {
@@ -127,6 +123,33 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+	}
+
+	private void readImageIOImage(File file) throws IOException {
+		BufferedImage image = ImageIO.read(file);
+		getView().setImage(image);
+	}
+	
+	private void readDDSUtilImage(File file)
+			throws IOException {
+		TextureImage image = null;
+		String filename = file.getAbsolutePath();
+		if(DDSFile.isValidDDSImage(file)) {
+			image = new DDSFile(filename);
+			if(image.getTextureType() == DDSFile.TextureType.CUBEMAP ||
+					image.getTextureType() == DDSFile.TextureType.VOLUME) {
+				JOptionPane.showMessageDialog(null, 
+						"<html>Error: This programm doesn't support cubemaps or volume textures." +
+						"<br>"+image.getFile().getName()+" can not be loaded.</html>",	"Attention", 
+						JOptionPane.INFORMATION_MESSAGE);
+				return;
+			} 
+		} else if (TEXFile.isValidTEXImage(file)) {
+			image = new TEXFile(filename);
+		} 
+		if(image != null) {
+			image.loadImageData();
+			getView().setImage(image);
+		}
 	}
 }

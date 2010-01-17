@@ -32,8 +32,8 @@ import javax.swing.event.AncestorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import DDSUtil.BIUtil;
-import DDSUtil.ImageOperations;
+import ddsutil.BIUtil;
+import ddsutil.ImageOperations;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;

@@ -13,9 +13,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.JViewport;
 
 

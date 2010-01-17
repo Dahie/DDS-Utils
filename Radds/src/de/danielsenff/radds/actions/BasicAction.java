@@ -7,7 +7,6 @@ import javax.swing.KeyStroke;
 
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.util.OS;
-import de.danielsenff.radds.util.ResourceLoader;
 
 
 

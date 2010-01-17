@@ -19,6 +19,7 @@ import model.MipMaps;
 import model.SingleTextureMap;
 import model.TextureMap;
 
+import util.FileUtil;
 import util.ImageUtils;
 
 
@@ -301,5 +302,10 @@ public class DDSUtil {
 			case DDSImage.D3DFMT_R8G8B8:
 				return null;
 			}
+	}
+
+	public static boolean isReadSupported(File file) {
+		return FileUtil.getFileSuffix(file).endsWith("dds")
+			|| FileUtil.getFileSuffix(file).endsWith("tex");
 	}
 }

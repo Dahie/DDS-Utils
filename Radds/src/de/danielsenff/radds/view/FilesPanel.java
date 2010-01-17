@@ -15,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.tree.TreeNode;
 
 import util.FileUtil;
-
 import de.danielsenff.radds.controller.Application;
 
 /**

@@ -16,10 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileFilter;
 
+import jogl.DDSImage;
+import model.DDSFile;
 import util.FileUtil;
-
-import JOGL.DDSImage;
-import Model.DDSFile;
 import de.danielsenff.radds.models.ExampleFileFilter;
 
 

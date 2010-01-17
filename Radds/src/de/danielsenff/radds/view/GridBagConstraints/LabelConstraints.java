@@ -1,6 +1,6 @@
 package de.danielsenff.radds.view.GridBagConstraints;
 
-import java.awt.*;
+import java.awt.Insets;
 
 /*
  * ### Not yet documented. ###

@@ -3,17 +3,15 @@
  */
 package de.danielsenff.radds.view;
 
-import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 
 import javax.swing.JLabel;
 
+import model.TextureImage;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.view.GridBagConstraints.LabelConstraints;
 import de.danielsenff.radds.view.GridBagConstraints.RemainderConstraints;
-
-import Model.DDSFile;
-import Model.TextureImage;
 
 
 /**
@@ -85,11 +83,27 @@ public class InfoPanel extends JCPanel {
 	}
 	
 	public void setTextureFile(TextureImage texture) {
-		this.setData(texture.getNumMipMaps(), 
-				texture.getWidth(), 
-				texture.getHeight(),
-				texture.getPixelformatVerbose(), 
-				texture.getTextureType().toString());
+		if(texture != null) {
+			this.setData(texture.getNumMipMaps(), 
+					texture.getWidth(), 
+					texture.getHeight(),
+					texture.getPixelformatVerbose(), 
+					texture.getTextureType().toString());	
+		} else {
+			this.setData(texture.getNumMipMaps(), 
+					texture.getWidth(), 
+					texture.getHeight(),
+					texture.getPixelformatVerbose(), 
+					texture.getTextureType().toString());
+		}
+	}
+	
+	public void setTextureFile(Image texture) {
+		this.setData(1, 
+				texture.getWidth(null), 
+				texture.getHeight(null),
+				"-", 
+				"-");	
 	}
 	
 }

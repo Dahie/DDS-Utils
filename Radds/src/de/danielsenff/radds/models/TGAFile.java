@@ -23,7 +23,6 @@
 */
 package de.danielsenff.radds.models;
 
-import java.awt.Canvas;
 import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

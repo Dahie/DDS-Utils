@@ -11,7 +11,7 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
-import Model.DDSFile;
+import model.DDSFile;
 
 
 /**

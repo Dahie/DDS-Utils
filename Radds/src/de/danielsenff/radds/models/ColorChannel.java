@@ -3,7 +3,7 @@
  */
 package de.danielsenff.radds.models;
 
-import DDSUtil.ImageOperations;
+import ddsutil.ImageOperations;
 
 
 /**

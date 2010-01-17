@@ -15,7 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JProgressBar;
 import javax.swing.JSplitPane;
 
-import Model.TextureImage;
+import model.TextureImage;
 import de.danielsenff.radds.actions.ActionCopy;
 import de.danielsenff.radds.actions.ActionExport;
 import de.danielsenff.radds.controller.Application;
@@ -158,6 +158,13 @@ public class View extends JCFrame {
 		filesPanel.getInfoPanel().setTextureFile(image);
 		this.actionCopy.setEnabled(true);
 	}
+
+	public void setImage(final BufferedImage image) {
+		getCanvas().setSourceBI(image);
+		filesPanel.getInfoPanel().setTextureFile(image);
+		this.actionCopy.setEnabled(true);
+	}
+	
 	
 	/**
 	 * Sets the icon on the Canvas to "busy"
