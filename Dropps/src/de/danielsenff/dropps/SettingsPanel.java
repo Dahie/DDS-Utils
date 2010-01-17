@@ -20,9 +20,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
+import jogl.DDSImage;
+
 import org.jdesktop.application.ResourceMap;
 
-import JOGL.DDSImage;
 import de.danielsenff.dropps.models.ExportOptions;
 import de.danielsenff.dropps.models.Preset;
 import de.danielsenff.dropps.models.PresetsComboModel;

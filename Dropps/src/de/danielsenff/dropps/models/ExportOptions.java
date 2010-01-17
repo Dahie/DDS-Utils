@@ -3,7 +3,7 @@
  */
 package de.danielsenff.dropps.models;
 
-import JOGL.DDSImage;
+import jogl.DDSImage;
 
 /**
  * @author danielsenff

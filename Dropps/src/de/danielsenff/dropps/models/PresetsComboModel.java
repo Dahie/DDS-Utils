@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
-import Model.DDSFile;
+import model.DDSFile;
 
 
 /**

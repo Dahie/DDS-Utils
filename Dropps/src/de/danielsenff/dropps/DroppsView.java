@@ -19,7 +19,8 @@ import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
-import javax.swing.border.EtchedBorder;
+
+import jogl.DDSImage;
 
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
@@ -31,7 +32,6 @@ import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
 import org.jdesktop.application.Task.BlockingScope;
 
-import JOGL.DDSImage;
 import de.danielsenff.dropps.models.ExportOptions;
 import de.danielsenff.dropps.models.ProgressStatus;
 import de.danielsenff.dropps.tasks.ConvertFilesTask;

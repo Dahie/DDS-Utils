@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 
 public class ImageIOUtils {
 
-	private boolean isImageIOSupported(File file) {
+	public static boolean isImageIOSupported(File file) {
 		String[] supportedMIMETypes = ImageIO.getReaderFormatNames();
 		for (int j = 0; j < supportedMIMETypes.length; j++) {
 			if(FileUtil.getFileSuffix(file).contains(supportedMIMETypes[j]))

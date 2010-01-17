@@ -14,9 +14,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import util.FileUtil;
-
-import DDSUtil.DDSUtil;
-import DDSUtil.MipMapsUtil;
+import util.ImageIOUtils;
+import ddsutil.DDSUtil;
+import ddsutil.MipMapsUtil;
 import de.danielsenff.dropps.models.ExportOptions;
 import de.danielsenff.dropps.models.IConvertListener;
 import de.danielsenff.dropps.models.IProgressListener;
@@ -95,8 +95,9 @@ public class ConvertController implements IProgressObserverable {
 				return;
 			}
 			
-			if(isImageIOSupported(file)) {
+			if(ImageIOUtils.isImageIOSupported(file)) {
 				imageToConvert = ImageIO.read(file);
+				System.out.println(imageToConvert.getType());
 			} else if (FileUtil.getFileSuffix(file).contains("tex")) {
 				imageToConvert = DDSUtil.decompressTexture(file);
 			}
@@ -137,17 +138,8 @@ public class ConvertController implements IProgressObserverable {
 		notifyConversionEnd(file);
 	}
 	
-	private boolean isImageIOSupported(File file) {
-		String[] supportedMIMETypes = ImageIO.getReaderFormatNames();
-		for (int j = 0; j < supportedMIMETypes.length; j++) {
-			if(FileUtil.getFileSuffix(file).contains(supportedMIMETypes[j]))
-				return true;
-		}
-		return false;
-	}
-	
 	private boolean isFiletypeSupported(File file) {
-		if(isImageIOSupported(file)
+		if(ImageIOUtils.isImageIOSupported(file)
 				|| FileUtil.getFileSuffix(file).contains("tex"))
 			return true;
 		
