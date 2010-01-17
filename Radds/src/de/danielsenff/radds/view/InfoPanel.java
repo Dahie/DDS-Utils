@@ -5,6 +5,7 @@ package de.danielsenff.radds.view;
 
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JLabel;
 
@@ -83,26 +84,18 @@ public class InfoPanel extends JCPanel {
 	}
 	
 	public void setTextureFile(TextureImage texture) {
-		if(texture != null) {
-			this.setData(texture.getNumMipMaps(), 
-					texture.getWidth(), 
-					texture.getHeight(),
-					texture.getPixelformatVerbose(), 
-					texture.getTextureType().toString());	
-		} else {
-			this.setData(texture.getNumMipMaps(), 
-					texture.getWidth(), 
-					texture.getHeight(),
-					texture.getPixelformatVerbose(), 
-					texture.getTextureType().toString());
-		}
+		this.setData(texture.getNumMipMaps(), 
+				texture.getWidth(), 
+				texture.getHeight(),
+				texture.getPixelformatVerbose(), 
+				texture.getTextureType().toString());	
 	}
 	
-	public void setTextureFile(Image texture) {
+	public void setTextureFile(BufferedImage texture) {
 		this.setData(1, 
-				texture.getWidth(null), 
-				texture.getHeight(null),
-				"-", 
+				texture.getWidth(), 
+				texture.getHeight(),
+				texture.getType()+"", 
 				"-");	
 	}
 	
