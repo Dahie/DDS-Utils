@@ -3,8 +3,8 @@
  */
 package de.danielsenff.badds.operations;
 
+import ddsutil.ImageOperations;
 import util.Debug;
-import DDSUtil.ImageOperations;
 
 /**
  * @author danielsenff

@@ -15,9 +15,10 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
+import model.DDSFile;
+import model.TextureImage.TextureType;
+
 import util.FileUtil;
-import Model.DDSFile;
-import Model.TextureImage.TextureType;
 import de.danielsenff.badds.controller.Application;
 
 

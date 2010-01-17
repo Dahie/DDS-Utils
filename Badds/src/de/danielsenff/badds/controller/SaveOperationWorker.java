@@ -12,10 +12,12 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import DDSUtil.DDSUtil;
-import DDSUtil.NonCubicDimensionException;
-import JOGL.DDSImage;
-import Model.DDSFile;
+import jogl.DDSImage;
+
+import model.DDSFile;
+
+import ddsutil.DDSUtil;
+import ddsutil.NonCubicDimensionException;
 import de.danielsenff.badds.model.ExportOptions;
 import de.danielsenff.badds.operations.ChannelBrightness;
 import de.danielsenff.badds.operations.Operation;

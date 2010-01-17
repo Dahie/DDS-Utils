@@ -6,9 +6,10 @@ package de.danielsenff.badds.operations;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import DDSUtil.Rescaler;
-import DDSUtil.BIUtil;
-import DDSUtil.ImageRescaler;
+import ddsutil.BIUtil;
+import ddsutil.ImageRescaler;
+import ddsutil.Rescaler;
+
 
 /**
  * @author danielsenff

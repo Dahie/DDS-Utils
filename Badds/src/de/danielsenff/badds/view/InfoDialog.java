@@ -6,9 +6,10 @@ import java.util.ResourceBundle;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
+import model.DDSFile;
+
 import de.danielsenff.badds.controller.Application;
 
-import Model.DDSFile;
 
 public class InfoDialog extends JDialog {
 

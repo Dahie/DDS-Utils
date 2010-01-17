@@ -12,7 +12,8 @@ import java.nio.ByteBuffer;
 
 import javax.swing.JOptionPane;
 
-import Model.DDSFile;
+import model.DDSFile;
+
 import de.danielsenff.badds.controller.Application;
 import de.danielsenff.badds.model.FilesListModel;
 import de.danielsenff.badds.model.SwingWorker;

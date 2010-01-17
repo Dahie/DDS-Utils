@@ -3,7 +3,7 @@
  */
 package de.danielsenff.badds.model;
 
-import JOGL.DDSImage;
+import jogl.DDSImage;
 
 /**
  * @author danielsenff

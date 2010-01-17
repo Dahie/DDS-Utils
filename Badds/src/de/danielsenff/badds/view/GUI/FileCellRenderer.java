@@ -17,7 +17,8 @@ import javax.swing.ListCellRenderer;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableCellRenderer;
 
-import Model.DDSFile;
+import model.DDSFile;
+
 
 /**
  * @author danielsenff

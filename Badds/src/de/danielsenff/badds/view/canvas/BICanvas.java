@@ -10,8 +10,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.Scrollable;
 
-import DDSUtil.BIUtil;
-import DDSUtil.ImageOperations;
+import ddsutil.BIUtil;
+import ddsutil.ImageOperations;
 import de.danielsenff.badds.controller.Application;
 import de.danielsenff.badds.view.GUI.JCPanel;
 

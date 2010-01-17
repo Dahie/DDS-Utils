@@ -10,13 +10,14 @@ import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
+import model.DDSFile;
+
 import de.danielsenff.badds.controller.Application;
 import de.danielsenff.badds.controller.SaveOperationWorker;
 import de.danielsenff.badds.model.ExportOptions;
 import de.danielsenff.badds.operations.Operation;
 import de.danielsenff.badds.operations.SourceOperation;
 
-import Model.DDSFile;
 
 
 /**

@@ -11,7 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
-import DDSUtil.ImageOperations;
+import ddsutil.ImageOperations;
 import de.danielsenff.badds.actions.ActionClose;
 import de.danielsenff.badds.controller.Application;
 import de.danielsenff.badds.view.canvas.BICanvas;

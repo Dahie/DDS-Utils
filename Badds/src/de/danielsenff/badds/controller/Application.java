@@ -9,6 +9,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 
+import jogl.DDSImage;
+
+import model.DDSFile;
+
 import de.danielsenff.badds.model.ExportOptions;
 import de.danielsenff.badds.model.FilesListModel;
 import de.danielsenff.badds.model.PresetsComboModel;
@@ -18,8 +22,6 @@ import de.danielsenff.badds.operations.Operation;
 import de.danielsenff.badds.operations.SourceOperation;
 import de.danielsenff.badds.view.View;
 
-import JOGL.DDSImage;
-import Model.DDSFile;
 
 /**
  * 

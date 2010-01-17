@@ -7,9 +7,10 @@ package de.danielsenff.badds.operations;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import DDSUtil.Rescaler;
 
 import com.mortennobel.imagescaling.ResampleOp;
+
+import ddsutil.Rescaler;
 
 /**
  * @author danielsenff

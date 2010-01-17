@@ -16,9 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileFilter;
 
+import jogl.DDSImage;
+
 import util.FileUtil;
 
-import JOGL.DDSImage;
 
 
 /**

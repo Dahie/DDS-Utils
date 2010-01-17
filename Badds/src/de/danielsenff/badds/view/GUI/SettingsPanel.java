@@ -19,12 +19,13 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 
+import jogl.DDSImage;
+
 import de.danielsenff.badds.controller.Application;
 import de.danielsenff.badds.model.ExportOptions;
 import de.danielsenff.badds.model.Preset;
 import de.danielsenff.badds.model.PresetsComboModel;
 
-import JOGL.DDSImage;
 
 /**
  * @author danielsenff
