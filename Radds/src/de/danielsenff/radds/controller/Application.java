@@ -2,8 +2,11 @@ package de.danielsenff.radds.controller;
 
 
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
@@ -13,9 +16,11 @@ import javax.swing.JProgressBar;
 import model.DDSFile;
 import model.TEXFile;
 import model.TextureImage;
+import util.FileUtil;
 import util.ImageIOUtils;
 import ddsutil.DDSUtil;
 import de.danielsenff.radds.models.FilesListModel;
+import de.danielsenff.radds.models.TGAFile;
 import de.danielsenff.radds.view.View;
 
 /**
@@ -101,6 +106,8 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 		try {
 			if(ImageIOUtils.isImageIOSupported(file)) {
 				readImageIOImage(file);
+			} else if (FileUtil.getFileSuffix(file).endsWith("tga")) {
+				readTGAImage(file);
 			} else if (DDSUtil.isReadSupported(file))
 				readDDSUtilImage(file);
 			else {
@@ -124,6 +131,42 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 			e.printStackTrace();
 		}
 	}
+
+	private void readTGAImage(File file) {
+		TGAFile tga = new TGAFile(file.getAbsolutePath());
+		int width = tga.getSize().width;
+		int height = tga.getSize().height;
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+		//initRaster(image, tga.getSize().width, tga.getSize().height, ByteBuffer.wrap(tga.getData()));
+		WritableRaster wr = image.getRaster();
+		byte[] data = tga.getData();
+		swapBGR(data, width, height, 4);
+		wr.setDataElements(0,0, width, height, data);
+		getView().setImage(image);
+	}
+
+	private static void initRaster(BufferedImage bi, int width, int height, Buffer buffer) {
+		WritableRaster wr = bi.getRaster();
+		byte[] rgba = new byte[buffer.capacity()];
+		((ByteBuffer)buffer).get(rgba);
+		
+		wr.setDataElements(0,0, width, height, rgba);
+	}
+	
+    private static void swapBGR(byte[] data, int bWidth, int height, int bpp) {
+        byte r,b;
+        int k;
+        for(int i=0; i<height; ++i) {
+            for(int j=0; j<bWidth; j+=bpp) {
+                k=i*bWidth+j;
+                b=data[k+0];
+                r=data[k+2];
+                data[k+0]=r;
+                data[k+2]=b;
+            }
+        }
+    }
+
 
 	private void readImageIOImage(File file) throws IOException {
 		BufferedImage image = ImageIO.read(file);
