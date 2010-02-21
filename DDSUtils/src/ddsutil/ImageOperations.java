@@ -252,6 +252,7 @@ public class ImageOperations {
 	}
 	
 	/**
+	 * TODO would be nice to remove
 	 * @param buffer
 	 * @param raster
 	 * @return

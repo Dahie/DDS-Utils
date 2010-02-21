@@ -3,7 +3,9 @@ package de.danielsenff.radds.controller;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -20,7 +22,7 @@ import util.FileUtil;
 import util.ImageIOUtils;
 import ddsutil.DDSUtil;
 import de.danielsenff.radds.models.FilesListModel;
-import de.danielsenff.radds.models.TGAFile;
+import de.danielsenff.radds.models.TextureImageFormatLoaderTGA;
 import de.danielsenff.radds.view.View;
 
 /**
@@ -132,16 +134,10 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 		}
 	}
 
-	private void readTGAImage(File file) {
-		TGAFile tga = new TGAFile(file.getAbsolutePath());
-		int width = tga.getSize().width;
-		int height = tga.getSize().height;
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-		//initRaster(image, tga.getSize().width, tga.getSize().height, ByteBuffer.wrap(tga.getData()));
-		WritableRaster wr = image.getRaster();
-		byte[] data = tga.getData();
-		swapBGR(data, width, height, 4);
-		wr.setDataElements(0,0, width, height, data);
+	private void readTGAImage(File file) throws IOException {
+		TextureImageFormatLoaderTGA loader = new TextureImageFormatLoaderTGA();
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+		BufferedImage image = loader.loadTextureImage(in , true, true); 
 		getView().setImage(image);
 	}
 
@@ -170,6 +166,10 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 
 	private void readImageIOImage(File file) throws IOException {
 		BufferedImage image = ImageIO.read(file);
+		System.out.println(image.getType());
+		System.out.println(image.getColorModel().hasAlpha());
+		System.out.println(image.getColorModel().isAlphaPremultiplied());
+		System.out.println(image.getColorModel().getNumComponents());
 		getView().setImage(image);
 	}
 	

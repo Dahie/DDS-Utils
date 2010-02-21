@@ -1,7 +1,9 @@
 package de.danielsenff.dropps;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +24,7 @@ import de.danielsenff.dropps.models.IConvertListener;
 import de.danielsenff.dropps.models.IProgressListener;
 import de.danielsenff.dropps.models.IProgressObserverable;
 import de.danielsenff.dropps.models.ProgressStatus;
+import de.danielsenff.dropps.models.TextureImageFormatLoaderTGA;
 
 public class ConvertController implements IProgressObserverable {
 
@@ -100,6 +103,10 @@ public class ConvertController implements IProgressObserverable {
 				System.out.println(imageToConvert.getType());
 			} else if (FileUtil.getFileSuffix(file).contains("tex")) {
 				imageToConvert = DDSUtil.decompressTexture(file);
+			} else if (FileUtil.getFileSuffix(file).contains("tga")) {
+				TextureImageFormatLoaderTGA loader = new TextureImageFormatLoaderTGA();
+				BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+				imageToConvert = loader.loadTextureImage(in , true, true);
 			}
 			
 			if(imageToConvert != null) {
@@ -140,7 +147,9 @@ public class ConvertController implements IProgressObserverable {
 	
 	private boolean isFiletypeSupported(File file) {
 		if(ImageIOUtils.isImageIOSupported(file)
-				|| FileUtil.getFileSuffix(file).contains("tex"))
+				|| FileUtil.getFileSuffix(file).contains("tex")
+				|| FileUtil.getFileSuffix(file).contains("tga")
+				)
 			return true;
 		
 		return false;

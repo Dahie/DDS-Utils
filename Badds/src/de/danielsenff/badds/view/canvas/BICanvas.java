@@ -5,7 +5,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 
 import javax.swing.BorderFactory;
 import javax.swing.Scrollable;
@@ -21,7 +24,7 @@ import de.danielsenff.badds.view.GUI.JCPanel;
  * @author danielsenff
  *
  */
-public class BICanvas extends JCPanel implements Scrollable {
+public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener {
 
 	/**
 	 * 
@@ -62,6 +65,7 @@ public class BICanvas extends JCPanel implements Scrollable {
 		this.biRendered = image;
 		this.biSource = image;
 		changeChannelBi(channel, biSource);
+		this.addMouseMotionListener(this);
 		
 		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.setPreferredSize(new Dimension(biRendered.getWidth(), biRendered.getHeight()));
@@ -119,6 +123,9 @@ public class BICanvas extends JCPanel implements Scrollable {
 		return this.biRendered;
 	}
 	
+	/**
+	 * @return
+	 */
 	public BufferedImage getSource() {
 		return this.biSource;
 	}
@@ -131,7 +138,10 @@ public class BICanvas extends JCPanel implements Scrollable {
 	public void setSourceBI(final BufferedImage bi) {
 		this.biRendered = bi;
 		this.biSource = bi;
-		this.setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
+		int width = (int) (zoomFactor*bi.getWidth());
+		int height = (int) (zoomFactor*bi.getHeight());
+		this.setPreferredSize(new Dimension(width, height));
+		this.getParent().setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
 		changeChannelBi(channelMode, biSource);
 		invalidate();
 	}
@@ -142,11 +152,14 @@ public class BICanvas extends JCPanel implements Scrollable {
 	 * @param zoom
 	 */
 	public void setZoomFactor(final float zoom) {
+		float oldValue = this.zoomFactor;
 		this.zoomFactor = zoom;
 		int newW = (int) (biRendered.getWidth() * zoom);
 		int newH = (int) (biRendered.getHeight() * zoom);
 		this.setPreferredSize(new Dimension(newW, newH));
 		this.revalidate();
+		
+		firePropertyChange("zoomFactor", oldValue, zoomFactor);
 	}
 	
 	/**
@@ -156,6 +169,7 @@ public class BICanvas extends JCPanel implements Scrollable {
 	public float getZoomFactor() {
 		return this.zoomFactor;
 	}
+
 	
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -226,5 +240,23 @@ public class BICanvas extends JCPanel implements Scrollable {
 	 */
 	public int getScrollableUnitIncrement(Rectangle arg0, int arg1, int arg2) {
 		return 15; // pixel
+	}
+
+
+	public void mouseDragged(MouseEvent e) {}
+
+	public void mouseMoved(MouseEvent e) {
+		int x = (int) (e.getPoint().x/zoomFactor);
+		int y = (int) (e.getPoint().y/zoomFactor);
+		
+		Raster data = biSource.getData();
+		this.setToolTipText(
+				"Coordinate (" + x + ", "+ y + "), "
+				+ "RGBA ("
+				+ "A" + data.getSample((int)x, (int)y, 3) + ", "
+				+ "R" + data.getSample((int)x, (int)y, 0) + ", "
+				+ "B" + data.getSample((int)x, (int)y, 1) + ", "
+				+ "G" + data.getSample((int)x, (int)y, 2) + ")"
+				);
 	}
 }
