@@ -250,13 +250,19 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 		int y = (int) (e.getPoint().y/zoomFactor);
 		
 		Raster data = biSource.getData();
-		this.setToolTipText(
-				"Coordinate (" + x + ", "+ y + "), "
-				+ "RGBA ("
-				+ "A" + data.getSample((int)x, (int)y, 3) + ", "
-				+ "R" + data.getSample((int)x, (int)y, 0) + ", "
-				+ "B" + data.getSample((int)x, (int)y, 1) + ", "
-				+ "G" + data.getSample((int)x, (int)y, 2) + ")"
-				);
+		String tooltip = "Coordinate (" + x + ", "+ y + "), ";
+		if(biSource.getColorModel().getNumComponents() > 3) {
+			tooltip	+= "ARGB ("
+				+ data.getSample((int)x, (int)y, 3) + ", "
+				+ data.getSample((int)x, (int)y, 0) + ", "
+				+ data.getSample((int)x, (int)y, 1) + ", "
+				+ data.getSample((int)x, (int)y, 2) + ")";
+		} else {
+			tooltip	+= "RGB ("
+				+ data.getSample((int)x, (int)y, 0) + ", "
+				+ data.getSample((int)x, (int)y, 1) + ", "
+				+ data.getSample((int)x, (int)y, 2) + ")";	
+		}
+		this.setToolTipText(tooltip);
 	}
 }

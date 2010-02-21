@@ -8,16 +8,10 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 import java.awt.image.Raster;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.Scrollable;
-
-import sun.awt.image.ByteInterleavedRaster;
-import util.ImageUtils;
 
 import ddsutil.BIUtil;
 import ddsutil.ImageOperations;
@@ -256,13 +250,19 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 		int y = (int) (e.getPoint().y/zoomFactor);
 		
 		Raster data = biSource.getData();
-		this.setToolTipText(
-				"Coordinate (" + x + ", "+ y + "), "
-				+ "RGBA ("
-				+ "A" + data.getSample((int)x, (int)y, 3) + ", "
-				+ "R" + data.getSample((int)x, (int)y, 0) + ", "
-				+ "B" + data.getSample((int)x, (int)y, 1) + ", "
-				+ "G" + data.getSample((int)x, (int)y, 2) + ")"
-				);
+		String tooltip = "Coordinate (" + x + ", "+ y + "), ";
+		if(biSource.getColorModel().getNumComponents() > 3) {
+			tooltip	+= "ARGB ("
+				+ data.getSample((int)x, (int)y, 3) + ", "
+				+ data.getSample((int)x, (int)y, 0) + ", "
+				+ data.getSample((int)x, (int)y, 1) + ", "
+				+ data.getSample((int)x, (int)y, 2) + ")";
+		} else {
+			tooltip	+= "RGB ("
+				+ data.getSample((int)x, (int)y, 0) + ", "
+				+ data.getSample((int)x, (int)y, 1) + ", "
+				+ data.getSample((int)x, (int)y, 2) + ")";	
+		}
+		this.setToolTipText(tooltip);
 	}
 }

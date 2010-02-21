@@ -199,14 +199,8 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 		canvas.setZoomFactor(zoomFactor);
 	}
 
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyReleased(KeyEvent arg0) {}
 
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyTyped(KeyEvent arg0) {}
 
 }
