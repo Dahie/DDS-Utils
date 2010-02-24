@@ -13,6 +13,7 @@ import java.io.File;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import util.FileUtil;
 import de.danielsenff.radds.controller.Application;
@@ -38,43 +39,13 @@ public class FilesPanel extends JCPanel {
 	}
 
 	private void init() {
-		/*list = new JList();
-		FilesListModel filesListModel = controller.getFilesListModel();
-		filesListModel.addListDataListener(new ListDataListener() {
-
-			public void contentsChanged(ListDataEvent arg0) {}
-
-			public void intervalAdded(ListDataEvent arg0) {
-				controller.getView().getActionCloseAllFiles().setEnabled(true);
-			}
-
-			public void intervalRemoved(ListDataEvent arg0) {}
-
-		});
-
-		list.setModel(filesListModel);
-		list.setSelectionModel(filesListModel.getSelectionModel());
-		list.setCellRenderer(new FileCellRenderer());
-
-		list.addListSelectionListener(new ChangeSelection(controller));
-
-		JScrollPane listScroller = new JScrollPane(list);
-		listScroller.setPreferredSize(new Dimension(panelWidth, panelHeight));
-		this.add(listScroller, BorderLayout.CENTER);
-		 */
 		// FileViewTree
 		final FileSystemTree fileTree = new FileSystemTree();
+		fileTree.setExpandsSelectedPaths(true);
 		fileTree.addMouseListener(new LoadListener());
 		fileTree.addKeyListener(new LoadListener());
 
 		final JScrollPane treeScroller = new JScrollPane(fileTree);
-
-
-		//Splitpane
-
-		//		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, listScroller, treeScroller);
-		//		splitPane.setDividerLocation(0.5);
-		//		add(splitPane, BorderLayout.CENTER);
 		add(treeScroller, BorderLayout.CENTER);
 
 		// information
@@ -92,11 +63,7 @@ public class FilesPanel extends JCPanel {
 	class LoadListener implements KeyListener, MouseListener {
 
 		public void keyPressed(final KeyEvent event) {
-			if(event.getKeyCode() == KeyEvent.VK_ENTER) {
-				final FileSystemTree fileTree = (FileSystemTree) event.getSource();
-				final TreeNode node = (TreeNode) fileTree.getSelectionPath().getLastPathComponent();
-				loadImage(node);
-			}
+			
 		}
 
 		public void keyReleased(final KeyEvent e) {}
