@@ -80,15 +80,6 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 		return this.view;
 	}
 
-	/**
-	 * @return
-	 */
-	/*public DDSImageFile getCurrentDDSImage() {
-		DDSImageFile image = view.getCanvas().getCanvas();
-//		DDSImageFile image = this.openFilesModel.getSelectedItem();
-		return image;  
-	}*/
-
 	public BufferedImage getCurrentImage() {
 		BufferedImage image = view.getCanvas().getCanvas();
 		//		DDSImageFile image = this.openFilesModel.getSelectedItem();
@@ -137,7 +128,7 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 	private void readTGAImage(File file) throws IOException {
 		TextureImageFormatLoaderTGA loader = new TextureImageFormatLoaderTGA();
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-		BufferedImage image = loader.loadTextureImage(in , true, true); 
+		BufferedImage image = loader.loadTextureImage(in , true, false); 
 		getView().setImage(image);
 	}
 

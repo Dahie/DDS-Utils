@@ -106,7 +106,7 @@ public class ConvertController implements IProgressObserverable {
 			} else if (FileUtil.getFileSuffix(file).contains("tga")) {
 				TextureImageFormatLoaderTGA loader = new TextureImageFormatLoaderTGA();
 				BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-				imageToConvert = loader.loadTextureImage(in , true, true);
+				imageToConvert = loader.loadTextureImage(in , true, false);
 			}
 			
 			if(imageToConvert != null) {
