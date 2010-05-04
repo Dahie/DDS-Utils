@@ -61,7 +61,7 @@ public class FileTreeModel implements TreeModel
 	}
 	
 	public static void main(String[] args) {
-		File userHomeDir = new File(System.getProperty("user.home"));
+		final File userHomeDir = new File(System.getProperty("user.home"));
 		final JTree tree = new JTree(new FileTreeModel(userHomeDir));
 		tree.setCellRenderer(new DefaultTreeCellRenderer() 
 		{
@@ -86,6 +86,7 @@ public class FileTreeModel implements TreeModel
 				} else if (	(event.isMetaDown() || event.isControlDown())
 						&& event.getKeyCode() == KeyEvent.VK_R	) {
 					System.out.println("selection path: " + selectionPath);
+					tree.setModel(new FileTreeModel(userHomeDir));
 					//updateTreeNodes();
 					//preparePath(selectionPath, 1, (DefaultMutableTreeNode) getModel().getRoot());
 					tree.expandPath(selectionPath);

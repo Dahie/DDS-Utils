@@ -4,7 +4,7 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-class FileNode { 
+public class FileNode { 
 	private static final NumberFormat FORMATTER = new DecimalFormat("#,##0"); 
 	private final File file; 
 
@@ -14,6 +14,22 @@ class FileNode {
 	
 	public File getFile() {
 		return this.file;
+	}
+	
+	@Override
+	public int hashCode() { 
+	    int hc = 17; 
+	    int hashMultiplier = 59; 
+	    hc = hc * hashMultiplier + this.toString().length(); 
+	    hc = hc * hashMultiplier + this.toString().hashCode(); 
+	    return hc; 
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		//System.out.println(obj.toString() + "  " + this.toString());
+		//System.out.println(obj.toString().equals(this.toString()));
+		return obj.toString().equals(this.toString());
 	}
 	
 	@Override
