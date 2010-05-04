@@ -15,6 +15,7 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
@@ -54,19 +55,17 @@ public class FileSystemTree extends JTree {
 //					loadImage(node);
 				} else if (	(event.isMetaDown() || event.isControlDown())
 						&& event.getKeyCode() == KeyEvent.VK_R	) {
+					System.out.println("selection path: " + selectionPath);
 					updateTreeNodes();
-					preparePath(selectionPath, 1, (TreeNode) getModel().getRoot());
-					
-					//expandPath(selectionPath);
+					//preparePath(selectionPath, 1, (DefaultMutableTreeNode) getModel().getRoot());
+					expandPath(selectionPath);
 					setSelectionPath(selectionPath);
 					invalidate();
 				}
 			}
 
 			public void keyReleased(KeyEvent e) {}
-
 			public void keyTyped(KeyEvent e) {}
-			
 		});
 		addTreeExpansionListener(new TreeExpansionListener() 
 		{
@@ -79,66 +78,27 @@ public class FileSystemTree extends JTree {
 
 				if (selectedPath != null) {
 					selectedNode = (TreeNode) selectedPath.getLastPathComponent();
-					if (isSelectedNodeInCollapsedNode(selectedNode.getParent(), collapsedNode)) {
+					if (isSelectedNodeInCollapsedNode(selectedNode.getParent(), collapsedNode))
 						setSelectionPath(path);
-					}
 				}
 			}
 
 			private boolean isSelectedNodeInCollapsedNode(TreeNode selectedNodeParent, TreeNode collapsedNode){
-				if(selectedNodeParent == null){
+				if(selectedNodeParent == null)
 					return false;
-				} else if(collapsedNode.equals(selectedNodeParent)){
+				else if(collapsedNode.equals(selectedNodeParent))
 					return true;
-				} else {
+				else
 					return isSelectedNodeInCollapsedNode(selectedNodeParent.getParent(), collapsedNode);
-				}
 			}
+			
 			public void treeExpanded(TreeExpansionEvent event)    {
-				FileSystemTreeNode node = (FileSystemTreeNode) event.getPath().getLastPathComponent();
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
 				prepareChildTreeNodes(node);
 			}
 		});
 	}
 	
-	/**
-	 * Prepare the tree dynamically expand it to the depth of the selectionpath.
-	 * @param selectionPath
-	 */
-	protected void preparePath(TreePath selectionPath, int level, TreeNode node) {
-		
-		Enumeration<FileSystemTreeNode> e = node.children();
-		while(e.hasMoreElements())    
-		{
-			FileSystemTreeNode child = e.nextElement();
-			prepareTreeNode(child);
-			if(child.equals(selectionPath.getPathComponent(level))) {
-				if(child.getChildCount() > 0 && level+1 < selectionPath.getPathCount() ) {
-					preparePath(selectionPath, level+1, child);
-				}
-			}
-		}
-		
-//		DefaultMutableTreeNode path = (DefaultMutableTreeNode) selectionPath.getPathComponent(0);
-//		DefaultMutableTreeNode root = (DefaultMutableTreeNode) this.getModel().getRoot();
-//		prepareChildTreeNodes(root);
-//		DefaultMutableTreeNode currentNode = root;
-//		while(!currentNode.equals(selectionPath.getLastPathComponent())) {			
-//			if(currentNode.isNodeChild((TreeNode) selectionPath.getPathComponent(1))) {
-//				Enumeration<DefaultMutableTreeNode> children = currentNode.breadthFirstEnumeration();
-//				while(children.hasMoreElements()) {
-//					DefaultMutableTreeNode child = children.nextElement();
-//					if(child.equals(selectionPath.getPathComponent(1))) {
-//						prepareTreeNode(child);
-//						System.out.println(child);
-//						currentNode = child;
-//					}
-//				}
-//			}
-//		}
-//		System.out.println(root);
-	}
-
 	/**
 	 * 
 	 */
@@ -146,18 +106,19 @@ public class FileSystemTree extends JTree {
 		//final File[] roots = fileSystemView.getRoots();
 		//File file = roots[0];
 		File file = fileSystemView.getHomeDirectory();
-		FileSystemTreeNode node = new FileSystemTreeNode(file);
-		node = prepareTreeNode(node);
+		DefaultMutableTreeNode node = new FileSystemTreeNode(file);
+		prepareTreeNode(node);
 		prepareChildTreeNodes(node);
 		expandRow(0); // expand root
 		((DefaultTreeModel) getModel()).setRoot(node);
 	}
 
 	/**
+	 * add new leaves to the node
 	 * @param node
 	 * @return
 	 */
-	public FileSystemTreeNode prepareTreeNode(FileSystemTreeNode node) {
+	public void prepareTreeNode(DefaultMutableTreeNode node) {
 		File f = (File) node.getUserObject();
 		File[] files = fileSystemView.getFiles(f, true);
 		for(int i = 0; i < files.length; i++) {
@@ -168,14 +129,19 @@ public class FileSystemTree extends JTree {
 					|| FileUtil.getFileSuffix(file).contains("tga"))
 				node.add(new FileSystemTreeNode(file));
 		}
-		return node;
 	}
 	
-	private void prepareChildTreeNodes(FileSystemTreeNode node)	{
-		Enumeration<FileSystemTreeNode> e = node.children();
+	/**
+	 * prepare each child of this parent node
+	 * @param node
+	 */
+	private void prepareChildTreeNodes(DefaultMutableTreeNode node)	{
+		Enumeration<DefaultMutableTreeNode> e = node.children();
+		System.out.println(node);
 		while(e.hasMoreElements())    
 		{
-			FileSystemTreeNode child = e.nextElement();
+			DefaultMutableTreeNode child = e.nextElement();
+			System.out.println("child: "+ child);	
 			prepareTreeNode(child);
 		}
 	}
@@ -183,9 +149,7 @@ public class FileSystemTree extends JTree {
 	
 	class FileSystemTreeNode extends DefaultMutableTreeNode {
 		
-		public FileSystemTreeNode(File file) {
-			super(file);
-		}
+		public FileSystemTreeNode(File file) {	super(file); }
 		
 		@Override
 		public int hashCode() { 
