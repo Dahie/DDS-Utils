@@ -3,17 +3,21 @@
  */
 package de.danielsenff.radds.view;
 
+
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 
 import util.FileUtil;
 import de.danielsenff.radds.controller.Application;
@@ -48,6 +52,24 @@ public class FilesPanel extends JCPanel {
 		final JScrollPane treeScroller = new JScrollPane(fileTree);
 		add(treeScroller, BorderLayout.CENTER);
 
+		// information
+		JButton gotoButton = new JButton("Go to…");
+		gotoButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				String url = JOptionPane.showInputDialog("Please enter the URL to the file.");
+				url.trim();
+				try {
+					File file = new File(url);
+					controller.setImage(file);
+				} catch (Exception ex) {
+					
+				}
+			}
+			
+		});
+		this.add(gotoButton, BorderLayout.NORTH);
+		
 		// information
 		infoPanel = new InfoPanel(controller);
 		this.add(infoPanel, BorderLayout.SOUTH);
