@@ -39,6 +39,7 @@ import de.danielsenff.dropps.util.FileDrop;
 
 
 /**
+ * View and Mainframe
  * @author Daniel Senff
  *
  */
@@ -124,13 +125,9 @@ public class DroppsView extends FrameView {
                     progressBar.setVisible(false);
                     progressBar.setValue(0);
 //                    statusMessageLabel.setText(resourceMap.getString("statusMessageLabel.text"));
-                    statusMessageLabel.setText("Conversion finished");
+                    statusMessageLabel.setText(resourceMap.getString("StatusBar.conversion_finished"));
                 } else if ("message".equals(propertyName)) {
                     final String text = (String)(evt.getNewValue());
-                    System.out.println("text: " + text);
-//                    statusMessageLabel.setText((text == null) ? "" : text);
-                    
-                    
                     if(text != null)
                     	statusMessageLabel.setText(text); // this way we don't overwrite if message is empty
                     messageTimer.restart();
@@ -143,8 +140,6 @@ public class DroppsView extends FrameView {
                 }
             }
         });
-
-	
 	}
 
 
@@ -249,7 +244,6 @@ public class DroppsView extends FrameView {
 				ts.execute(convertTask);
             }   // end filesDropped
         }); // end FileDrop.Listener
-        
         
         setComponent(mainPanel);
         setStatusBar(statusPanel);
