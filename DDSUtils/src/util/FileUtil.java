@@ -88,4 +88,42 @@ public class FileUtil {
 
         return arg.toLowerCase();
     }
+    
+    
+    /**
+     * Checks whether the extension of the given filename is as the same as the given string. 
+     * This is case-insensitive.
+     * @param filename
+     * @param extension
+     * @return
+     */
+    public static boolean isExtension(final String filename, final String extension) {
+    	return getFileSuffix(filename).toLowerCase().contains(extension.toLowerCase());
+    }
+    
+    /**
+     * Checks whether the extension of the given {@link File} is as the same as the given string. 
+     * This is case-insensitive.
+     * @param file
+     * @param extension
+     * @return
+     */
+    public static boolean isExtension(final File file, final String extension) {
+    	return getFileSuffix(file).toLowerCase().contains(extension.toLowerCase());
+    }
+    
+    /**
+     * Checks whether the extension of the given {@link File} is as the same as any of the given extensions. 
+     * This is case-insensitive.
+     * @param file
+     * @param extensions
+     * @return
+     */
+    public static boolean isExtension(final File file, final String[] extensions) {
+    	for (int i = 0; i < extensions.length; i++) {
+    		if (getFileSuffix(file).toLowerCase().contains(extensions[i].toLowerCase()))
+    			return true;
+		}
+    	return false;
+    }
 }

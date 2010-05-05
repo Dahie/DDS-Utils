@@ -82,7 +82,6 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 
 	public BufferedImage getCurrentImage() {
 		BufferedImage image = view.getCanvas().getCanvas();
-		//		DDSImageFile image = this.openFilesModel.getSelectedItem();
 		return image;  
 	}
 
@@ -110,7 +109,7 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 						JOptionPane.INFORMATION_MESSAGE);
 				return;
 			}
-				
+
 			mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 			// System.out.println(mem0);
 		} catch (final OutOfMemoryError ex) {
@@ -128,44 +127,37 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 	private void readTGAImage(File file) throws IOException {
 		TextureImageFormatLoaderTGA loader = new TextureImageFormatLoaderTGA();
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-		BufferedImage image = loader.loadTextureImage(in , true, false); 
-		getView().setImage(image);
+		try {
+			BufferedImage image = loader.loadTextureImage(in , true, false); 
+			getView().setImage(image);
+		} catch (final Exception ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(getView(), 
+					"<html>Error: The TGA-file could not be loaded. Only 32bit TGA are supported." +
+					"<br>The operation is aborted. </html>",	"Error", 
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private static void initRaster(BufferedImage bi, int width, int height, Buffer buffer) {
 		WritableRaster wr = bi.getRaster();
 		byte[] rgba = new byte[buffer.capacity()];
 		((ByteBuffer)buffer).get(rgba);
-		
+
 		wr.setDataElements(0,0, width, height, rgba);
 	}
-	
-    private static void swapBGR(byte[] data, int bWidth, int height, int bpp) {
-        byte r,b;
-        int k;
-        for(int i=0; i<height; ++i) {
-            for(int j=0; j<bWidth; j+=bpp) {
-                k=i*bWidth+j;
-                b=data[k+0];
-                r=data[k+2];
-                data[k+0]=r;
-                data[k+2]=b;
-            }
-        }
-    }
-
 
 	private void readImageIOImage(File file) throws IOException {
 		BufferedImage image = ImageIO.read(file);
-		System.out.println(image.getType());
-		System.out.println(image.getColorModel().hasAlpha());
-		System.out.println(image.getColorModel().isAlphaPremultiplied());
-		System.out.println(image.getColorModel().getNumComponents());
+		//		System.out.println(image.getType());
+		//		System.out.println(image.getColorModel().hasAlpha());
+		//		System.out.println(image.getColorModel().isAlphaPremultiplied());
+		//		System.out.println(image.getColorModel().getNumComponents());
 		getView().setImage(image);
 	}
-	
+
 	private void readDDSUtilImage(File file)
-			throws IOException {
+	throws IOException {
 		TextureImage image = null;
 		String filename = file.getAbsolutePath();
 		if(DDSFile.isValidDDSImage(file)) {

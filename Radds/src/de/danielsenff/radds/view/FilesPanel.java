@@ -14,6 +14,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileFilter;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -25,6 +26,7 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import util.FileUtil;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.FileNode;
 import de.danielsenff.radds.models.FileTreeModel;
@@ -52,7 +54,20 @@ public class FilesPanel extends JCPanel {
 	private void init() {
 		// FileViewTree
 		final FileSystemView fileSystemView = FileSystemView.getFileSystemView();
-		final JTree fileTree = new JTree(new FileTreeModel(fileSystemView.getHomeDirectory()));
+		FileTreeModel fileTreeModel = new FileTreeModel(fileSystemView.getHomeDirectory(), new FileFilter() {
+
+			public boolean accept(File file) {
+				String[] extensions = {"dds", "tga", "tex"};
+				if (!file.isHidden() && !file.isDirectory())
+					return FileUtil.isExtension(file, extensions);
+				else if (file.isDirectory()) 
+					return true;
+				else 
+					return false;
+			}
+			
+		});
+		final JTree fileTree = new JTree(fileTreeModel);
 		fileTree.setExpandsSelectedPaths(true);
 		fileTree.addMouseListener(new LoadListener());
 		fileTree.addKeyListener(new LoadListener());
@@ -75,7 +90,6 @@ public class FilesPanel extends JCPanel {
 				TreePath selectionPath = fileTree.getSelectionPath();
 				if (	(event.isMetaDown() || event.isControlDown())
 						&& event.getKeyCode() == KeyEvent.VK_R	) {
-					System.out.println("selection path: " + selectionPath);
 					fileTree.setModel(new FileTreeModel(fileSystemView.getHomeDirectory()));
 					//updateTreeNodes();
 					//preparePath(selectionPath, 1, (DefaultMutableTreeNode) getModel().getRoot());
