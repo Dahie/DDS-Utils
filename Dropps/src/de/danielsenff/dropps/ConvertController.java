@@ -26,6 +26,11 @@ import de.danielsenff.dropps.models.IProgressObserverable;
 import de.danielsenff.dropps.models.ProgressStatus;
 import de.danielsenff.dropps.models.TextureImageFormatLoaderTGA;
 
+/**
+ * Controller for the conversion process. This actually does the work.
+ * @author dahie
+ *
+ */
 public class ConvertController implements IProgressObserverable {
 
 	private static final Logger logger = Logger.getLogger(ConvertController.class.getName());
@@ -40,7 +45,7 @@ public class ConvertController implements IProgressObserverable {
     public static final String ERROR_ORIGINAL_FILE_NOT_EXISTS = "errorOriginalFileNotExists";
     public static final String ERROR_CANT_CREATE_CONVERTED_FILE = "errorCantCreateConvertedFile";
 
-	private ExportOptions options;
+	private final ExportOptions options;
 	
 	/**
 	 * @param options
@@ -56,7 +61,7 @@ public class ConvertController implements IProgressObserverable {
 	 */
 	public void convertFiles(final Collection<File> files) {
 		int i = 0;
-		for (File file : files) {
+		for (final File file : files) {
 			convertFile(file, i, files.size());
 			i++;
 		}
@@ -71,16 +76,16 @@ public class ConvertController implements IProgressObserverable {
 	 * @param i
 	 * @param filesCount
 	 */
-	private void convertFile(File file,
-			int i, 
-			int filesCount) {
+	private void convertFile(final File file,
+			final int i, 
+			final int filesCount) {
 		System.out.println("Process: "+file);
 
 		notifyConversionBegin(file);
 		notifyProgressListeners(new ProgressStatus(i, filesCount, "progress"));
 
 		BufferedImage imageToConvert = null;
-		DefaultListModel dlm = (DefaultListModel) ((DroppsView)((Dropps)Dropps.getInstance()).getMainView()).getDropPanel().getModel();
+		final DefaultListModel dlm = (DefaultListModel) ((DroppsView)((Dropps)Dropps.getInstance()).getMainView()).getDropPanel().getModel();
 		try {
 			System.out.println("Read BufferedImage ...");
 			
@@ -104,15 +109,24 @@ public class ConvertController implements IProgressObserverable {
 			} else if (FileUtil.getFileSuffix(file).contains("tex")) {
 				imageToConvert = DDSUtil.decompressTexture(file);
 			} else if (FileUtil.getFileSuffix(file).contains("tga")) {
-				TextureImageFormatLoaderTGA loader = new TextureImageFormatLoaderTGA();
-				BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-				imageToConvert = loader.loadTextureImage(in , true, false);
+				try {
+					final TextureImageFormatLoaderTGA loader = new TextureImageFormatLoaderTGA();
+
+					final BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+					imageToConvert = loader.loadTextureImage(in , true, false);
+				} catch (final Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(Dropps.getApplication().getMainFrame(), 
+							"<html>Error: The TGA-file could not be loaded. Only 32bit TGA are supported." +
+							"<br>The operation is aborted. </html>",	"Error", 
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 			
 			if(imageToConvert != null) {
 				
-				String convertedFile = file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf('.'));
-				File newFile = new File(convertedFile+".dds");
+				final String convertedFile = file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf('.'));
+				final File newFile = new File(convertedFile+".dds");
 				
 				// check image dimensions
 				
@@ -128,10 +142,10 @@ public class ConvertController implements IProgressObserverable {
 				// exclude this into an Converter with appropriate listeners
 				DDSUtil.write(newFile, imageToConvert, options.getNewPixelformat(), options.hasGeneratedMipMaps());
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			//			showErrorDialog(e.getMessage());
-		} catch (OutOfMemoryError e) {
+		} catch (final OutOfMemoryError e) {
 			e.printStackTrace();
 			final long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 			JOptionPane.showMessageDialog(null, 
@@ -145,7 +159,7 @@ public class ConvertController implements IProgressObserverable {
 		notifyConversionEnd(file);
 	}
 	
-	private boolean isFiletypeSupported(File file) {
+	private boolean isFiletypeSupported(final File file) {
 		if(ImageIOUtils.isImageIOSupported(file)
 				|| FileUtil.getFileSuffix(file).contains("tex")
 				|| FileUtil.getFileSuffix(file).contains("tga")
@@ -155,32 +169,32 @@ public class ConvertController implements IProgressObserverable {
 		return false;
 	}
 
-	protected void notifyProgressListeners(ProgressStatus status) {
-		for (IProgressListener iProgressListener : progressListeners) {
+	protected void notifyProgressListeners(final ProgressStatus status) {
+		for (final IProgressListener iProgressListener : progressListeners) {
 			iProgressListener.update(status);
 		}
 	}
 
-	protected void notifyConversionBegin(File originalFile) {
-		for (IConvertListener iConvertListener : convertListeners) {
+	protected void notifyConversionBegin(final File originalFile) {
+		for (final IConvertListener iConvertListener : convertListeners) {
 			iConvertListener.convertBegin(originalFile);
 		}
 	}
 
-	protected void notifyConversionEnd(File originalFile) {
-		for (IConvertListener iConvertListener : convertListeners) {
+	protected void notifyConversionEnd(final File originalFile) {
+		for (final IConvertListener iConvertListener : convertListeners) {
 			iConvertListener.convertEnd(originalFile);
 		}
 	}
 
-	protected void notifyError(ProgressStatus status) {
-		for (IProgressListener iProgressListener : progressListeners) {
+	protected void notifyError(final ProgressStatus status) {
+		for (final IProgressListener iProgressListener : progressListeners) {
 			iProgressListener.error(status);
 		}
 	}
 
 
-	protected boolean checkConvertFileExists(File originalFile) {
+	protected boolean checkConvertFileExists(final File originalFile) {
 		if (!originalFile.exists()) {
 			notifyError(new ProgressStatus(0, 0, ERROR_ORIGINAL_FILE_NOT_EXISTS, true));
 			logger.log(Level.SEVERE, ERROR_ORIGINAL_FILE_NOT_EXISTS);
@@ -189,19 +203,19 @@ public class ConvertController implements IProgressObserverable {
 		return true;
 	}
 
-	public void addListener(IConvertListener listener) {
+	public void addListener(final IConvertListener listener) {
 		convertListeners.add(listener);
 	}
 
-	public void removeListener(IConvertListener listener) {
+	public void removeListener(final IConvertListener listener) {
 		convertListeners.remove(listener);
 	}
 
-	public void addListener(IProgressListener listener) {
+	public void addListener(final IProgressListener listener) {
 		progressListeners.add(listener);
 	}
 
-	public void removeListener(IProgressListener listener) {
+	public void removeListener(final IProgressListener listener) {
 		progressListeners.remove(listener);
 	}
 }
