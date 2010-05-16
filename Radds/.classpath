@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="lib/swing-worker-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/appframework-1.0.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DDSUtil"/>
+	<classpathentry kind="lib" path="lib/DDSUtils.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

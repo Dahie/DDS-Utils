@@ -113,7 +113,7 @@ public class View extends JCFrame {
 		setPreferredSize(new Dimension(900, 600));
 	
 		setResizable(true); 
-		setTitle(title);
+		setTitle(title + "unknown");
 		setName(title);
 		
 		final BufferedImage applicationIcon;
@@ -156,6 +156,7 @@ public class View extends JCFrame {
 	public void setImage(final TextureImage image) {
 		getCanvas().setSourceBI(image.getData());
 		filesPanel.getInfoPanel().setTextureFile(image);
+		setTitle(title+image.getFile().getName());
 		this.actionCopy.setEnabled(true);
 	}
 
