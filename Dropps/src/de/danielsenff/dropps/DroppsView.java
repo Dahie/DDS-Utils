@@ -57,8 +57,6 @@ public class DroppsView extends FrameView {
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
 
-    private JDialog aboutBox;
-
     private static final Logger logger = Logger.getLogger(DroppsView.class.getName());
 	
     private final ExportOptions options;
@@ -180,9 +178,6 @@ public class DroppsView extends FrameView {
         statusPanel.add(progressBar, BorderLayout.LINE_END);
 
 
-        /*final Dropps instance = Application.getInstance(Dropps.class);
-		final ApplicationContext context = instance.getContext();
-		final org.jdesktop.application.ResourceMap resourceMap = context.getResourceMap(Dropps.class);*/
 		final ResourceMap resourceMap = getResourceMap();
         resourceMap.injectComponents(mainPanel);
         resourceMap.injectComponents(statusPanel);
@@ -195,7 +190,6 @@ public class DroppsView extends FrameView {
         mainPanel.add(settingsPanel, BorderLayout.LINE_START);
 
         
-//        final JPanel dropPanel = new JPanel();
         final DefaultListModel dlm = new DefaultListModel();
         dropPanel = new JList(dlm) {
         	@Override
@@ -227,10 +221,6 @@ public class DroppsView extends FrameView {
 				for( int i = 0; i < files.length; i++ )
                 {   
 					File file = files[i];
-					// start new task 
-        			
-        			// get files
-//        			 give files to task, starting thread
 					dlm.addElement(file);
 					filesArrayList.add(file);
         			
@@ -250,10 +240,6 @@ public class DroppsView extends FrameView {
 	}
 	
 	
-	/*
-	 * Action definitions
-	 * 
-	 */
 	
 	/**
 	 * @return the dropPanel
@@ -261,6 +247,11 @@ public class DroppsView extends FrameView {
 	public JList getDropPanel() {
 		return dropPanel;
 	}
+	
+	/*
+	 * Action definitions
+	 * 
+	 */
 
 	/**
 	 * @return

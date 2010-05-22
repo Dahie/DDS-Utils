@@ -1,8 +1,13 @@
 package de.danielsenff.dropps;
 
-import javax.swing.JFrame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jdesktop.application.Application;
+import org.jdesktop.application.LocalStorage;
 import org.jdesktop.application.SingleFrameApplication;
 
 
@@ -13,40 +18,37 @@ import org.jdesktop.application.SingleFrameApplication;
  */
 public class Dropps extends SingleFrameApplication {
 
+	private static Logger logger = Logger.getLogger(Dropps.class.getName());
+	private static final String sessionFile = "session.xml";
+
 	/**
-     * At startup create and show the main frame of the application.
-     */
-    @Override protected void startup() {
-        show(new DroppsView(this));
-    	getMainFrame().setLocationRelativeTo(null);
-    	getMainFrame().setResizable(false);
-    	getMainFrame().pack();
-//    	getMainFrame().addWindowListener(new MainFrameListener());
-    	getMainFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//    	getMainFrame().setIconImage(new ImageIcon("icon.png").getImage());
-    }
+	 * At startup create and show the main frame of the application.
+	 */
+	@Override 
+	protected void startup() {
+		DroppsView mainView = new DroppsView(this);
+		//    	getMainFrame().setLocationRelativeTo(null);
+		//    	getMainFrame().setResizable(false);
+		//    	getMainFrame().pack();
+		//    	getMainFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//    	getMainFrame().setVisible(true);
+		show(mainView);
+	}
 
-    /**
-     * This method is to initialize the specified window by injecting resources.
-     * Windows shown in our application come fully initialized from the GUI
-     * builder, so this additional configuration is not needed.
-     */
-    @Override protected void configureWindow(final java.awt.Window root) {
-    }
+	/**
+	 * A convenient static getter for the application instance.
+	 * @return the instance of DocumentEditorApp
+	 */
+	public static Dropps getApplication() {
+		return Application.getInstance(Dropps.class);
+	}
 
-    /**
-     * A convenient static getter for the application instance.
-     * @return the instance of DocumentEditorApp
-     */
-    public static Dropps getApplication() {
-        return Application.getInstance(Dropps.class);
-    }
+	/**
+	 * Main method launching the application.
+	 * @param args 
+	 */
+	public static void main(final String[] args) {
+		launch(Dropps.class, args);
+	}
 
-    /**
-     * Main method launching the application.
-     */
-    public static void main(final String[] args) {
-        launch(Dropps.class, args);
-    }
-    
 }
