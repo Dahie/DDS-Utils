@@ -1,10 +1,12 @@
 /**
  * 
  */
-package de.danielsenff.radds.controller;
+package de.danielsenff.radds;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import de.danielsenff.radds.controller.Application;
 
 /**
  * @author danielsenff

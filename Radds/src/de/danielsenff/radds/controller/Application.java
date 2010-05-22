@@ -21,9 +21,9 @@ import model.TextureImage;
 import util.FileUtil;
 import util.ImageIOUtils;
 import ddsutil.DDSUtil;
+import de.danielsenff.radds.View;
 import de.danielsenff.radds.models.FilesListModel;
 import de.danielsenff.radds.models.TextureImageFormatLoaderTGA;
-import de.danielsenff.radds.view.View;
 
 /**
  * 

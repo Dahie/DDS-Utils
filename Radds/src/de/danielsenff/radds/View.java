@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.danielsenff.radds.view;
+package de.danielsenff.radds;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,10 +16,12 @@ import javax.swing.JProgressBar;
 import javax.swing.JSplitPane;
 
 import model.TextureImage;
-import de.danielsenff.radds.actions.ActionCopy;
-import de.danielsenff.radds.actions.ActionExport;
 import de.danielsenff.radds.controller.Application;
+import de.danielsenff.radds.tasks.ActionCopy;
+import de.danielsenff.radds.tasks.ActionExport;
 import de.danielsenff.radds.util.OS;
+import de.danielsenff.radds.view.FilesPanel;
+import de.danielsenff.radds.view.JCFrame;
 import de.danielsenff.radds.view.canvas.BICanvas;
 import de.danielsenff.radds.view.canvas.CanvasControlsPanel;
 

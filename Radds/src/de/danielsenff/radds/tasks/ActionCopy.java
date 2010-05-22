@@ -1,4 +1,4 @@
-package de.danielsenff.radds.actions;
+package de.danielsenff.radds.tasks;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;

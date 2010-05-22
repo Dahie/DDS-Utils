@@ -34,11 +34,11 @@ import javax.swing.event.ChangeListener;
 
 import ddsutil.BIUtil;
 import ddsutil.ImageOperations;
+import de.danielsenff.radds.View;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
 import de.danielsenff.radds.view.JCPanel;
-import de.danielsenff.radds.view.View;
 
 /**
  * Control-Panel for the {@link BICanvas}. 

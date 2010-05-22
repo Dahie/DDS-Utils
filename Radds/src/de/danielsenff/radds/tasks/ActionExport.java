@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.danielsenff.radds.actions;
+package de.danielsenff.radds.tasks;
 
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
