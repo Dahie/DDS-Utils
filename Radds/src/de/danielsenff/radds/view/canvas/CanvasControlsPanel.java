@@ -32,20 +32,25 @@ import javax.swing.event.AncestorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.ResourceMap;
+
+import com.sun.j3d.utils.behaviors.vp.WandViewBehavior.ResetViewListener;
+
 import ddsutil.BIUtil;
 import ddsutil.ImageOperations;
-import de.danielsenff.radds.View;
+import de.danielsenff.radds.Radds;
+import de.danielsenff.radds.RaddsView;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
-import de.danielsenff.radds.view.JCPanel;
 
 /**
  * Control-Panel for the {@link BICanvas}. 
  * @author Daniel Senff
  *
  */
-public class CanvasControlsPanel extends JCPanel {
+public class CanvasControlsPanel extends JPanel {
 
 	/**
 	 * 
@@ -54,19 +59,18 @@ public class CanvasControlsPanel extends JCPanel {
 	private BICanvas canvas;
 	private JComboBox zoomCombo;
 	private JSlider zoomSlider;
-	private View view;
+	private RaddsView view;
 
 	/**
 	 * @param controller
 	 */
-	public CanvasControlsPanel(final View view, final Application controller) {
-		super(controller);
+	public CanvasControlsPanel(final RaddsView view) {
 		this.view = view;
 
 		setLayout(new BorderLayout());
 		final JPanel navigateCanvas = initNavigationPanel();
 
-		final JScrollPane scrollViewPane = initScrollCanvas(controller);
+		final JScrollPane scrollViewPane = initScrollCanvas();
 
 		getCanvas().addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent pChangeEvent) {
@@ -85,7 +89,8 @@ public class CanvasControlsPanel extends JCPanel {
 
 				for (int i = 0; i < files.length; i++) {
 					File file = files[i];
-					controller.setImage(file);
+					// TODO FileDrop 
+//					controller.setImage(file);
 				}
 
 			}   // end filesDropped
@@ -97,8 +102,8 @@ public class CanvasControlsPanel extends JCPanel {
 
 	private JPanel initNavigationPanel() {
 		final JPanel panel = new JPanel();
-		
-		final JButton copyButton = new JButton(view.getActionCopy());
+//		TODO COPY BUTTON
+		final JButton copyButton = new JButton();
 		panel.add(copyButton);
 		
 		final JComboBox channelCombo = new JComboBox(composeColorChannelModel());
@@ -114,7 +119,7 @@ public class CanvasControlsPanel extends JCPanel {
 
 		
 
-		final JLabel lblChannelCombo = new JLabel(bundle.getString("Channels")+":");
+		final JLabel lblChannelCombo = new JLabel(getResourceMap().getString("Channels")+":");
 
 		panel.add(copyButton);
 		panel.add(lblChannelCombo);
@@ -148,7 +153,7 @@ public class CanvasControlsPanel extends JCPanel {
 		});
 		
 
-		final JLabel lblZoom = new JLabel(bundle.getString("Zoom")+":");
+		final JLabel lblZoom = new JLabel(getResourceMap().getString("Zoom")+":");
 
 		zoomSlider = new JSlider(0, 500, 100);
 		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
@@ -189,25 +194,31 @@ public class CanvasControlsPanel extends JCPanel {
 	 */
 	private DefaultComboBoxModel composeColorChannelModel() {
 		final DefaultComboBoxModel combo = new DefaultComboBoxModel();
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RGB, bundle.getString("rgb_channels")));
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RED, bundle.getString("r_channel")));
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.GREEN, bundle.getString("g_channel")));
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.BLUE, bundle.getString("b_channel")));
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.ALPHA, bundle.getString("a_channel")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RGB, getResourceMap().getString("rgb_channels")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RED, getResourceMap().getString("r_channel")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.GREEN, getResourceMap().getString("g_channel")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.BLUE, getResourceMap().getString("b_channel")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.ALPHA, getResourceMap().getString("a_channel")));
 		return combo;
 	}
 
+	private ResourceMap getResourceMap() {
+		final Radds instance = Application.getInstance(Radds.class);
+		final ApplicationContext context = instance.getContext();
+		final org.jdesktop.application.ResourceMap resourceMap = context.getResourceMap(RaddsView.class);
+		return resourceMap;
+	}
 
 	private ImageIcon getResourceIcon(String file){
 		return new ImageIcon(Class.class.getResource(file));
 	}
 	
-	private JScrollPane initScrollCanvas(final Application controller) {
+	private JScrollPane initScrollCanvas() {
 
+		// TODO FIXME WTF no static paths ...
 		final ImageIcon defaultImage = getResourceIcon("/de/danielsenff/radds/resources/defaultimage.png");
 
-		canvas = new BICanvas(controller, 
-				BIUtil.convertImageToBufferedImage(defaultImage.getImage(), 
+		canvas = new BICanvas(BIUtil.convertImageToBufferedImage(defaultImage.getImage(), 
 						BufferedImage.TYPE_4BYTE_ABGR));
 		final JScrollPane scrollViewPane = new JScrollPane(canvas);
 		scrollViewPane.setPreferredSize(new Dimension(700,300));
@@ -232,15 +243,10 @@ public class CanvasControlsPanel extends JCPanel {
 		canvas.addAncestorListener(new AncestorListener() {
 			public void ancestorAdded(final AncestorEvent arg0) {}
 			public void ancestorMoved(final AncestorEvent arg0) {
-				//				canvas.repaint();
-				/*Rectangle bounds = canvas.getBounds();
-				scrollcanvas.repaint(new Rectangle(bounds.x+bounds.width, 80));*/
 				scrollViewPane.repaint();
 			}
 			public void ancestorRemoved(final AncestorEvent arg0) {	}
 		});
-
-
 
 		return scrollViewPane;
 	}

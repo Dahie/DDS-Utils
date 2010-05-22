@@ -11,12 +11,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 
 import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 import javax.swing.Scrollable;
 
 import ddsutil.BIUtil;
 import ddsutil.ImageOperations;
-import de.danielsenff.radds.controller.Application;
-import de.danielsenff.radds.view.JCPanel;
 
 
 /**
@@ -24,7 +23,7 @@ import de.danielsenff.radds.view.JCPanel;
  * @author danielsenff
  *
  */
-public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener {
+public class BICanvas extends JPanel implements Scrollable, MouseMotionListener {
 
 	/**
 	 * 
@@ -44,8 +43,8 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 	 * @param image 
 	 * @param biRendered BufferedImage to display
 	 */
-	public BICanvas(final Application controller, BufferedImage image) {
-		this(controller, image, ImageOperations.ChannelMode.RGB);
+	public BICanvas(BufferedImage image) {
+		this(image, ImageOperations.ChannelMode.RGB);
 	}
 	
 	
@@ -56,11 +55,8 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 	 * @param biRendered BufferedImage to display
 	 * @param channel Channel of the BufferedImage to display 
 	 */
-	public BICanvas(final Application controller, 
-			final BufferedImage image, 
+	public BICanvas(final BufferedImage image, 
 			final ImageOperations.ChannelMode channel) {
-		super(controller);
-		this.controller = controller;
 		this.channelMode = channel;
 		this.biRendered = image;
 		this.biSource = image;

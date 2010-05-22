@@ -21,7 +21,7 @@ import model.TextureImage;
 import util.FileUtil;
 import util.ImageIOUtils;
 import ddsutil.DDSUtil;
-import de.danielsenff.radds.View;
+import de.danielsenff.radds.RaddsView;
 import de.danielsenff.radds.models.FilesListModel;
 import de.danielsenff.radds.models.TextureImageFormatLoaderTGA;
 
@@ -36,7 +36,7 @@ import de.danielsenff.radds.models.TextureImageFormatLoaderTGA;
 public class Application extends org.jdesktop.application.SingleFrameApplication {
 
 	//GUI
-	private View view;
+	private RaddsView view;
 	private ImageFileChooser imageFileChooser;
 	// List with all operations	
 
@@ -49,7 +49,7 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 	 */
 	public Application() {
 		this.openFilesModel = new FilesListModel();
-		this.view = new View(this);
+		this.view = new RaddsView(this);
 	}
 
 	public void removeFile(int index) {
@@ -76,7 +76,7 @@ public class Application extends org.jdesktop.application.SingleFrameApplication
 		return bundle;
 	}
 
-	public View getView() {
+	public RaddsView getView() {
 		return this.view;
 	}
 

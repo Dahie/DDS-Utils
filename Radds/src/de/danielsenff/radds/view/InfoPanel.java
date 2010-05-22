@@ -4,22 +4,29 @@
 package de.danielsenff.radds.view;
 
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import model.TextureImage;
+
+import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.ResourceMap;
+
+import de.danielsenff.radds.Radds;
+import de.danielsenff.radds.RaddsView;
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.view.GridBagConstraints.LabelConstraints;
 import de.danielsenff.radds.view.GridBagConstraints.RemainderConstraints;
 
 
 /**
+ * Information panel for displaying image details.
  * @author danielsenff
  *
  */
-public class InfoPanel extends JCPanel {
+public class InfoPanel extends JPanel {
 
 	private JLabel lblNumMipMaps ;
 	private JLabel numMipMaps;
@@ -37,19 +44,24 @@ public class InfoPanel extends JCPanel {
 	/**
 	 * 
 	 */
-	public InfoPanel(Application controller) {
-		super(controller);
+	public InfoPanel() {
 		init();
 	}
 	
+	private ResourceMap getResourceMap() {
+		final Radds instance = Application.getInstance(Radds.class);
+		final ApplicationContext context = instance.getContext();
+		final org.jdesktop.application.ResourceMap resourceMap = context.getResourceMap(RaddsView.class);
+		return resourceMap;
+	}
 	
 	private void init() {
 		
-		this.lblNumMipMaps = new JLabel(bundle.getString("MipMaps")+":");
-		this.lblWidth = new JLabel(bundle.getString("Width")+":");
-		this.lblHeight = new JLabel(bundle.getString("Height")+":");
-		this.lblPixelformat = new JLabel(bundle.getString("Pixelformat")+":");
-		this.lblType = new JLabel(bundle.getString("Type")+":");
+		this.lblNumMipMaps = new JLabel(getResourceMap().getString("MipMaps")+":");
+		this.lblWidth = new JLabel(getResourceMap().getString("Width")+":");
+		this.lblHeight = new JLabel(getResourceMap().getString("Height")+":");
+		this.lblPixelformat = new JLabel(getResourceMap().getString("Pixelformat")+":");
+		this.lblType = new JLabel(getResourceMap().getString("Type")+":");
 		
 		this.numMipMaps = new JLabel("-");
 		this.width = new JLabel("-");
@@ -74,7 +86,7 @@ public class InfoPanel extends JCPanel {
 	/**
 	 * 
 	 */
-	private void setData(int numMipMaps, int width, int height, String pixelformat, String type) {
+	private void setData(final int numMipMaps, final int width, final int height, final String pixelformat, final String type) {
 		this.numMipMaps.setText(numMipMaps+"");
 		this.width.setText(width+"");
 		this.height.setText(height+"");
@@ -83,7 +95,11 @@ public class InfoPanel extends JCPanel {
 		this.revalidate();
 	}
 	
-	public void setTextureFile(TextureImage texture) {
+	/**
+	 * Set the {@link TextureImage} whose information are to be displayed.
+	 * @param texture
+	 */
+	public void setTextureFile(final TextureImage texture) {
 		this.setData(texture.getNumMipMaps(), 
 				texture.getWidth(), 
 				texture.getHeight(),
@@ -91,7 +107,11 @@ public class InfoPanel extends JCPanel {
 				texture.getTextureType().toString());	
 	}
 	
-	public void setTextureFile(BufferedImage texture) {
+	/**
+	 * Set the {@link BufferedImage} whose information are to be displayed.
+	 * @param texture
+	 */
+	public void setTextureFile(final BufferedImage texture) {
 		this.setData(1, 
 				texture.getWidth(), 
 				texture.getHeight(),

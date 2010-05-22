@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.filechooser.FileSystemView;
@@ -27,7 +28,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import util.FileUtil;
-import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.FileNode;
 import de.danielsenff.radds.models.FileTreeModel;
 
@@ -35,7 +35,7 @@ import de.danielsenff.radds.models.FileTreeModel;
  * @author danielsenff
  *
  */
-public class FilesPanel extends JCPanel {
+public class FilesPanel extends JPanel {
 
 	private JList list;
 	static int panelWidth = 200;
@@ -45,8 +45,7 @@ public class FilesPanel extends JCPanel {
 	/**
 	 * 
 	 */
-	public FilesPanel(final Application controller) {
-		super(controller);
+	public FilesPanel() {
 		this.setLayout(new BorderLayout());
 		init();
 	}
@@ -114,8 +113,7 @@ public class FilesPanel extends JCPanel {
 				String url = JOptionPane.showInputDialog("Please enter the URL to the file.");
 				url.trim();
 				try {
-					File file = new File(url);
-					controller.setImage(file);
+					openImage(new File(url));
 				} catch (Exception ex) {
 					
 				}
@@ -125,7 +123,7 @@ public class FilesPanel extends JCPanel {
 		this.add(gotoButton, BorderLayout.NORTH);
 		
 		// information
-		infoPanel = new InfoPanel(controller);
+		infoPanel = new InfoPanel();
 		this.add(infoPanel, BorderLayout.SOUTH);
 	}
 
@@ -134,6 +132,10 @@ public class FilesPanel extends JCPanel {
 	 */
 	public InfoPanel getInfoPanel() {
 		return this.infoPanel;
+	}
+
+	private void openImage(File file) {
+//		controller.setImage(file);
 	}
 
 	class LoadListener implements KeyListener, MouseListener {
@@ -159,7 +161,7 @@ public class FilesPanel extends JCPanel {
 			final FileNode node = (FileNode) fileTree.getSelectionPath().getLastPathComponent();
 			File file = node.getFile();
 			if( !file.isDirectory()) 
-				controller.setImage(file);
+				openImage(file);
 		}
 		
 		public void mouseEntered(final MouseEvent arg0) {}

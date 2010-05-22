@@ -16,12 +16,15 @@ import javax.swing.JProgressBar;
 import javax.swing.JSplitPane;
 
 import model.TextureImage;
+
+import org.jdesktop.application.FrameView;
+import org.jdesktop.application.ResourceMap;
+
 import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.tasks.ActionCopy;
 import de.danielsenff.radds.tasks.ActionExport;
 import de.danielsenff.radds.util.OS;
 import de.danielsenff.radds.view.FilesPanel;
-import de.danielsenff.radds.view.JCFrame;
 import de.danielsenff.radds.view.canvas.BICanvas;
 import de.danielsenff.radds.view.canvas.CanvasControlsPanel;
 
@@ -30,9 +33,8 @@ import de.danielsenff.radds.view.canvas.CanvasControlsPanel;
  * @author danielsenff
  *
  */
-public class View extends JCFrame {
+public class RaddsView extends FrameView {
 
-	final String title = bundle.getString("application_title");
 	private final JProgressBar progressbar;
 
 	private ActionCopy actionCopy;
@@ -46,28 +48,25 @@ public class View extends JCFrame {
 	 * @param controller 
 	 * 
 	 */
-	public View(final Application controller) {
-		super(controller);
+	public RaddsView(final Radds radds) {
+		super(radds);
 		
 		try {
-			this.setIconImage(ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/Radds128.png")));
+//			this.setIconImage(ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/Radds128.png")));
 			this.busy = ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/defaultimage.png"));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		
-		initFrame();
-		
-		// init actions
-		initActions(controller);
+		initComponnents();
 		
 		// menu
-		initMenu(controller);
+		initMenu();
 		
 		// general layout
-		filesPanel = new FilesPanel(controller);
+		filesPanel = new FilesPanel();
 		
-		canvasPanel = new CanvasControlsPanel(this, controller);
+		canvasPanel = new CanvasControlsPanel(this);
 		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, filesPanel, canvasPanel);
 		splitPane.setDividerLocation(200);
 		splitPane.setContinuousLayout(true);
@@ -75,56 +74,47 @@ public class View extends JCFrame {
 		
 		this.progressbar = new JProgressBar();
 		
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(splitPane, BorderLayout.CENTER);
+//		setLayout(new BorderLayout());
+//		getContentPane().add(splitPane, BorderLayout.CENTER);
+		setComponent(splitPane);
 
-		setVisible(true);
-		pack();
+		
 	}
 
-	private void initActions(final Application controller) {
-		actionCopy = new ActionCopy(controller);
-		actionCopy.setEnabled(false);
-	}
-
-	private void initMenu(final Application controller) {
+	private void initMenu() {
 		final JMenuBar menuBar = new JMenuBar();
+		
+		final ResourceMap resourceMap = getResourceMap();
 		
 		JMenu menuFile;
 		if(OS.isMacOS()) 
-			menuFile = new JMenu(bundle.getString("File_menu_osx"));
+			menuFile = new JMenu(resourceMap.getString("File_menu_osx"));
 		else
-			menuFile = new JMenu(bundle.getString("File_menu"));
+			menuFile = new JMenu(resourceMap.getString("File_menu"));
 		
-		final JMenu menuEdit = new JMenu(bundle.getString("Edit"));
+		final JMenu menuEdit = new JMenu(resourceMap.getString("Edit"));
 		menuEdit.add(actionCopy);
 		menuBar.add(menuEdit);
 		
 		if(OS.isMacOS()) 
-			menuFile = new JMenu(bundle.getString("View_menu_osx"));
+			menuFile = new JMenu(resourceMap.getString("View_menu_osx"));
 		else
-			menuFile = new JMenu(bundle.getString("View_menu"));
+			menuFile = new JMenu(resourceMap.getString("View_menu"));
 		
-		//setJMenuBar(menuBar);
+		setMenuBar(menuBar);
 	}
 
 
-	private void initFrame() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationByPlatform(true);
-		setPreferredSize(new Dimension(900, 600));
-	
-		setResizable(true); 
-		setTitle(title + "unknown");
-		setName(title);
-		
-		final BufferedImage applicationIcon;
-		/*try {
-			applicationIcon = ImageIO.read(ResourceLoader.getResource(bundle.getString("application_icon")));
-			setIconImage(applicationIcon);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
+	private void initComponnents() {
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setLocationByPlatform(true);
+//		setPreferredSize(new Dimension(900, 600));
+//	
+//		setResizable(true); 
+//		setTitle(title + "unknown");
+//		setName(title);
+//		setVisible(true);
+//		pack();
 	}
 
 	
@@ -139,18 +129,6 @@ public class View extends JCFrame {
 		return this.canvasPanel.getCanvas();
 	}
 
-	public ActionCopy getActionCopy() {
-		return this.actionCopy;
-	}
-
-	public ActionExport getActionExport() {
-		return this.actionExport;
-	}
-
-	public FilesPanel getFilesPanel() {
-		return this.filesPanel;
-	}
-
 	/**
 	 * Sets the image in the Canvas to the specified Image.
 	 * @param image
@@ -158,7 +136,7 @@ public class View extends JCFrame {
 	public void setImage(final TextureImage image) {
 		getCanvas().setSourceBI(image.getData());
 		filesPanel.getInfoPanel().setTextureFile(image);
-		setTitle(title+image.getFile().getName());
+//		getFrame().setTitle(title+image.getFile().getName());
 		this.actionCopy.setEnabled(true);
 	}
 
@@ -176,5 +154,12 @@ public class View extends JCFrame {
 		this.actionCopy.setEnabled(false);
 		getCanvas().setSourceBI(busy);
 	}
+	
+	
+	
+	/*
+	 * Action definitions
+	 * 
+	 */
 	
 }
