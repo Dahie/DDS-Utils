@@ -25,8 +25,14 @@ import de.danielsenff.radds.models.TextureImageFormatLoaderTGA;
  */
 public class ImageController {
 
+	/**
+	 * Current View
+	 */
 	protected RaddsView view;
 	
+	/**
+	 * @param view
+	 */
 	public ImageController(final RaddsView view) {
 		this.view = view;
 	}
@@ -75,7 +81,7 @@ public class ImageController {
 		final BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
 		try {
 			final BufferedImage image = loader.loadTextureImage(in , true, false); 
-			getView().setImage(image);
+			getView().setImage(image, file);
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(getView().getFrame(), 
@@ -87,7 +93,7 @@ public class ImageController {
 
 	private void readImageIOImage(final File file) throws IOException {
 		final BufferedImage image = ImageIO.read(file);
-		getView().setImage(image);
+		getView().setImage(image, file);
 	}
 
 	private void readDDSUtilImage(final File file)

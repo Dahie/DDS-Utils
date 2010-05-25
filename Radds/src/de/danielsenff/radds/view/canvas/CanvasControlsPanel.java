@@ -34,12 +34,14 @@ import javax.swing.event.ChangeListener;
 
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.TaskService;
 
 import ddsutil.BIUtil;
 import ddsutil.ImageOperations;
 import de.danielsenff.radds.Radds;
 import de.danielsenff.radds.RaddsView;
 import de.danielsenff.radds.models.ColorChannel;
+import de.danielsenff.radds.tasks.LoadImageTask;
 import de.danielsenff.radds.util.FileDrop;
 
 /**
@@ -59,7 +61,7 @@ public class CanvasControlsPanel extends JPanel {
 	private RaddsView view;
 
 	/**
-	 * @param controller
+	 * @param view
 	 */
 	public CanvasControlsPanel(final RaddsView view) {
 		this.view = view;
@@ -82,13 +84,8 @@ public class CanvasControlsPanel extends JPanel {
 
 		new FileDrop( scrollViewPane, new FileDrop.Listener(){   
 			public void filesDropped( java.io.File[] files ) {   
-				// handle file drop
-
-				for (int i = 0; i < files.length; i++) {
-					File file = files[i];
-					// TODO FileDrop 
-//					controller.setImage(file);
-				}
+				// handle first file
+				openImage(files[0]);
 
 			}   // end filesDropped
 		}); // end FileDrop.Listener
@@ -96,10 +93,15 @@ public class CanvasControlsPanel extends JPanel {
 		this.add(scrollViewPane, BorderLayout.CENTER);
 		this.add(navigateCanvas, BorderLayout.SOUTH);
 	}
+	
+	private void openImage(File file) {
+		LoadImageTask convertTask = new LoadImageTask(file);
+		TaskService ts = Radds.getApplication().getContext().getTaskService();
+		ts.execute(convertTask);
+	}
 
 	private JPanel initNavigationPanel() {
 		final JPanel panel = new JPanel();
-//		TODO COPY BUTTON
 		final JButton copyButton = new JButton(view.getAction("copy"));
 		panel.add(copyButton);
 		
@@ -143,14 +145,10 @@ public class CanvasControlsPanel extends JPanel {
 			}
 
 			public void keyReleased(KeyEvent e) {}
-
 			public void keyTyped(KeyEvent e) {}
-			
 		});
-		
 
 		final JLabel lblZoom = new JLabel(getResourceMap().getString("Zoom")+":");
-
 		zoomSlider = new JSlider(0, 500, 100);
 		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
 		labels.put(10, new JLabel("0.1x"));

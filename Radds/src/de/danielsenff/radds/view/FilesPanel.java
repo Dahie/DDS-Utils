@@ -137,7 +137,7 @@ public class FilesPanel extends JPanel {
 	}
 
 	private void openImage(File file) {
-		Task convertTask = new LoadImageTask(file);
+		LoadImageTask convertTask = new LoadImageTask(file);
 		TaskService ts = Radds.getApplication().getContext().getTaskService();
 		ts.execute(convertTask);
 	}
@@ -148,7 +148,6 @@ public class FilesPanel extends JPanel {
 			if(event.getKeyCode() == KeyEvent.VK_ENTER) {
 				processEvent(event);
 			}
-			
 		}
 
 		public void keyReleased(final KeyEvent e) {}

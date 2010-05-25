@@ -23,12 +23,14 @@ import model.TextureImage;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.FrameView;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task.BlockingScope;
 
 import de.danielsenff.radds.models.ClipImage;
 import de.danielsenff.radds.models.FilesListModel;
 import de.danielsenff.radds.tasks.LoadImageTask;
 import de.danielsenff.radds.util.OS;
 import de.danielsenff.radds.view.FilesPanel;
+import de.danielsenff.radds.view.InfoPanel;
 import de.danielsenff.radds.view.canvas.BICanvas;
 import de.danielsenff.radds.view.canvas.CanvasControlsPanel;
 
@@ -47,7 +49,7 @@ public class RaddsView extends FrameView {
 	private static JProgressBar progressBar;
 	
 
-	private boolean fileOpened = false;
+	private boolean opened = false;
 	private boolean modified = false;
 	private boolean paste = false;
 	
@@ -171,17 +173,17 @@ public class RaddsView extends FrameView {
 	/**
 	 * @return the fileOpened
 	 */
-	public final boolean isFileOpened() {
-		return fileOpened;
+	public final boolean isOpened() {
+		return opened;
 	}
 
 	/**
 	 * @param fileOpened the fileOpened to set
 	 */
-	public final void setFileOpened(boolean fileOpened) {
-		boolean oldvalue = fileOpened;
-		this.fileOpened = fileOpened;
-		firePropertyChange("fileOpened", oldvalue, this.fileOpened);
+	public final void setOpened(boolean fileOpened) {
+		boolean oldvalue = this.opened;
+		this.opened = fileOpened;
+		firePropertyChange("opened", oldvalue, this.opened);
 	}
     
 	/**
@@ -193,7 +195,9 @@ public class RaddsView extends FrameView {
 	}
 	
 	/**
-	 * Returns the currently loaded {@link BufferedImage}.
+	 * Returns the currently loaded {@link BufferedImage} shown on the canvas.
+	 * This may be different from the origin Image, as the canvas 
+	 * may be only displaying certain channels.
 	 * @return
 	 */
 	public BufferedImage getImage() {
@@ -206,19 +210,25 @@ public class RaddsView extends FrameView {
 	 */
 	public void setImage(final TextureImage image) {
 		getCanvas().setSourceBI(image.getData());
-		setFileOpened(true);
+		setOpened(true);
 		setFile(image.getFile());
-		filesPanel.getInfoPanel().setTextureFile(image);
+		getInfoPanel().setTextureFile(image);
 	}
 
 	/**
 	 * Sets the image in the Canvas to the specified {@link BufferedImage}.
 	 * @param image
+	 * @param file 
 	 */
-	public void setImage(final BufferedImage image) {
+	public void setImage(final BufferedImage image, final File file) {
 		getCanvas().setSourceBI(image);
-		setFileOpened(true);
-		filesPanel.getInfoPanel().setTextureFile(image);
+		setOpened(true);
+		setFile(file);
+		getInfoPanel().setTextureFile(image);
+	}
+	
+	private InfoPanel getInfoPanel() {
+		return filesPanel.getInfoPanel();
 	}
 	
 	private String getResourceString(final String key) {
@@ -243,9 +253,9 @@ public class RaddsView extends FrameView {
 	
 	/**
 	 * Copy the opened image
-	 * TODO fileOpened doesn't work yet
 	 */
-	@Action(enabledProperty = "fileOpened")
+	@Action
+	(enabledProperty = "opened")
 	public void copy() { 
 		BufferedImage bi = getImage();
 		Clipboard myClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();	
@@ -260,6 +270,7 @@ public class RaddsView extends FrameView {
 	 * @return
 	 */
 	@Action
+	(block = BlockingScope.APPLICATION)
 	public LoadImageTask open() {
 		/* unused so far, as radds doesn't modify
 		 * if(isModified()) {
