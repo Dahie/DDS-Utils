@@ -6,8 +6,6 @@ package de.danielsenff.radds.view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,10 +14,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileFilter;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -27,17 +22,22 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import org.jdesktop.application.Task;
+import org.jdesktop.application.TaskService;
+
 import util.FileUtil;
+import de.danielsenff.radds.Radds;
 import de.danielsenff.radds.models.FileNode;
 import de.danielsenff.radds.models.FileTreeModel;
+import de.danielsenff.radds.tasks.LoadImageTask;
 
 /**
+ * SidePanel displaying the file-system tree and info panel. 
  * @author danielsenff
  *
  */
 public class FilesPanel extends JPanel {
 
-	private JList list;
 	static int panelWidth = 200;
 	static int panelHeight = 300;
 	private InfoPanel infoPanel;
@@ -106,7 +106,9 @@ public class FilesPanel extends JPanel {
 		add(treeScroller, BorderLayout.CENTER);
 
 		// information
+		/* TODO new action
 		JButton gotoButton = new JButton("Go to…");
+		 
 		gotoButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -120,7 +122,7 @@ public class FilesPanel extends JPanel {
 			}
 			
 		});
-		this.add(gotoButton, BorderLayout.NORTH);
+		this.add(gotoButton, BorderLayout.NORTH);*/
 		
 		// information
 		infoPanel = new InfoPanel();
@@ -135,7 +137,9 @@ public class FilesPanel extends JPanel {
 	}
 
 	private void openImage(File file) {
-//		controller.setImage(file);
+		Task convertTask = new LoadImageTask(file);
+		TaskService ts = Radds.getApplication().getContext().getTaskService();
+		ts.execute(convertTask);
 	}
 
 	class LoadListener implements KeyListener, MouseListener {

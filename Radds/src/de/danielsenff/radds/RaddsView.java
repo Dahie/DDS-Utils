@@ -9,9 +9,7 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -51,19 +49,16 @@ public class RaddsView extends FrameView {
 
 	private boolean fileOpened = false;
 	private boolean modified = false;
-	private boolean selected = false;
 	private boolean paste = false;
 	
 	/**
-	 * @param controller 
+	 * @param radds 
 	 * 
 	 */
 	public RaddsView(final Radds radds) {
 		super(radds);
 		
 		this.openFilesModel = new FilesListModel();
-		
-		initComponents();
 		
 		// menu
 		initMenu();
@@ -101,32 +96,26 @@ public class RaddsView extends FrameView {
 		
 		setMenuBar(menuBar);
 	}
-
-
-	private void initComponents() {
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setLocationByPlatform(true);
-//		setPreferredSize(new Dimension(900, 600));
-//	
-//		setResizable(true); 
-//		setTitle(title + "unknown");
-//		setName(title);
-//		setVisible(true);
-//		pack();
-	}
-
 	
 	/**
 	 * @return the progressbar
 	 */
-	public JProgressBar getProgressbar() {
-		return this.progressBar;
+	public static JProgressBar getProgressbar() {
+		return progressBar;
 	}
 
+	/**
+	 * Get the BufferedImage Canvas of this view.
+	 * @return
+	 */
 	public BICanvas getCanvas() {
 		return this.canvasPanel.getCanvas();
 	}
 
+	/**
+	 * Unused FileList of opened files. Currently only one opened file is supported.
+	 * @return
+	 */
 	public FilesListModel getFilesListModel() {
 		return this.openFilesModel;
 	}
@@ -176,8 +165,6 @@ public class RaddsView extends FrameView {
             String changed = modified ? "*" : "";
         	getFrame().setTitle(file.getName() + changed +" - " + appId);	
         }
-        
-        
         firePropertyChange("modified", oldValue, this.modified);
     }
 	
@@ -210,22 +197,27 @@ public class RaddsView extends FrameView {
 	 * @return
 	 */
 	public BufferedImage getImage() {
-		BufferedImage image = getCanvas().getCanvas();
-		return image;  
+		return getCanvas().getCanvas();
 	}
 	
 	/**
-	 * Sets the image in the Canvas to the specified Image.
+	 * Sets the image in the Canvas to the specified {@link TextureImage}.
 	 * @param image
 	 */
 	public void setImage(final TextureImage image) {
 		getCanvas().setSourceBI(image.getData());
+		setFileOpened(true);
+		setFile(image.getFile());
 		filesPanel.getInfoPanel().setTextureFile(image);
-//		getFrame().setTitle(title+image.getFile().getName());
 	}
 
+	/**
+	 * Sets the image in the Canvas to the specified {@link BufferedImage}.
+	 * @param image
+	 */
 	public void setImage(final BufferedImage image) {
 		getCanvas().setSourceBI(image);
+		setFileOpened(true);
 		filesPanel.getInfoPanel().setTextureFile(image);
 	}
 	
@@ -239,13 +231,19 @@ public class RaddsView extends FrameView {
 	 * 
 	 */
 	
-	public javax.swing.Action getAction(String actionName) {
+	/**
+	 * Convenience function for getting the {@link Action} by the given name.
+	 * @param actionName
+	 * @return
+	 */
+	public javax.swing.Action getAction(final String actionName) {
 		ActionMap actionMap = getContext().getActionMap(RaddsView.class, this);
 	    return actionMap.get(actionName);
 	}
 	
 	/**
 	 * Copy the opened image
+	 * TODO fileOpened doesn't work yet
 	 */
 	@Action(enabledProperty = "fileOpened")
 	public void copy() { 
@@ -257,6 +255,10 @@ public class RaddsView extends FrameView {
 		});
 	}
 	
+	/**
+	 * Open a texture image file via FileChooser dialogue.
+	 * @return
+	 */
 	@Action
 	public LoadImageTask open() {
 		/* unused so far, as radds doesn't modify
@@ -270,8 +272,9 @@ public class RaddsView extends FrameView {
 		} */
 		final JFileChooser fc = new JFileChooser();
         final String[] allExtensions = {"dds", "tga", "bmp", "gif", "jpg", "jpeg"};
-        fc.setFileFilter(new FileNameExtensionFilter("All supported images", allExtensions));
         fc.setFileFilter(new FileNameExtensionFilter("DirectDrawSurface texture", "dds"));
+        fc.setFileFilter(new FileNameExtensionFilter("GrandPrix4 TEX texture", "tex"));
+        fc.setFileFilter(new FileNameExtensionFilter("All supported images", allExtensions));
 
 		LoadImageTask task = null;
 		final int option = fc.showOpenDialog(null);

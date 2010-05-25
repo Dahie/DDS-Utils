@@ -35,13 +35,10 @@ import javax.swing.event.ChangeListener;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 
-import com.sun.j3d.utils.behaviors.vp.WandViewBehavior.ResetViewListener;
-
 import ddsutil.BIUtil;
 import ddsutil.ImageOperations;
 import de.danielsenff.radds.Radds;
 import de.danielsenff.radds.RaddsView;
-import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.models.ColorChannel;
 import de.danielsenff.radds.util.FileDrop;
 
@@ -202,7 +199,7 @@ public class CanvasControlsPanel extends JPanel {
 	}
 
 	private ResourceMap getResourceMap() {
-		final Radds instance = Application.getInstance(Radds.class);
+		final Radds instance = Radds.getInstance(Radds.class);
 		final ApplicationContext context = instance.getContext();
 		final org.jdesktop.application.ResourceMap resourceMap = context.getResourceMap(RaddsView.class);
 		return resourceMap;

@@ -16,7 +16,6 @@ import org.jdesktop.application.ResourceMap;
 
 import de.danielsenff.radds.Radds;
 import de.danielsenff.radds.RaddsView;
-import de.danielsenff.radds.controller.Application;
 import de.danielsenff.radds.view.GridBagConstraints.LabelConstraints;
 import de.danielsenff.radds.view.GridBagConstraints.RemainderConstraints;
 
@@ -49,7 +48,7 @@ public class InfoPanel extends JPanel {
 	}
 	
 	private ResourceMap getResourceMap() {
-		final Radds instance = Application.getInstance(Radds.class);
+		final Radds instance = Radds.getInstance(Radds.class);
 		final ApplicationContext context = instance.getContext();
 		final org.jdesktop.application.ResourceMap resourceMap = context.getResourceMap(RaddsView.class);
 		return resourceMap;
