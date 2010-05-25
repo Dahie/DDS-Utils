@@ -10,7 +10,7 @@ import de.danielsenff.radds.controller.ImageController;
  *
  * @param <V>
  */
-public class LoadImageTask<V> extends LoadFileTask<ImageController, V> {
+public class LoadImageTask extends LoadFileTask<ImageController, Void> {
 
 	/**
      * Construct a LoadImageGraphTask.
@@ -23,8 +23,9 @@ public class LoadImageTask<V> extends LoadFileTask<ImageController, V> {
 	
 	@Override
 	protected ImageController doInBackground() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ImageController controller = new ImageController(getView());
+		controller.openImage(getFile());
+		return controller;
 	}
 
 	@Override

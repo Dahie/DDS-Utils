@@ -54,8 +54,6 @@ public class RaddsView extends FrameView {
 	private boolean selected = false;
 	private boolean paste = false;
 	
-	private BufferedImage busy;
-	
 	/**
 	 * @param controller 
 	 * 
@@ -65,14 +63,7 @@ public class RaddsView extends FrameView {
 		
 		this.openFilesModel = new FilesListModel();
 		
-		try {
-//			this.setIconImage(ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/Radds128.png")));
-			this.busy = ImageIO.read(this.getClass().getResourceAsStream("/de/danielsenff/radds/resources/defaultimage.png"));
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-		
-		initComponnents();
+		initComponents();
 		
 		// menu
 		initMenu();
@@ -88,11 +79,7 @@ public class RaddsView extends FrameView {
 		
 		this.progressBar = new JProgressBar();
 		
-//		setLayout(new BorderLayout());
-//		getContentPane().add(splitPane, BorderLayout.CENTER);
 		setComponent(splitPane);
-
-		
 	}
 
 	private void initMenu() {
@@ -102,24 +89,21 @@ public class RaddsView extends FrameView {
 		
 		JMenu menuFile;
 		if(OS.isMacOS()) 
-			menuFile = new JMenu(resourceMap.getString("File_menu_osx"));
+			menuFile = new JMenu(resourceMap.getString("file.osx.menu"));
 		else
-			menuFile = new JMenu(resourceMap.getString("File_menu"));
+			menuFile = new JMenu(resourceMap.getString("file.menu"));
+		menuFile.add(getAction("open"));
+		menuBar.add(menuFile);
 		
-		final JMenu menuEdit = new JMenu(resourceMap.getString("Edit"));
+		final JMenu menuEdit = new JMenu(resourceMap.getString("edit.menu"));
 		menuEdit.add(getAction("copy"));
 		menuBar.add(menuEdit);
-		
-		if(OS.isMacOS()) 
-			menuFile = new JMenu(resourceMap.getString("View_menu_osx"));
-		else
-			menuFile = new JMenu(resourceMap.getString("View_menu"));
 		
 		setMenuBar(menuBar);
 	}
 
 
-	private void initComponnents() {
+	private void initComponents() {
 //		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		setLocationByPlatform(true);
 //		setPreferredSize(new Dimension(900, 600));
@@ -186,7 +170,7 @@ public class RaddsView extends FrameView {
     public void setModified(final boolean modified) {
         boolean oldValue = this.modified;
         this.modified = modified;
-        // on program start, file may not be initialised
+        // on program start, file may not be initialized
         if(file != null){
         	String appId = getResourceString("Application.id");
             String changed = modified ? "*" : "";
@@ -197,6 +181,22 @@ public class RaddsView extends FrameView {
         firePropertyChange("modified", oldValue, this.modified);
     }
 	
+	/**
+	 * @return the fileOpened
+	 */
+	public final boolean isFileOpened() {
+		return fileOpened;
+	}
+
+	/**
+	 * @param fileOpened the fileOpened to set
+	 */
+	public final void setFileOpened(boolean fileOpened) {
+		boolean oldvalue = fileOpened;
+		this.fileOpened = fileOpened;
+		firePropertyChange("fileOpened", oldvalue, this.fileOpened);
+	}
+    
 	/**
 	 * Returns the currently loaded image-file.
 	 * @return
@@ -239,7 +239,7 @@ public class RaddsView extends FrameView {
 	 * 
 	 */
 	
-	private javax.swing.Action getAction(String actionName) {
+	public javax.swing.Action getAction(String actionName) {
 		ActionMap actionMap = getContext().getActionMap(RaddsView.class, this);
 	    return actionMap.get(actionName);
 	}
@@ -247,7 +247,7 @@ public class RaddsView extends FrameView {
 	/**
 	 * Copy the opened image
 	 */
-	@Action(enabledProperty = "isFileOpened")
+	@Action(enabledProperty = "fileOpened")
 	public void copy() { 
 		BufferedImage bi = getImage();
 		Clipboard myClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();	
@@ -258,7 +258,7 @@ public class RaddsView extends FrameView {
 	}
 	
 	@Action
-	public LoadImageTask loadImage() {
+	public LoadImageTask open() {
 		/* unused so far, as radds doesn't modify
 		 * if(isModified()) {
 			final int optionSave = showSaveConfirmation();

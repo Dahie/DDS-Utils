@@ -103,7 +103,7 @@ public class CanvasControlsPanel extends JPanel {
 	private JPanel initNavigationPanel() {
 		final JPanel panel = new JPanel();
 //		TODO COPY BUTTON
-		final JButton copyButton = new JButton();
+		final JButton copyButton = new JButton(view.getAction("copy"));
 		panel.add(copyButton);
 		
 		final JComboBox channelCombo = new JComboBox(composeColorChannelModel());
@@ -121,7 +121,6 @@ public class CanvasControlsPanel extends JPanel {
 
 		final JLabel lblChannelCombo = new JLabel(getResourceMap().getString("Channels")+":");
 
-		panel.add(copyButton);
 		panel.add(lblChannelCombo);
 		panel.add(channelCombo);
 
@@ -215,7 +214,6 @@ public class CanvasControlsPanel extends JPanel {
 	
 	private JScrollPane initScrollCanvas() {
 
-		// TODO FIXME WTF no static paths ...
 		final ImageIcon defaultImage = getResourceIcon("/de/danielsenff/radds/resources/defaultimage.png");
 
 		canvas = new BICanvas(BIUtil.convertImageToBufferedImage(defaultImage.getImage(), 
