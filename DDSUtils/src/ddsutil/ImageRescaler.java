@@ -3,7 +3,9 @@
  */
 package ddsutil;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 /**
@@ -36,17 +38,14 @@ public class ImageRescaler extends Rescaler {
 		 * @return
 		 */
 		@Override
-		public BufferedImage rescaleBI(final BufferedImage image,
-				final int width, final int height) {
+		public BufferedImage rescaleBI(final BufferedImage originalImage,
+				final int newWidth, final int newHeight) {
 
-			Image rescaledImage = image.getScaledInstance(width, height, scaleAlgorithm);
-			BufferedImage bi;
-			if(rescaledImage instanceof BufferedImage)
-				bi = (BufferedImage)rescaledImage;
-			else
-				bi = BIUtil.convertImageToBufferedImage(rescaledImage, BufferedImage.TYPE_4BYTE_ABGR);
-			//rescale.flush();
-			
+			BufferedImage bi = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = bi.createGraphics();
+	        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+	                            RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);			
 			return bi;
 		}
 

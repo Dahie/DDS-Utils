@@ -483,39 +483,6 @@ public class DDSImage {
 		return buf.toString();
 	}
 
-	/** Allocates a temporary, empty ByteBuffer suitable for use in a
-        call to glCompressedTexImage2D. This is used by the Texture
-        class to expand non-power-of-two DDS compressed textures to
-        power-of-two sizes on hardware not supporting OpenGL 2.0 and the
-        NPOT texture extension. The specified OpenGL internal format
-        must be one of GL_COMPRESSED_RGB_S3TC_DXT1_EXT,
-        GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
-        GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, or
-        GL_COMPRESSED_RGBA_S3TC_DXT5_EXT.
-	 */
-	public static ByteBuffer allocateBlankBuffer(int width,
-			int height,
-			int openGLInternalFormat) {
-		int size = width * height;
-		switch (openGLInternalFormat) {
-		case GL.GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
-		case GL.GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
-			size /= 2;
-			break;
-
-		case GL.GL_COMPRESSED_RGBA_S3TC_DXT3_EXT:
-		case GL.GL_COMPRESSED_RGBA_S3TC_DXT5_EXT:
-			break;
-
-		default:
-			throw new IllegalArgumentException("Illegal OpenGL texture internal format " +
-					openGLInternalFormat);
-		}
-		if (size == 0)
-			size = 1;
-		return GLBuffers.newDirectByteBuffer(size);
-	}
-
 	public void debugPrint() {
 		PrintStream tty = System.err;
 		tty.println("Compressed texture: " + isCompressed());
