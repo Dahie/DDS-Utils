@@ -10,11 +10,11 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
-import ddsutil.BIUtil;
 import ddsutil.ByteBufferedImage;
 
 
 /**
+ * Decompressor for DXT-Compression
  * @author danielsenff
  *
  */

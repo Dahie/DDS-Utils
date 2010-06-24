@@ -200,8 +200,6 @@ public class DDSUtil {
 				map.getHeight(), 
 				pixelformat);
 	}
-	
-	
 
 	private static DDSImage writeDDSImage(final File file,
 			ByteBuffer[] mipmapBuffer, 
@@ -304,7 +302,13 @@ public class DDSUtil {
 			}
 	}
 
-	public static boolean isReadSupported(File file) {
+	/**
+	 * Returns true for file formats supported by this library.
+	 * Currently TEX and DDS reading is supported.
+	 * @param file
+	 * @return
+	 */
+	public static boolean isReadSupported(final File file) {
 		return FileUtil.getFileSuffix(file).endsWith("dds")
 			|| FileUtil.getFileSuffix(file).endsWith("tex");
 	}

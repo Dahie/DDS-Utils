@@ -4,7 +4,6 @@
 package model;
 
 import gr.zdimensions.jsquish.Squish;
-import gr.zdimensions.jsquish.Squish.CompressionType;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -13,11 +12,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import jogl.DDSImage;
-import jogl.DDSImage.ImageInfo;
-
-import compression.DXTBufferDecompressor;
 import ddsutil.ByteBufferedImage;
-import ddsutil.DDSUtil;
 import ddsutil.ImageRescaler;
 import ddsutil.MipMapsUtil;
 import ddsutil.NonCubicDimensionException;
@@ -30,7 +25,6 @@ import ddsutil.Rescaler;
  *
  */
 public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImage> {
-
 	
 	/**
 	 * Topmost MipMap Index 
@@ -38,6 +32,9 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	public static final int TOP_MOST_MIP_MAP = 0;
 	
 	Vector<BufferedImage> mipmaps;
+	/**
+	 * {@link Rescaler} providing the scaling algorithm.
+	 */
 	protected Rescaler rescaler;
 	private int numMipMaps;
 	
@@ -72,20 +69,22 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		numMipMaps = MipMapsUtil.calculateMaxNumberOfMipMaps(mipmapWidth, mipmapHeight);
 		
 		BufferedImage previousMap = topmost;
+		BufferedImage mipMapBi;
 		for (int i = 1; i < numMipMaps; i++) {
 			// calculation for next map
 			mipmapWidth = MipMaps.calculateMipMapSize(mipmapWidth);
 			mipmapHeight = MipMaps.calculateMipMapSize(mipmapHeight);
-			BufferedImage mipMapBi = rescaler.rescaleBI(previousMap, mipmapWidth, mipmapHeight);
+			
+			mipMapBi = rescaler.rescaleBI(previousMap, mipmapWidth, mipmapHeight);
 			mipMapsVector.add(mipMapBi);
 			// by using this map in the next MipMap generation step, we increase
 			// performance, since we don't always scale from the biggest image.
+			// however this might also increase errors over generations
 			previousMap = mipMapBi;
 		}
 		return mipMapsVector;
 	}
 
-	
 	/**
 	 * Returns the highest MipMap in the original resolution. 
 	 * @return
@@ -148,11 +147,6 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * @return
 	 */
 	public BufferedImage[] getAllMipMapsArray() {
-		/*final BufferedImage[] array = new BufferedImage[numMipMaps];
-		for (int i = 0; i < numMipMaps; i++) {
-			array[i] = getMipMap(i);
-		}*/
-		
 		return (BufferedImage[]) this.mipmaps.toArray();
 	}
 
@@ -179,9 +173,9 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 			int mipmapHeight, 
 			final BufferedImage[] mipmapBI) {
 		int i = 0; // cause the first already is set
+		ImageRescaler rescaler = new ImageRescaler();
 		while(true) {
 			
-			ImageRescaler rescaler = new ImageRescaler();
 			mipmapBI[i] = rescaler.rescaleBI(mipmapBI[i], mipmapWidth, mipmapHeight);
 			
 			if (mipmapWidth == 1 || mipmapHeight == 1) 
@@ -217,10 +211,18 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		};
 	}
 
+	/**
+	 * Get the {@link Rescaler}.
+	 * @return
+	 */
 	public Rescaler getRescaler() {
 		return this.rescaler;
 	}
 
+	/**
+	 * Set the {@link Rescaler}.
+	 * @param rescaler
+	 */
 	public void setRescaler(Rescaler rescaler) {
 		this.rescaler = rescaler;
 	}
@@ -248,16 +250,26 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		return newValue;
 	}
 	
+	/**
+	 * Width of the MipMap on the specified index.
+	 * @param index
+	 * @return
+	 */
 	public int getMipMapWidth(int index) {
 		return getMipMap(index).getWidth();
 	}
 	
+	/**
+	 * Width of the MipMap on the specified index.
+	 * @param index
+	 * @return
+	 */
 	public int getMipMapHeight(int index) {
 		return getMipMap(index).getHeight();
 	}
 	
 	/**
-	 * Returns the {@link Dimension} of the MipMap at the given index.
+	 * Returns the {@link Dimension} of the MipMap at the specified index.
 	 * @param index
 	 * @return
 	 */

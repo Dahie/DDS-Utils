@@ -160,26 +160,12 @@ public class ImageOperations {
 				channel, greyValue);
 	}
 	
-	/**
-	 * Paint a specific RGB-color channel in a color
-	 * Channel RGBA (0,1,2,3)
-	 * @param bb
-	 * @param channel
-	 * @param greyValue
-	 * @return
-	 */
-	public static ByteBuffer paintValueInChannelBB(final ByteBuffer bb, final int channel, final float greyValue) {
-		for (int i = 0; i < bb.capacity(); i+=channel) {
-			bb.put(i, (byte) convertColor(greyValue));
-		}
-		return bb;
-	}
 	
 	/**
 	 * Paint Channel in a specified value (0-255)
 	 * Channel RGBA (0,1,2,3)
 	 * @param rgba
-	 * @param channel
+	 * @param channel to paint in
 	 * @param color
 	 * @return
 	 */
@@ -207,7 +193,7 @@ public class ImageOperations {
 	}
 	
 	/**
-	 * Convertion between float color value to a int value 
+	 * Conversion between float color value to a int value 
 	 * @param value color
 	 * @return
 	 */
@@ -245,72 +231,6 @@ public class ImageOperations {
 		} else {
 			return value;
 		}
-
-		/*if ( value > 255) value = 255;
-    	if ( value < 0) value = 0;
-    	return value;*/
-	}
-	
-	/**
-	 * TODO would be nice to remove
-	 * @param buffer
-	 * @param raster
-	 * @return
-	 */
-	public static Raster writeBufferToRaster(final Buffer buffer, final WritableRaster raster) {
-		
-		final int width = raster.getWidth();
-		final int height = raster.getHeight();
-	
-		/*System.out.println(bufImg.getHeight() + " - " + width);
-		System.out.println("bytebuffer-limit: " + byteBuf.limit());
-		System.out.println("bytebuffer-capacity: " + byteBuf.capacity());
-		int expectedBufferSize = bufImg.getHeight()*width;
-		System.out.println("expected: " + expectedBufferSize);*/
-		
-		int[] rgb = {	(1), (255), (128), (255)	};
-		
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				
-				try { 
-					if(buffer instanceof IntBuffer)
-					{
-						rgb = readPixelARGB(((IntBuffer) buffer).get());
-					} 
-					else if (buffer instanceof ByteBuffer) 
-					{
-						rgb[0] = unsignedByteToInt(((ByteBuffer)buffer).get());	
-						rgb[1] = unsignedByteToInt(((ByteBuffer) buffer).get());
-						rgb[2] = unsignedByteToInt(((ByteBuffer) buffer).get());
-						rgb[3] = unsignedByteToInt(((ByteBuffer) buffer).get());
-					}
-					
-					
-				} catch (BufferUnderflowException euf){
-					System.out.println("Error-index-position:" +  (y*width)+x);
-					euf.printStackTrace();
-				}
-				
-				rgb = limitBoundaries(rgb, 0, 255);
-				raster.setPixel(x, y, rgb);
-			}
-		}
-		return raster;
 	}
 		
-	
-	/**
-	 * Put an Byte-Array into a {@link ByteBuffer}
-	 * @param byteBuf
-	 * @return
-	 */
-	public static int[] convertBufferToIntArray(final ByteBuffer byteBuf) {
-		int[] array = new int[byteBuf.capacity()];
-		for (int i = 0; i < array.length; i++) {
-			array[i] = unsignedByteToInt(byteBuf.get());
-		}
-		return array;
-	}
-	
 }

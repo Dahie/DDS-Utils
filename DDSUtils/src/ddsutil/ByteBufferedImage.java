@@ -72,41 +72,9 @@ public class ByteBufferedImage extends BufferedImage {
 	/**
 	 * @return
 	 */
-//	public int[] getPixels() {
-//		return convertBIintoIntArray(this);
-//	}
-
-	/**
-	 * @return
-	 */
-//	public IntBuffer getPixelBuffer() {
-//		return IntBuffer.wrap(getPixels());
-//	}
-	
-	/**
-	 * @return
-	 */
 	public byte[] getARGBPixels(){
 		return convertBIintoARGBArray(this);
 	}
-
-	/**
-	 * Transfers the pixel-Information from a {@link BufferedImage} into a byte-array.
-	 * If the {@link BufferedImage} is of different type, the pixels are reordered and stored in RGBA-order.
-	 * @param bi
-	 * @return array in order RGBA
-	 */
-	/*public static byte[] convertBIintoARGBArray(final BufferedImage bi) {
-		
-		WritableRaster r = bi.getRaster();
-	    DataBuffer db = r.getDataBuffer();
-	    if (db instanceof DataBufferByte) {
-	        DataBufferByte dbi = (DataBufferByte) db;
-	        return dbi.getData();
-	    }
-		System.err.println("db is of type " + db.getClass());
-		return null;
-	}*/
 
 	
 	/**
@@ -132,7 +100,6 @@ public class ByteBufferedImage extends BufferedImage {
 	 * @return array in order RGBA
 	 */
 	public static byte[] convertBIintoARGBArray(final BufferedImage bi) {
- 
 		DataBuffer dataBuffer = bi.getRaster().getDataBuffer();
  
 		// read channel count
@@ -209,11 +176,11 @@ public class ByteBufferedImage extends BufferedImage {
 	 * @param srcBI
 	 * @param trgBI
 	 */
-	private static void moveARGBtoABGR(BufferedImage srcBI, BufferedImage trgBI) {
+	private static void moveARGBtoABGR(final BufferedImage srcBI, final BufferedImage trgBI) {
 		int[] srcData = ( (DataBufferInt)srcBI.getData().getDataBuffer() ).getData();
 		byte[] trgData = ( (DataBufferByte)trgBI.getData().getDataBuffer() ).getData();
 		final int size = srcData.length;
-		for ( int i = 0; i > 16;i++ ) {
+		for ( int i = 0; i > size;i++ ) {
 		    trgData[i * 4 + 0] = (byte)( ( srcData[i] & 0xFF000000 ) >> 24 );
 		    trgData[i * 4 + 1] = (byte)  ( srcData[i] & 0x000000FF );
 		    trgData[i * 4 + 2] = (byte)( ( srcData[i] & 0x0000FF00 ) >>  8 );

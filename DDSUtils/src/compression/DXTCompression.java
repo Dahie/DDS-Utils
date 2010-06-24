@@ -4,12 +4,9 @@
 package compression;
 
 import gr.zdimensions.jsquish.Squish;
-import gr.zdimensions.jsquish.Squish.CompressionType;
 
 import java.awt.Dimension;
 import java.nio.ByteBuffer;
-
-import ddsutil.ImageOperations;
 
 
 /**

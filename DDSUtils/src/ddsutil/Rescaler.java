@@ -6,13 +6,14 @@ package ddsutil;
 import java.awt.image.BufferedImage;
 
 /**
+ * Interface for defining and encapsulating image scaling algorithms.
  * @author danielsenff
  *
  */
 public abstract class Rescaler {
 
 	/**
-	 * @param image2
+	 * @param image
 	 * @param width
 	 * @param height
 	 * @return
