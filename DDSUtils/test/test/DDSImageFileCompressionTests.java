@@ -3,17 +3,17 @@
  */
 package test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 
+import jogl.DDSImage;
 import model.DDSFile;
 
 import org.junit.Test;
 
-import jogl.DDSImage;
-import junit.framework.TestCase;
 import util.Stopwatch;
-import static org.junit.Assert.*;
 
 /**
  * @author danielsenff

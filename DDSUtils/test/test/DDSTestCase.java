@@ -33,6 +33,7 @@ public class DDSTestCase {
 	public static DDSFile loadDDSFile(File file) {
 		DDSFile ddsimage = null;
 		ddsimage = new DDSFile(file);
+		ddsimage.loadImageData();
 		return ddsimage;
 	}
 	

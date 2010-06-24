@@ -74,7 +74,7 @@ public class DDSImageFileRecompressionTest extends DDSTestCase {
 			// not original compression
 			ddsimage.setPixelformat(format);
 		}
-		System.out.println("create MipMaps:" + generateMipMaps);
+//		System.out.println("create MipMaps:" + generateMipMaps);
 		ddsimage.setHasMipMaps(generateMipMaps);
 
 		try {
@@ -82,7 +82,7 @@ public class DDSImageFileRecompressionTest extends DDSTestCase {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		System.out.println("image written to disc");
+//		System.out.println("image written to disc");
 
 		// test
 		DDSFile newddsimage = null;

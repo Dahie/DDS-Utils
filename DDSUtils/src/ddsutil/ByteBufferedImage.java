@@ -110,6 +110,16 @@ public class ByteBufferedImage extends BufferedImage {
 		return convertDataBufferToArray;
 	}
 	
+	/**
+	 * I need to manually define the order in my array, because for different
+	 * file formats, this varies and ImageIO doesn't return always the same.
+	 * @param width
+	 * @param height
+	 * @param dataBuffer
+	 * @param componentCount
+	 * @param bufferedImageType
+	 * @return
+	 */
 	private static byte[] convertDataBufferToArray(final int width, 
 			final int height,
 			final DataBuffer dataBuffer, 
