@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.IndexColorModel;
 import java.awt.image.Raster;
 
 import javax.swing.BorderFactory;
@@ -247,7 +248,14 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		
 		Raster data = biSource.getData();
 		String tooltip = "Coordinate (" + x + ", "+ y + "), ";
-		if(biSource.getColorModel().getNumComponents() > 3) {
+		int index = y*biSource.getWidth() + x;
+		if(biSource.getColorModel() instanceof IndexColorModel) {
+			tooltip	+= "Index Colors ("
+				+ biSource.getColorModel().getAlpha(index) + ", "
+				+ biSource.getColorModel().getRed(index) + ", "
+				+ biSource.getColorModel().getGreen(index) + ", "
+				+ biSource.getColorModel().getBlue(index) + ")";
+		} else if(biSource.getColorModel().getNumComponents() > 3) {
 			tooltip	+= "ARGB ("
 				+ data.getSample((int)x, (int)y, 3) + ", "
 				+ data.getSample((int)x, (int)y, 0) + ", "
