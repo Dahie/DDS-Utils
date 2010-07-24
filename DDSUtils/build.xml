@@ -5,7 +5,7 @@
 	
   <property name="app-name" value="DDSUtils" />
   <tstamp>
-	<format property="NOW" pattern="d-MM-yyyy-hhmm" />
+	<format property="NOW" pattern="yyyy-MM-dd-hhmm" />
   </tstamp>
   <property name="bin.dir" location="${basedir}/bin" /> 
   <property name="src.dir" location="${basedir}/src" /> 
@@ -36,7 +36,6 @@
 	
   	<!-- build DDSUitls -->
   <target name="compile" depends="clean" description="Fresh compile Java class files">
-  	
 	<!-- copy all files from src which are not java-files -->
 	<copy todir="${bin.dir}">
 	  <fileset dir="${src.dir}" excludes="**.java, packaging/" />
@@ -53,7 +52,6 @@
         <attribute name="Class-Path" value="."/>
       </manifest>
       <fileset dir="${bin.dir}"/>
-      <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/jogl.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="${lib.dir}/jsquish.jar"/>
     </jar>
   </target>
