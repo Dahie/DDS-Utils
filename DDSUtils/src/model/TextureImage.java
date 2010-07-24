@@ -157,6 +157,13 @@ public interface TextureImage {
 	public BufferedImage getData();
 	
 	/**
+	 * Returns the MipMap at the specified index.
+	 * @param index
+	 * @return
+	 */
+	public BufferedImage getMipMap(int index);
+	
+	/**
 	 * Load the data from file into memory.
 	 */
 	public void loadImageData();

@@ -15,20 +15,25 @@ import jogl.TEXImage;
 import compression.DXTBufferDecompressor;
 import ddsutil.DDSUtil;
 
-
+/**
+ * TEX for GP4-Texture format.
+ * @author dahie
+ *
+ */
 public class TEXFile  extends AbstractTextureImage {
 
 	private TEXImage teximage;
 
-	protected TEXFile() {}
-	
 	/**
-	 * @throws IOException 
+	 * @param filename 
 	 */
 	public TEXFile(final String filename) {
 		this(new File(filename));
 	}
 	
+	/**
+	 * @param file
+	 */
 	public TEXFile(final File file) {
 		this.file = file;
 		TEXImage teximage = null;
@@ -86,7 +91,7 @@ public class TEXFile  extends AbstractTextureImage {
 	 */
 	public BufferedImage[] getAllMipMapsBI(){
 		MipMaps mipMaps = new MipMaps();
-		mipMaps.generateMipMaps(topmost);
+		mipMaps.generateMipMaps(getTopMipMap());
 		return mipMaps.getAllMipMapsArray();		
 	}
 	
@@ -96,18 +101,22 @@ public class TEXFile  extends AbstractTextureImage {
 	 */
 	public Vector<BufferedImage> generateAllMipMaps(){
 		MipMaps mipMaps = new MipMaps();
-		mipMaps.generateMipMaps(topmost);
+		mipMaps.generateMipMaps(getTopMipMap());
 		return mipMaps.getAllMipMaps();
 	}
 
 	public void loadImageData() {
 		CompressionType compressionType = 
 			DDSUtil.getSquishCompressionFormat(teximage.getPixelFormat());
-		this.topmost = new DXTBufferDecompressor(
+		this.mipMaps.setMipMap(0, new DXTBufferDecompressor(
 				teximage.getEmbeddedMaps(0).getMipMap(0).getData(),
 				teximage.getWidth(), 
 				teximage.getHeight(), 
-				compressionType).getImage();
+				compressionType).getImage());
+	}
+
+	public BufferedImage getMipMap(int index) {
+		return this.mipMaps.getMipMap(index);
 	}
 	
 }

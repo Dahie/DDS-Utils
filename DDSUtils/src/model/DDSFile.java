@@ -10,16 +10,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InvalidObjectException;
 import java.nio.ByteBuffer;
 import java.util.Vector;
 
 import jogl.DDSImage;
 
 import compression.DXTBufferDecompressor;
+
 import ddsutil.DDSUtil;
-import ddsutil.MipMapsUtil;
-import ddsutil.NonCubicDimensionException;
 
 
 /**
@@ -31,10 +29,8 @@ public class DDSFile extends AbstractTextureImage{
 	protected TextureType textureType;
 	private DDSImage ddsimage;
 	
-	protected DDSFile() {}
-	
 	/**
-	 * @throws IOException 
+	 * @param filename 
 	 */
 	public DDSFile(final String filename) {
 		this(new File(filename));
@@ -43,14 +39,11 @@ public class DDSFile extends AbstractTextureImage{
 	/**
 	 * Constructs a DDSFile from a {@link File}
 	 * @param file
-	 * @throws IOException
 	 */
 	public DDSFile(final File file) {
 		this.file = file;
-		DDSImage ddsimage = null;
 		try {
-			ddsimage = DDSImage.read(file);
-			init(ddsimage);
+			init(DDSImage.read(file));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,7 +53,6 @@ public class DDSFile extends AbstractTextureImage{
 	 * Constructs a DDSFile from a {@link File} and a {@link DDSImage}
 	 * @param file
 	 * @param ddsimage
-	 * @throws InvalidObjectException 
 	 */
 	public DDSFile(final File file, final DDSImage ddsimage) {
 		this.file = file;
@@ -68,10 +60,9 @@ public class DDSFile extends AbstractTextureImage{
 	}
 	
 	/**
-	 * Constructs a DDSFile from a filepath and a {@link DDSImage}
+	 * Constructs a DDSFile from a file path and a {@link DDSImage}
 	 * @param filename
 	 * @param ddsimage
-	 * @throws InvalidObjectException 
 	 */
 	public DDSFile(final String filename, final DDSImage ddsimage) {
 		this(new File(filename), ddsimage);
@@ -88,14 +79,18 @@ public class DDSFile extends AbstractTextureImage{
 			BufferedImage bi, 
 			final int pixelformat, 
 			final boolean hasmipmaps) {
-		//super(filename);
 		this.file = filename;
 		
 		this.height = bi.getHeight();
 		this.width  = bi.getWidth();
 		this.hasMipMaps = hasmipmaps;
-		
-		this.topmost = bi; 
+		if(hasmipmaps) {
+			
+		} else {
+			this.numMipMaps = 1;
+		}
+		this.mipMaps = new MipMaps(this.numMipMaps);
+		this.mipMaps.setMipMap(0, bi); 
 		this.pixelformat = pixelformat;
 	}
 	
@@ -110,34 +105,50 @@ public class DDSFile extends AbstractTextureImage{
 		this.pixelformat 	= ddsimage.getPixelFormat();
 		this.textureType	= getTextureType(ddsimage);
 		this.numMipMaps 	= ddsimage.getNumMipMaps();
+		this.mipMaps 		= new MipMaps(this.numMipMaps);
 		this.hasMipMaps		= (ddsimage.getNumMipMaps() > 1); // there is always at least the topmost MipMap
 	}
 
+	/**
+	 * Load the ImageData for the specified MipMap.
+	 * @param mipmap
+	 */
+	public void loadImageData(int mipmap) {
+		if(mipmap <= this.numMipMaps ) {
+			CompressionType compressionType = 
+				DDSUtil.getSquishCompressionFormat(ddsimage.getPixelFormat());
+			ByteBuffer data = ddsimage.getMipMap(mipmap).getData();
+			int width = MipMaps.getMipMapSizeAtIndex(mipmap, ddsimage.getWidth());
+			int height = MipMaps.getMipMapSizeAtIndex(mipmap, ddsimage.getHeight());;
+			DXTBufferDecompressor dxtBufferDecompressor = new DXTBufferDecompressor(
+					data,
+					width, 
+					height, 
+					compressionType);
+			this.mipMaps.addMipMap(dxtBufferDecompressor.getImage());
+		}
+	}
+	
 	public void loadImageData() {
-		CompressionType compressionType = 
-			DDSUtil.getSquishCompressionFormat(ddsimage.getPixelFormat());
-		this.topmost = new DXTBufferDecompressor(
-							ddsimage.getMipMap(0).getData(),
-							ddsimage.getWidth(), 
-							ddsimage.getHeight(), 
-							compressionType).getImage();
+		for (int i = 0; i < this.numMipMaps; i++) {
+			loadImageData(i);
+		}
 	}
 	
 	@Override
 	public String toString() {
-		return this.file.getAbsolutePath()+verbosePixelformat(this.pixelformat);
+		return this.file.getAbsolutePath() + verbosePixelformat(this.pixelformat);
 	}
 	
 	@Override
 	public boolean equals(Object second) {
 		if(second != null && second instanceof DDSFile) {
 			DDSFile secondFile = (DDSFile) second;
-			boolean isEqual = (this.getFile().getAbsoluteFile().equals(secondFile.getFile().getAbsoluteFile()) && 
+			return (this.getFile().getAbsoluteFile().equals(secondFile.getFile().getAbsoluteFile()) && 
 					this.hasMipMaps() == secondFile.hasMipMaps() &&
 					this.getPixelformat() == secondFile.getPixelformat() &&
 					this.getHeight() == secondFile.getHeight() &&
-					this.getWidth() == secondFile.getWidth());
-			return isEqual;	
+					this.getWidth() == secondFile.getWidth());	
 		}
 		return false;
 	}
@@ -207,7 +218,7 @@ public class DDSFile extends AbstractTextureImage{
 	 */
 	public BufferedImage[] getAllMipMapsBI(){
 		MipMaps mipMaps = new MipMaps();
-		mipMaps.generateMipMaps(topmost);
+		mipMaps.generateMipMaps(getTopMipMap());
 		return mipMaps.getAllMipMapsArray();		
 	}
 	
@@ -217,8 +228,12 @@ public class DDSFile extends AbstractTextureImage{
 	 */
 	public Vector<BufferedImage> generateAllMipMaps(){
 		MipMaps mipMaps = new MipMaps();
-		mipMaps.generateMipMaps(topmost);
+		mipMaps.generateMipMaps(getTopMipMap());
 		return mipMaps.getAllMipMaps();
+	}
+
+	public BufferedImage getMipMap(int index) {
+		return this.mipMaps.getMipMap(index);
 	}
 	
 }

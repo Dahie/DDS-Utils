@@ -43,8 +43,13 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * 
 	 */
 	public MipMaps() {
+		this(1);
+	}
+	
+	public MipMaps(int numMipMaps) {
+		this.numMipMaps = numMipMaps;
 		this.rescaler = new ImageRescaler();
-		this.mipmaps = new Vector<BufferedImage>();
+		this.mipmaps = new Vector<BufferedImage>(numMipMaps);
 	}
 	
 	/**
@@ -90,7 +95,7 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * @return
 	 */
 	public BufferedImage getTopMostMipMap() {
-		return getMipMap(0);
+		return getMipMap(TOP_MOST_MIP_MAP);
 	}
 	
 	/**
@@ -116,6 +121,19 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 */
 	public BufferedImage getMipMap(final int index) {
 		return this.mipmaps.get(index);
+	}
+	
+	/**
+	 * Set the given {@link BufferedImage} as MipMap in the index.
+	 * @param mipmap
+	 * @param image
+	 */
+	public void setMipMap(int mipmap, BufferedImage image) {
+		this.mipmaps.set(mipmap, image);
+	}
+	
+	public void addMipMap(BufferedImage image) {
+		this.mipmaps.add(image);
 	}
 	
 	/**
@@ -238,12 +256,13 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	}
 
 	/**
+	 * Returns the size of the MipMap at the requested index based on the original value
 	 * @param targetIndex
-	 * @param currentValue
+	 * @param original size at index 0
 	 * @return
 	 */
-	public static int getMipMapSizeAtIndex(final int targetIndex, final int currentValue) {
-		int newValue = currentValue;
+	public static int getMipMapSizeAtIndex(final int targetIndex, final int original) {
+		int newValue = original;
 		for (int i = 0; i < targetIndex; i++) {
 			newValue = MipMaps.calculateMipMapSize(newValue);
 		}

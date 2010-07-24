@@ -4,11 +4,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import jogl.DDSImage;
 import ddsutil.DDSUtil;
 import ddsutil.MipMapsUtil;
 import ddsutil.NonCubicDimensionException;
-
-import jogl.DDSImage;
 
 
 public abstract class AbstractTextureImage implements TextureImage {
@@ -24,7 +23,8 @@ public abstract class AbstractTextureImage implements TextureImage {
 	/**
 	 * MipMap at the highest Level, ie the original 
 	 */
-	protected BufferedImage topmost;
+//	protected BufferedImage topmost;
+	protected MipMaps mipMaps;
 	
 	/**
 	 * Depth of color for all channels
@@ -258,7 +258,7 @@ public abstract class AbstractTextureImage implements TextureImage {
 	 * @throws IllegalArgumentException 
 	 */
 	public void setHasMipMaps(final boolean generateMipMaps) throws IllegalArgumentException{
-		if(isPowerOfTwo(topmost.getWidth()) && isPowerOfTwo(topmost.getHeight()))
+		if(isPowerOfTwo(getTopMipMap().getWidth()) && isPowerOfTwo(getTopMipMap().getHeight()))
 			this.hasMipMaps = generateMipMaps;
 		else throw new NonCubicDimensionException();
 	}
@@ -270,15 +270,31 @@ public abstract class AbstractTextureImage implements TextureImage {
 	public void setData(final BufferedImage bi) {
 		this.width = bi.getWidth();
 		this.height = bi.getHeight();
-		this.topmost = bi;
+		this.setTopMipMap(bi);
+	}
+
+	/**
+	 * Sets the topmost MipMap.
+	 * @param bi
+	 */
+	public void setTopMipMap(BufferedImage bi) {
+		this.mipMaps.setMipMap(0, bi);
 	}
 	
+	/**
+	 * Returns the top-most MipMap.
+	 * @return 
+	 */
+	public BufferedImage getTopMipMap() {
+		return this.mipMaps.getMipMap(0);
+	}
+
 	/**
 	 * Returns the topmost MipMap
 	 * @return {@link BufferedImage}
 	 */
 	public BufferedImage getData() {
-		return this.topmost;
+		return this.getTopMipMap();
 	}
 	
 	/**
