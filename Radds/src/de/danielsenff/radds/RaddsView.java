@@ -52,6 +52,8 @@ public class RaddsView extends FrameView {
 	private boolean opened = false;
 	private boolean modified = false;
 	private boolean paste = false;
+
+	private TextureImage textureImage;
 	
 	/**
 	 * @param radds 
@@ -205,14 +207,27 @@ public class RaddsView extends FrameView {
 	}
 	
 	/**
+	 * Returns the currently opened {@link TextureImage}.
+	 * @return
+	 */
+	public TextureImage getTextureImage() {
+		return this.textureImage;
+	}
+	
+	/**
 	 * Sets the image in the Canvas to the specified {@link TextureImage}.
 	 * @param image
 	 */
 	public void setImage(final TextureImage image) {
+		TextureImage oldvalue = this.textureImage;
+		this.textureImage = image;
 		getCanvas().setSourceBI(image.getData());
 		setOpened(true);
 		setFile(image.getFile());
 		getInfoPanel().setTextureFile(image);
+		this.canvasPanel.updateNumMipMaps();
+		firePropertyChange("textureImage", oldvalue, this.textureImage);
+		
 	}
 
 	/**

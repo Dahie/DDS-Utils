@@ -32,6 +32,8 @@ import javax.swing.event.AncestorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import model.TextureImage;
+
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.TaskService;
@@ -59,6 +61,7 @@ public class CanvasControlsPanel extends JPanel {
 	private JComboBox zoomCombo;
 	private JSlider zoomSlider;
 	private RaddsView view;
+	private JComboBox mipMapCombo;
 
 	/**
 	 * @param view
@@ -86,7 +89,6 @@ public class CanvasControlsPanel extends JPanel {
 			public void filesDropped( java.io.File[] files ) {   
 				// handle first file
 				openImage(files[0]);
-
 			}   // end filesDropped
 		}); // end FileDrop.Listener
 		
@@ -147,7 +149,24 @@ public class CanvasControlsPanel extends JPanel {
 			public void keyReleased(KeyEvent e) {}
 			public void keyTyped(KeyEvent e) {}
 		});
-
+		
+		mipMapCombo = new JComboBox();
+		updateNumMipMaps();
+		mipMapCombo.addActionListener(new ActionListener() {
+			public void actionPerformed(final ActionEvent e) {
+				if(mipMapCombo.getItemCount() > 0) {
+					int index = (Integer) ((JComboBox)e.getSource()).getSelectedItem();
+					TextureImage textureImage = view.getTextureImage();
+					if(index < textureImage.getNumMipMaps()) {
+						BufferedImage bi = textureImage.getMipMap(index-1);
+						canvas.setSourceBI(bi);
+						canvas.revalidate();
+					}
+				}
+			}
+		});
+		panel.add(mipMapCombo);
+		
 		final JLabel lblZoom = new JLabel(getResourceMap().getString("Zoom")+":");
 		zoomSlider = new JSlider(0, 500, 100);
 		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
@@ -165,7 +184,7 @@ public class CanvasControlsPanel extends JPanel {
 			public void stateChanged(final ChangeEvent e) {
 				final int zoomValue = ((JSlider)e.getSource()).getValue();
 				canvas.setZoomFactor( (Float.valueOf(zoomValue)) / 100);
-				canvas.repaint();
+				canvas.revalidate();
 			}
 
 		});
@@ -179,6 +198,16 @@ public class CanvasControlsPanel extends JPanel {
 
 
 		return panel;
+	}
+
+	public void updateNumMipMaps() {
+		TextureImage textureImage = view.getTextureImage();
+		if(textureImage != null) {
+			mipMapCombo.removeAllItems();
+			for (int i = 0; i < textureImage.getNumMipMaps(); i++) {
+				mipMapCombo.addItem(i+1);
+			}
+		}
 	}
 
 
