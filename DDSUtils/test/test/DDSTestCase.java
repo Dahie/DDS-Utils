@@ -21,13 +21,13 @@ public class DDSTestCase {
 	String outputDirectory = "test/output/";
 	String inputDirectory = "test/resource/";
 	
-	File texturePNG2048 = new File(inputDirectory +"STRBahrain.png");
+	protected File texturePNG2048 = new File(inputDirectory +"STRBahrain.png");
 	protected File textureDDS1024 = new File(inputDirectory +"RAIKKONENEXTRA0.dds");
 	protected File textureBMP512x512 = new File(inputDirectory +"512x512.bmp");
-	File texturePNG64x64 = new File(inputDirectory + "SUAEXTRA3-1.png");
-	File imageBMP3 = new File(inputDirectory +"3x3.bmp");
+	protected File texturePNG64x64 = new File(inputDirectory + "SUAEXTRA3-1.png");
+	protected File imageBMP3 = new File(inputDirectory +"3x3.bmp");
 	protected File originalB1024 = new File(inputDirectory +"RAIKKONENEXTRA1.dds");
-	File original2048 = new File(inputDirectory +"RAIKKONENEXTRA0.dds");
+	protected File original2048 = new File(inputDirectory +"RAIKKONENEXTRA0.dds");
 	
 	
 	public static DDSFile loadDDSFile(File file) {

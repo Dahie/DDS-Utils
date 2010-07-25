@@ -11,13 +11,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import model.MipMaps;
-
 import org.junit.Test;
 
-import ddsutil.MipMapsUtil;
-
 import test.DDSTestCase;
+import ddsutil.MipMapsUtil;
 
 
 /**
