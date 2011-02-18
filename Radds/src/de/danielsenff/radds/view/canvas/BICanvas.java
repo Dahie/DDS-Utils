@@ -160,7 +160,6 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		invalidate();
 	}
 		
-	
 	/**
 	 * Sets the factor the original-image dimensions are multiplied with
 	 * @param zoom
