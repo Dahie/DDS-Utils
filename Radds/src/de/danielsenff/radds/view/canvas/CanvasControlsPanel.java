@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -80,22 +81,6 @@ public class CanvasControlsPanel extends JPanel {
 		setLayout(new BorderLayout());
 		scrollViewPane = initScrollCanvas();
 		final JPanel navigateCanvas = initNavigationPanel();
-
-		scrollViewPane.addComponentListener(new ComponentListener() {
-			@Override
-			public void componentShown(ComponentEvent arg0) {}
-
-			@Override
-			public void componentResized(ComponentEvent event) {
-				resizeCanvasToFit(fitSize);
-			}
-
-			@Override
-			public void componentMoved(ComponentEvent arg0) {}
-
-			@Override
-			public void componentHidden(ComponentEvent arg0) {}
-		});
 
 		getCanvas().addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
@@ -173,10 +158,10 @@ public class CanvasControlsPanel extends JPanel {
 			}
 
 		});
+		panel.add(channelCombo);
 
 		final JLabel lblChannelCombo = new JLabel(getResourceMap().getString("Channels")+":");
 		panel.add(lblChannelCombo);
-		panel.add(channelCombo);
 
 		JLabel lblMipMap = new JLabel(getResourceMap().getString("MipMap")+":");
 		panel.add(lblMipMap);
@@ -187,7 +172,7 @@ public class CanvasControlsPanel extends JPanel {
 		JLabel lblZoom = new JLabel(getResourceMap().getString("Zoom")+":"); 
 		panel.add(lblZoom);
 
-		JCheckBox chkZoomFitSize = new JCheckBox(getResourceString("Zoom to fit"));
+		JCheckBox chkZoomFitSize = new JCheckBox(getResourceString("Zoom_to_fit"));
 		chkZoomFitSize.addChangeListener(new ChangeListener() {
 
 			@Override
@@ -305,9 +290,10 @@ public class CanvasControlsPanel extends JPanel {
 	}
 
 	public float calculateZoomfactorFitWidth() {
-		float factorWidth = (float) (scrollViewPane.getSize().getWidth() / getCanvas().getSource().getWidth());
-		float factorHeight = (float) (scrollViewPane.getSize().getHeight() / getCanvas().getSource().getHeight());
-
+		Insets insets = scrollViewPane.getBorder().getBorderInsets(canvas);
+		float factorWidth = (float) ( (scrollViewPane.getSize().getWidth()-insets.left-insets.right) / canvas.getSource().getWidth());
+		float factorHeight = (float) ( (scrollViewPane.getSize().getHeight()-insets.bottom-insets.top) / canvas.getSource().getHeight());
+		
 		return (factorWidth < factorHeight) ? factorWidth : factorHeight; 
 	}
 
@@ -361,15 +347,32 @@ public class CanvasControlsPanel extends JPanel {
 
 		canvas = new BICanvas(BIUtil.convertImageToBufferedImage(defaultImage.getImage(), 
 				BufferedImage.TYPE_4BYTE_ABGR));
+		
+		// JScrollPane
 		final JScrollPane scrollViewPane = new JScrollPane(canvas);
 		scrollViewPane.setPreferredSize(new Dimension(700,300));
+		scrollViewPane.addComponentListener(new ComponentListener() {
+			@Override
+			public void componentShown(ComponentEvent arg0) {}
+
+			@Override
+			public void componentResized(ComponentEvent event) {
+				resizeCanvasToFit(fitSize);
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent arg0) {}
+
+			@Override
+			public void componentHidden(ComponentEvent arg0) {}
+		});
+		
 		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane);
 		canvas.addMouseMotionListener(scrollCanvasListener);
 		//		canvas.addMouseWheelListener(scrollCanvasListener);
 		canvas.addKeyListener(scrollCanvasListener);
 		canvas.setFocusable(true);
 		canvas.requestFocus();
-
 		canvas.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -397,6 +400,9 @@ public class CanvasControlsPanel extends JPanel {
 			public void ancestorRemoved(final AncestorEvent arg0) {	}
 		});
 
+		
+
+		
 		return scrollViewPane;
 	}
 
