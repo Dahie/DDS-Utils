@@ -61,10 +61,10 @@ public class CanvasControlsPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -3204480115770320549L;
 	private BICanvas canvas;
-	private JComboBox zoomCombo;
+	private JComboBox<Integer> zoomCombo;
 	private JSlider zoomSlider;
 	private RaddsView view;
-	private JComboBox mipMapCombo;
+	private JComboBox<Integer> mipMapCombo;
 
 	/**
 	 * @param view
@@ -141,11 +141,11 @@ public class CanvasControlsPanel extends JPanel {
 		
 		panel.add(bgColorButton);
 		
-		final JComboBox channelCombo = new JComboBox(composeColorChannelModel());
+		final JComboBox<ColorChannel> channelCombo = new JComboBox<ColorChannel>(composeColorChannelModel());
 		channelCombo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				final JComboBox channelCombo = (JComboBox) event.getSource();
+				final JComboBox<ColorChannel> channelCombo = (JComboBox<ColorChannel>) event.getSource();
 				final ColorChannel channel = (ColorChannel) channelCombo.getSelectedItem();
 				canvas.setChannelMode(channel.getChannel());
 			}
@@ -157,17 +157,23 @@ public class CanvasControlsPanel extends JPanel {
 		panel.add(lblChannelCombo);
 		panel.add(channelCombo);
 		
-		initMipmapCombo(panel);
+		JLabel lblMipMap = new JLabel(getResourceMap().getString("MipMap")+":");
+		panel.add(lblMipMap);
+		
+		initMipmapCombo();
+		panel.add(mipMapCombo);
 
-		initZoomCombo();
-		initZoomSlider();
-		
 		//TODO fit to width/optimal
-		
 		JLabel lblZoom = new JLabel(getResourceMap().getString("Zoom")+":"); 
 		panel.add(lblZoom);
+		
+		initZoomCombo();
 		panel.add(zoomCombo);
+		
+		initZoomSlider();
 		panel.add(zoomSlider);
+		
+		
 
 		return panel;
 	}
@@ -206,14 +212,14 @@ public class CanvasControlsPanel extends JPanel {
 		});
 	}
 
-	private void initMipmapCombo(final JPanel panel) {
-		mipMapCombo = new JComboBox();
+	private void initMipmapCombo() {
+		mipMapCombo = new JComboBox<Integer>();
 		updateNumMipMaps();
 		mipMapCombo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				if(mipMapCombo.getItemCount() > 0) {
-					int index = (Integer) ((JComboBox)e.getSource()).getSelectedItem();
+					int index = (Integer) ((JComboBox<Integer>)e.getSource()).getSelectedItem();
 					TextureImage textureImage = view.getTextureImage();
 					if(index < textureImage.getNumMipMaps()) {
 						BufferedImage bi = textureImage.getMipMap(index-1);
@@ -223,7 +229,6 @@ public class CanvasControlsPanel extends JPanel {
 				}
 			}
 		});
-		panel.add(mipMapCombo);
 	}
 
 	private void initZoomCombo() {
