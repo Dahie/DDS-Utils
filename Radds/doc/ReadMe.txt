@@ -12,7 +12,7 @@ color channels.
 
 * SYSTEM REQUIREMENTS
 
-  - Java Runtime Environment 1.5+
+  - Java Runtime Environment 1.6+
 
 
 * CONTENTS
@@ -71,7 +71,7 @@ who's DDSImage-Class was a great starting point for this endeavor.
 Secondly big thanks to Patriarhou Kyrillou for creating a Java implementation 
 of the Squish DXT-compression library by Simon Brown.
 
-I also thank Marcel Offermann and Marvin Fröhlich, the latter from the 
+I also thank Marcel Offermann and Marvin Fr√∂hlich, the latter from the 
 Xith3d-Project, for answering my occasional questions.
 
 Furthermore I'd like to thank my hosts in South Tyrol, where I lived 
