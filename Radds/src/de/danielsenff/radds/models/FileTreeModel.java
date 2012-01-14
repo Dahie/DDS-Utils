@@ -5,10 +5,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,6 +32,9 @@ public class FileTreeModel implements TreeModel
 	private final FileNode _rootNode; 
 	private HashSet<FileFilter> fileFilters;
 	
+	/**
+	 * @param dir
+	 */
 	public FileTreeModel(final File dir) { 
 		_rootNode = new FileNode(dir);
 		fileFilters = new HashSet<FileFilter>();
@@ -55,6 +59,7 @@ public class FileTreeModel implements TreeModel
 		this.fileFilters.add(fileFilter);
 	}
 	
+	@Override
 	public Object getRoot() {
 		return _rootNode;
 	} 
@@ -63,18 +68,23 @@ public class FileTreeModel implements TreeModel
 		return FILE_SYSTEM_VIEW.getFiles(file, true);
 	} 
 	
-	private Vector<File> getSortedFiles(final File directory) {
+	private List<File> getSortedFiles(final File directory) {
 		File[] filesArray = getFiles(directory);
-		Vector<File> files = new Vector<File>();
+		List<File> files = new ArrayList<File>();
 		for (int i = 0; i < filesArray.length; i++) {
 			File file = filesArray[i];
 			if ( filterFile(file))
 				files.add(file);
 		}
-		Collections.sort(files);
+		Collections.sort(files); // just stupid javasorting
 		return files;
 	}
 
+	/** 
+	 * Returns true if supported file format.
+	 * @param file
+	 * @return
+	 */
 	private boolean filterFile(File file) {
 		for (FileFilter fileFilter : this.fileFilters) {
 			if (fileFilter.accept(file))
@@ -83,32 +93,37 @@ public class FileTreeModel implements TreeModel
 		return false;
 	}
 
+	@Override
 	public int getChildCount(final Object parent) {
 		final File file = ((FileNode) parent).getFile(); 
 		return file.isDirectory() ? getSortedFiles(file).size() : 0;
 	}
 
-
+	@Override
 	public boolean isLeaf(final Object node) {
 		final File file = ((FileNode) node).getFile();
 		return (file.isDirectory() == false || getSortedFiles(file).size() == 0 );
 	}
 
+	@Override
 	public Object getChild(final Object parent, final int index) {
 		final File file = ((FileNode) parent).getFile();
 		return file.isDirectory() ? new FileNode(getSortedFiles(file).get(index)) : null;
 	} 
-
+	@Override
 	public int getIndexOfChild(final Object parent, final Object child) {
 		final File dir = ((FileNode) parent).getFile(); 
 		final File file = ((FileNode) child).getFile(); 
 		return dir.isDirectory() ? Arrays.asList(getSortedFiles(dir)).indexOf(file) : -1;
 	}
-
+	
+	@Override
 	public void addTreeModelListener(final TreeModelListener l) {}
-
+	
+	@Override
 	public void removeTreeModelListener(final TreeModelListener l) {}
-
+	
+	@Override
 	public void valueForPathChanged(final TreePath path, final Object newValue) {}
 	
 	/**
@@ -134,6 +149,7 @@ public class FileTreeModel implements TreeModel
 		});
 		tree.addKeyListener(new KeyListener() {
 
+			@Override
 			public void keyPressed(final KeyEvent event) {
 				final TreePath selectionPath = tree.getSelectionPath();
 				if (	(event.isMetaDown() || event.isControlDown())
@@ -143,10 +159,11 @@ public class FileTreeModel implements TreeModel
 					tree.setSelectionPath(selectionPath);
 					tree.invalidate();
 				}
-				
 			}
-
+			
+			@Override
 			public void keyReleased(final KeyEvent e) {}
+			@Override
 			public void keyTyped(final KeyEvent e) {}
 			
 		}
