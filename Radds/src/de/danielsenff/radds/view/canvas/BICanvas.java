@@ -31,12 +31,28 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	 */
 	private static final long serialVersionUID = 1L;
 
-
+	/**
+	 * BufferedImage that is actually rendered. It is derived from the biSource.
+	 */
 	private BufferedImage biRendered;
+	/**
+	 * BufferedImage source from which displayed BufferedImage are derived.
+	 */
 	private BufferedImage biSource;
+	/**
+	 * Mode to display the image by channel.
+	 */
 	private ImageOperations.ChannelMode channelMode;
+	/** 
+	 * Zoom factor for display.
+	 */
 	private float zoomFactor = 1.0f;
 	
+	/**
+	 * Color displayed when showing transparency.
+	 */
+	private Color transparencyColor;
+		
 	/**
 	 * Displays a {@link BufferedImage} in RGB-Mode 
 	 * without multiplied Alpha-channel.
@@ -63,6 +79,7 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		this.biSource = image;
 		changeChannelBi(channel, biSource);
 		this.addMouseMotionListener(this);
+		this.transparencyColor = Color.CYAN;
 		
 		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.setPreferredSize(new Dimension(biRendered.getWidth(), biRendered.getHeight()));
@@ -168,9 +185,27 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	}
 
 	
+	/**
+	 * @return the transparencyColor
+	 */
+	public final Color getTransparencyColor() {
+		return this.transparencyColor;
+	}
+
+
+	/**
+	 * @param transparencyColor the transparencyColor to set
+	 */
+	public final void setTransparencyColor(Color transparencyColor) {
+		this.transparencyColor = transparencyColor;
+	}
+
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		drawBackground(g);
 
 		int width =  biRendered.getWidth(), height =  biRendered.getHeight();
 		int newW = (int) (zoomFactor * width); 
@@ -183,19 +218,23 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		offsetY=0;
 		
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, width, height);
+//		g.fillRect(0, 0, width, height);
 		//g.drawImage(this.displayBi, 0, 0, this);
 		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);   
         g.drawImage(biRendered, offsetX, offsetY, newW+offsetX, newH+offsetY, moveX, moveY, biRendered.getWidth(), biRendered.getHeight(), null);
   	
 	}
 
-
+	private void drawBackground(Graphics g) {
+		g.setColor(this.transparencyColor);
+		g.fillRect(0, 0, (int) (zoomFactor * biRendered.getWidth()), (int) (zoomFactor * biRendered.getHeight()));
+	}
 
 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getPreferredScrollableViewportSize()
 	 */
+	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		return null;
 	}
@@ -204,6 +243,7 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableBlockIncrement(java.awt.Rectangle, int, int)
 	 */
+	@Override
 	public int getScrollableBlockIncrement(Rectangle arg0, int arg1, int arg2) {
 		return 50;
 	}
@@ -212,6 +252,7 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableTracksViewportHeight()
 	 */
+	@Override
 	public boolean getScrollableTracksViewportHeight() {
 		return false;
 	}
@@ -220,6 +261,7 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableTracksViewportWidth()
 	 */
+	@Override
 	public boolean getScrollableTracksViewportWidth() {
 		return false;
 	}
@@ -235,13 +277,16 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableUnitIncrement(java.awt.Rectangle, int, int)
 	 */
+	@Override
 	public int getScrollableUnitIncrement(Rectangle arg0, int arg1, int arg2) {
 		return 15; // pixel
 	}
 
 
+	@Override
 	public void mouseDragged(MouseEvent e) {}
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		int x = (int) (e.getPoint().x/zoomFactor);
 		int y = (int) (e.getPoint().y/zoomFactor);
