@@ -39,6 +39,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import model.TextureImage;
+import net.miginfocom.swing.MigLayout;
 
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
@@ -117,10 +118,65 @@ public class CanvasControlsPanel extends JPanel {
 	 * @return
 	 */
 	private JPanel initNavigationPanel() {
+		
+		// Action buttons
+		
+		MigLayout miglayout = new MigLayout("nogrid, fillx, wrap, gap 0, ins 0");
 		final JPanel panel = new JPanel();
+		panel.setLayout(miglayout);
 		final JButton copyButton = new JButton(view.getAction("copy"));
-		panel.add(copyButton);
+		panel.add(copyButton, "sg");
 
+		final JButton bgColorButton = initTransparencyColorButton();
+		panel.add(bgColorButton, "sg");
+
+		// Color Channel
+		
+		final JLabel lblChannelCombo = new JLabel(getResourceMap().getString("Channels")+":");
+		panel.add(lblChannelCombo, "gap push");
+		final JComboBox<ColorChannel> channelCombo = initColorChannelCombo();
+		panel.add(channelCombo, "sg");
+
+		// MipMaps
+		
+		JLabel lblMipMap = new JLabel(getResourceMap().getString("MipMap")+":");
+		panel.add(lblMipMap, "gap push");
+
+		initMipmapCombo();
+		panel.add(mipMapCombo, "sg, wrap");
+
+		// ZO_om
+		
+		JLabel lblZoom = new JLabel(getResourceMap().getString("Zoom")+":"); 
+		panel.add(lblZoom, "");
+
+		initZoomCombo();
+		panel.add(zoomCombo, "");
+
+		initZoomSlider();
+		panel.add(zoomSlider, "");
+		
+		JCheckBox chkZoomFitSize = initFitZoomCheckbox();
+		panel.add(chkZoomFitSize, "");
+
+		return panel;
+	}
+
+	private JCheckBox initFitZoomCheckbox() {
+		JCheckBox chkZoomFitSize = new JCheckBox(getResourceString("Zoom_to_fit"));
+		chkZoomFitSize.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				fitSize = ((JCheckBox)e.getSource()).isSelected();
+				resizeCanvasToFit(fitSize);
+			}
+
+		});
+		return chkZoomFitSize;
+	}
+
+	private JButton initTransparencyColorButton() {
 		final JButton bgColorButton = new JButton(getResourceString("Background"));
 		bgColorButton.setToolTipText(getResourceString("set_background_color"));
 		bgColorButton.setIcon(initColorImageIcon(canvas.getTransparencyColor()));
@@ -145,9 +201,10 @@ public class CanvasControlsPanel extends JPanel {
 				}
 			}
 		});
+		return bgColorButton;
+	}
 
-		panel.add(bgColorButton);
-
+	private JComboBox<ColorChannel> initColorChannelCombo() {
 		final JComboBox<ColorChannel> channelCombo = new JComboBox<ColorChannel>(composeColorChannelModel());
 		channelCombo.addActionListener(new ActionListener() {
 			@Override
@@ -158,39 +215,7 @@ public class CanvasControlsPanel extends JPanel {
 			}
 
 		});
-		panel.add(channelCombo);
-
-		final JLabel lblChannelCombo = new JLabel(getResourceMap().getString("Channels")+":");
-		panel.add(lblChannelCombo);
-
-		JLabel lblMipMap = new JLabel(getResourceMap().getString("MipMap")+":");
-		panel.add(lblMipMap);
-
-		initMipmapCombo();
-		panel.add(mipMapCombo);
-
-		JLabel lblZoom = new JLabel(getResourceMap().getString("Zoom")+":"); 
-		panel.add(lblZoom);
-
-		JCheckBox chkZoomFitSize = new JCheckBox(getResourceString("Zoom_to_fit"));
-		chkZoomFitSize.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				fitSize = ((JCheckBox)e.getSource()).isSelected();
-				resizeCanvasToFit(fitSize);
-			}
-
-		});
-		panel.add(chkZoomFitSize);
-
-		initZoomCombo();
-		panel.add(zoomCombo);
-
-		initZoomSlider();
-		panel.add(zoomSlider);
-
-		return panel;
+		return channelCombo;
 	}
 
 
@@ -217,6 +242,7 @@ public class CanvasControlsPanel extends JPanel {
 		zoomSlider.setMinorTickSpacing(25);
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setPaintLabels(true);
+		zoomSlider.setPreferredSize(new Dimension(250, 14));
 		zoomSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(final ChangeEvent e) {
