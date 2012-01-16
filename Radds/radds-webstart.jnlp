@@ -1,0 +1,24 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://download.ctdp.net/tools/" href="radds-webstart.jnlp">
+    <information>
+        <title>Radds</title>
+        <vendor>Daniel Senff (CTDP)</vendor>
+    </information>
+    <resources>
+        <!-- Application Resources -->
+        <j2se version="1.6+"
+              href="http://java.sun.com/products/autodl/j2se"/>
+        <jar href="http://download.ctdp.net/tools/Radds.jar" main="true" />
+    </resources>
+    <security>
+       <all-permissions/>
+    </security>    
+    <application-desc
+         name="Radds - Review a DDS"
+         main-class="de.danielsenff.radds.Radds"
+         width="400"
+         height="500">
+     </application-desc>
+     <update check="background"/>
+</jnlp>
