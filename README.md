@@ -9,7 +9,7 @@ DDS-Utils are a selection of tools to work with DirectDrawSurfaces textures in J
 - Dropps - Simple DDS-image-converter
 - DDSUtil - Wannabe-library for DDS-conversion
 
-Each subproject has it's own project folder in the repository. 
+Each subproject has its own project folder in the repository. 
 I use eclipse to check each one out. The Tools require the DDSUtils-project in their buildpath.
 
 ## History
@@ -27,7 +27,7 @@ Please see the [wiki][wiki]
 DDS-Utils are written by [Daniel Senff][dahie]
 
 ## License
-Released under a [Gnu General Public License v3][license].
+Released under a [GNU General Public License v3][license].
 
 [dahie]: http://github.com/Dahie
 [imagej]: http://rsb.info.nih.gov/ij/

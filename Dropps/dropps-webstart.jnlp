@@ -1,0 +1,25 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://download.ctdp.net/tools/" href="dropps-webstart.jnlp">
+    <information>
+        <title>Dropps</title>
+        <vendor>Daniel Senff (CTDP)</vendor>
+    </information>
+    <resources>
+        <!-- Application Resources -->
+        <j2se version="1.6+"
+              href="http://java.sun.com/products/autodl/j2se"/>
+        <jar href="http://download.ctdp.net/tools/Dropps.jar" main="true" />
+
+    </resources>
+    <security>
+       <all-permissions/>
+    </security>    
+    <application-desc
+         name="Dropps - Drop a DDS"
+         main-class="de.danielsenff.dropps.Dropps"
+         width="300"
+         height="300">
+     </application-desc>
+     <update check="background"/>
+</jnlp>

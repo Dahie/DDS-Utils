@@ -83,6 +83,6 @@ this app and for their feedback during development.
 
 * CONTACT DETAILS
 
-The Dropps application has been developed by Daniel Senff.
+The Radds application has been developed by Daniel Senff.
 Please visit http://www.danielsenff.de for details on how to contact me.
 
