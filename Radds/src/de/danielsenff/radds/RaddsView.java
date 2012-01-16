@@ -9,6 +9,7 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ActionMap;
 import javax.swing.JFileChooser;
@@ -97,6 +98,12 @@ public class RaddsView extends FrameView {
 		final JMenu menuEdit = new JMenu(resourceMap.getString("edit.menu"));
 		menuEdit.add(getAction("copy"));
 		menuBar.add(menuEdit);
+		
+		JMenu menuHelp = new JMenu(getResourceString("help.menu"));
+		menuHelp.add(getAction("openAuthorURL"));
+		menuHelp.add(getAction("openWebsiteURL"));
+		menuHelp.add(getAction("openBugTrackerURL"));
+		menuBar.add(menuHelp);
 		
 		setMenuBar(menuBar);
 	}
@@ -308,4 +315,28 @@ public class RaddsView extends FrameView {
 		}
 		return task;		
 	}
+	
+	/**
+     * Opens the URL to the BugTracker.
+     */
+    @Action 
+    public void openBugTrackerURL() {
+		OS.openURLinDefaultBrowser(getResourceString("help.menu.bugtracker_url"));
+    }
+    
+    /**
+     * Opens the URL to the BugTracker.
+     */
+    @Action 
+    public void openAuthorURL() {
+		OS.openURLinDefaultBrowser(getResourceString("help.menu.author_url"));
+    }
+    
+    /**
+     * Opens the URL to the BugTracker.
+     */
+    @Action 
+    public void openWebsiteURL() {
+		OS.openURLinDefaultBrowser(getResourceString("help.menu.website_url"));
+    }
 }
