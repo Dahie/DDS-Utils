@@ -10,12 +10,12 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -25,8 +25,8 @@ import java.util.Hashtable;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -286,7 +286,7 @@ public class CanvasControlsPanel extends JPanel {
 				canvas.repaint();
 			}
 		});
-		zoomCombo.addKeyListener(new KeyListener() {
+		zoomCombo.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -295,10 +295,6 @@ public class CanvasControlsPanel extends JPanel {
 					canvas.repaint();
 				}
 			}
-			@Override
-			public void keyReleased(KeyEvent e) {}
-			@Override
-			public void keyTyped(KeyEvent e) {}
 		});
 	}
 
@@ -376,20 +372,12 @@ public class CanvasControlsPanel extends JPanel {
 		// JScrollPane
 		final JScrollPane scrollViewPane = new JScrollPane(canvas);
 		scrollViewPane.setPreferredSize(new Dimension(700,300));
-		scrollViewPane.addComponentListener(new ComponentListener() {
-			@Override
-			public void componentShown(ComponentEvent arg0) {}
-
+		scrollViewPane.addComponentListener(new ComponentAdapter() {
+		
 			@Override
 			public void componentResized(ComponentEvent event) {
 				resizeCanvasToFit(fitSize);
 			}
-
-			@Override
-			public void componentMoved(ComponentEvent arg0) {}
-
-			@Override
-			public void componentHidden(ComponentEvent arg0) {}
 		});
 		
 		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane);
@@ -398,19 +386,11 @@ public class CanvasControlsPanel extends JPanel {
 		canvas.addKeyListener(scrollCanvasListener);
 		canvas.setFocusable(true);
 		canvas.requestFocus();
-		canvas.addMouseListener(new MouseListener() {
+		canvas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				canvas.requestFocus();
 			}
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-			@Override
-			public void mousePressed(MouseEvent arg0) {}
-			@Override
-			public void mouseReleased(MouseEvent arg0) {}
 		});
 
 		canvas.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));

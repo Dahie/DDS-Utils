@@ -127,6 +127,7 @@ public class SettingsPanel extends JPanel implements PropertyChangeListener {
 				"it'll make the pixel either white or black with value 128 as threshold. In most cases if you want \n" +
 				"a DXT1 file, you want a clean white alpha. This function paints the alpha channel white.");
 		chkWhiteAlpha.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				final boolean selected = ((JCheckBox)arg0.getSource()).isSelected();
 				exportOptions.setPaintWhiteAlpha(selected);
@@ -139,6 +140,7 @@ public class SettingsPanel extends JPanel implements PropertyChangeListener {
 		final JCheckBox chkKeepOriginal = new JCheckBox(resourceMap.getString("keep_old_files"));
 		chkKeepOriginal.setSelected(true);
 		chkKeepOriginal.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 //				controller.getExportOptions().setKeepOriginal(((JCheckBox)arg0.getSource()).isSelected());
 			}
@@ -148,6 +150,7 @@ public class SettingsPanel extends JPanel implements PropertyChangeListener {
 		final JCheckBox chkBackup = new JCheckBox(resourceMap.getString("backup_old_files"));
 		chkBackup.setSelected(true);
 		chkBackup.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				boolean selected = ((JCheckBox)arg0.getSource()).isSelected();
 //				controller.getExportOptions().setMakeBackup(selected);
@@ -200,6 +203,7 @@ public class SettingsPanel extends JPanel implements PropertyChangeListener {
 		
 		chkMipMaps = new JCheckBox(resourceMap.getString("Generate_MipMaps_(recommended)"));
 		chkMipMaps.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				boolean selected = ((JCheckBox)arg0.getSource()).isSelected();
 				exportOptions.setGenerateMipMaps(selected);
@@ -241,6 +245,7 @@ public class SettingsPanel extends JPanel implements PropertyChangeListener {
 		/* (non-Javadoc)
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 		 */
+		@Override
 		public void actionPerformed(final ActionEvent e) {
 			final JComboBox combo = (JComboBox) e.getSource();
 			final ComboBoxModel model = combo.getModel();

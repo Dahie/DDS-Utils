@@ -84,6 +84,7 @@ public class DroppsView extends FrameView {
         
 		final int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
+        	@Override
             public void actionPerformed(final ActionEvent e) {
 //                statusMessageLabel.setText("");
             }
@@ -94,6 +95,7 @@ public class DroppsView extends FrameView {
             busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
         }
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+        	@Override
             public void actionPerformed(final ActionEvent e) {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
                 statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
@@ -106,6 +108,7 @@ public class DroppsView extends FrameView {
         // connect action tasks to status bar via TaskMonitor
         final TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        	@Override
             public void propertyChange(final java.beans.PropertyChangeEvent evt) {
                 final String propertyName = evt.getPropertyName();
                 System.out.println("PropertyName: "+propertyName);
@@ -214,6 +217,7 @@ public class DroppsView extends FrameView {
         
         new FileDrop( null, dropPanel, /*dragBorder,*/ new FileDrop.Listener()
         {   
+        	@Override
 			public void filesDropped( final java.io.File[] files )
             {   
 				

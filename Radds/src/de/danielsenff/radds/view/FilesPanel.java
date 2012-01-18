@@ -7,6 +7,7 @@ package de.danielsenff.radds.view;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -54,7 +55,7 @@ public class FilesPanel extends JPanel {
 		// FileViewTree
 		final FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 		FileTreeModel fileTreeModel = new FileTreeModel(fileSystemView.getHomeDirectory(), new FileFilter() {
-
+			@Override
 			public boolean accept(File file) {
 				String[] extensions = {"dds", "tga", "tex"};
 				if (!file.isHidden() && !file.isDirectory())
@@ -83,8 +84,8 @@ public class FilesPanel extends JPanel {
 				return label;
 			}
 		});
-		fileTree.addKeyListener(new KeyListener() {
-
+		fileTree.addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent event) {
 				TreePath selectionPath = fileTree.getSelectionPath();
 				if (	(event.isMetaDown() || event.isControlDown())
@@ -97,9 +98,6 @@ public class FilesPanel extends JPanel {
 					fileTree.invalidate();
 				}
 			}
-
-			public void keyReleased(KeyEvent e) {}
-			public void keyTyped(KeyEvent e) {}
 		});
 
 		final JScrollPane treeScroller = new JScrollPane(fileTree);
@@ -107,7 +105,7 @@ public class FilesPanel extends JPanel {
 
 		// information
 		/* TODO new action
-		JButton gotoButton = new JButton("Go toÉ");
+		JButton gotoButton = new JButton("Go toï¿½");
 		 
 		gotoButton.addActionListener(new ActionListener() {
 
@@ -144,15 +142,19 @@ public class FilesPanel extends JPanel {
 
 	class LoadListener implements KeyListener, MouseListener {
 
+		@Override
 		public void keyPressed(final KeyEvent event) {
 			if(event.getKeyCode() == KeyEvent.VK_ENTER) {
 				processEvent(event);
 			}
 		}
 
+		@Override
 		public void keyReleased(final KeyEvent e) {}
+		@Override
 		public void keyTyped(final KeyEvent e) {}
 
+		@Override
 		public void mouseClicked(final MouseEvent click) {
 			if(click.getClickCount() == 2) {
 				processEvent(click);
@@ -167,9 +169,13 @@ public class FilesPanel extends JPanel {
 				openImage(file);
 		}
 		
+		@Override
 		public void mouseEntered(final MouseEvent arg0) {}
+		@Override
 		public void mouseExited(final MouseEvent arg0) {}
+		@Override
 		public void mousePressed(final MouseEvent arg0) {}
+		@Override
 		public void mouseReleased(final MouseEvent arg0) {}
 	}
 }
