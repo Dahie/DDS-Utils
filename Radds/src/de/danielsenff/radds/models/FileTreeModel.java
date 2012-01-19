@@ -1,14 +1,13 @@
 package de.danielsenff.radds.models;
 
 import java.awt.Component;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -29,15 +28,20 @@ import javax.swing.tree.TreePath;
 public class FileTreeModel implements TreeModel
 {
 	private static final FileSystemView FILE_SYSTEM_VIEW = FileSystemView.getFileSystemView();
-	private final FileNode _rootNode; 
-	private HashSet<FileFilter> fileFilters;
+	private FileNode _rootNode; 
+	private FileFilter fileFilter;
 	
 	/**
 	 * @param dir
 	 */
 	public FileTreeModel(final File dir) { 
-		_rootNode = new FileNode(dir);
-		fileFilters = new HashSet<FileFilter>();
+		this(dir, new FileFilter() {
+			
+			@Override
+			public boolean accept(File pathname) {
+				return true;
+			}
+		});
 	} 
 
 	/**
@@ -47,16 +51,8 @@ public class FileTreeModel implements TreeModel
 	 * @param fileFilter
 	 */
 	public FileTreeModel(final File dir, final FileFilter fileFilter) {
-		this(dir);
-		fileFilters.add(fileFilter);
-	}
-	
-	/**
-	 * Add a {@link FileFilter} for this file tree.
-	 * @param fileFilter
-	 */
-	public void addFileFilter(final FileFilter fileFilter) {
-		this.fileFilters.add(fileFilter);
+		this.fileFilter = fileFilter;
+		_rootNode = new FileNode(dir, fileFilter);
 	}
 	
 	@Override
@@ -64,57 +60,37 @@ public class FileTreeModel implements TreeModel
 		return _rootNode;
 	} 
 
-	private static File[] getFiles(final File file) {
-		return FILE_SYSTEM_VIEW.getFiles(file, true);
+	private List<File> getFiles(final File directory) {
+		return Arrays.asList(directory.listFiles(fileFilter));
 	} 
 	
 	private List<File> getSortedFiles(final File directory) {
-		File[] filesArray = getFiles(directory);
-		List<File> files = new ArrayList<File>();
-		for (int i = 0; i < filesArray.length; i++) {
-			File file = filesArray[i];
-			if ( filterFile(file))
-				files.add(file);
-		}
+		List<File> files = getFiles(directory);
 		Collections.sort(files); // just stupid javasorting
 		return files;
 	}
 
-	/** 
-	 * Returns true if supported file format.
-	 * @param file
-	 * @return
-	 */
-	private boolean filterFile(File file) {
-		for (FileFilter fileFilter : this.fileFilters) {
-			if (fileFilter.accept(file))
-				return true;
-		}
-		return false;
-	}
-
 	@Override
 	public int getChildCount(final Object parent) {
-		final File file = ((FileNode) parent).getFile(); 
-		return file.isDirectory() ? getSortedFiles(file).size() : 0;
+		return ((FileNode) parent).getChildrenCount();
 	}
 
 	@Override
 	public boolean isLeaf(final Object node) {
-		final File file = ((FileNode) node).getFile();
-		return (file.isDirectory() == false || getSortedFiles(file).size() == 0 );
+		return !((FileNode) node).isDirectory();
 	}
 
 	@Override
 	public Object getChild(final Object parent, final int index) {
-		final File file = ((FileNode) parent).getFile();
-		return file.isDirectory() ? new FileNode(getSortedFiles(file).get(index)) : null;
+		final FileNode node = ((FileNode) parent);
+//		List<File> sortedFiles = getSortedFiles(file);
+		return node.isDirectory() ? new FileNode(node.getChild(index), fileFilter) : null;
 	} 
 	@Override
 	public int getIndexOfChild(final Object parent, final Object child) {
-		final File dir = ((FileNode) parent).getFile(); 
-		final File file = ((FileNode) child).getFile(); 
-		return dir.isDirectory() ? Arrays.asList(getSortedFiles(dir)).indexOf(file) : -1;
+		 final File file = ((FileNode) child).getFile(); 
+		final FileNode node = (FileNode) parent;
+		return node.getIndexOfChild(file);
 	}
 	
 	@Override
@@ -147,7 +123,7 @@ public class FileTreeModel implements TreeModel
 			}
 			
 		});
-		tree.addKeyListener(new KeyListener() {
+		tree.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyPressed(final KeyEvent event) {
@@ -160,14 +136,7 @@ public class FileTreeModel implements TreeModel
 					tree.invalidate();
 				}
 			}
-			
-			@Override
-			public void keyReleased(final KeyEvent e) {}
-			@Override
-			public void keyTyped(final KeyEvent e) {}
-			
-		}
-		);
+		});
 		
 		final JFrame frame = new JFrame("FileBrowser"); 
 		frame.getContentPane().add(new JScrollPane(tree)); 

@@ -1,15 +1,39 @@
 package de.danielsenff.radds.models;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+/**
+ * 
+ * @author danielsenff
+ *
+ */
 public class FileNode { 
 	private static final NumberFormat FORMATTER = new DecimalFormat("#,##0"); 
 	private final File file; 
+	private boolean isDirectory = false;
+	private int childrenCount = 0;
+	private List<File> children;
 
-	public FileNode(File file) {
+	/**
+	 * 
+	 * @param file
+	 * @param filter
+	 */
+	public FileNode(final File file, final FileFilter filter) {
 		this.file = file;
+		this.isDirectory = file.isDirectory();
+		if(isDirectory) {
+			this.children = Arrays.asList(file.listFiles(filter));
+		} else {
+			this.children = new ArrayList<File>();
+		}
+		this.childrenCount = children.size();
 	}
 	
 	public File getFile() {
@@ -39,5 +63,34 @@ public class FileNode {
 			name += " [" + FORMATTER.format(this.file.length()) + " bytes]"; 
 		}
 		return name;
+	}
+
+	/**
+	 * Returns the number of children ie files if this is a directory.
+	 * For regular files this is always 0.
+	 * @return
+	 */
+	public int getChildrenCount() {
+		return this.childrenCount;
+	}
+
+	/**
+	 * If it is a directory, it is a node. Otherwise if it is no directory, it is a leaf.
+	 * @return
+	 */
+	public boolean isDirectory() {
+		return this.isDirectory;
+	}
+
+	public List<File> getChildren() {
+		return this.children;
+	}
+
+	public File getChild(int index) {
+		return this.children.get(index);
+	}
+
+	public int getIndexOfChild(File file) {
+		return isDirectory ? this.children.indexOf(file) : -1;
 	}
 }

@@ -21,7 +21,7 @@ import model.DDSFile;
 public class FilesListModel extends DefaultListModel {
 
 	private ListSelectionModel selectionModel;
-	
+
 	/**
 	 * 
 	 */
@@ -29,7 +29,7 @@ public class FilesListModel extends DefaultListModel {
 		this.selectionModel = new DefaultListSelectionModel();
 		this.selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
-	
+
 	/**
 	 * @param item
 	 */
@@ -47,14 +47,14 @@ public class FilesListModel extends DefaultListModel {
 		this.selectionModel = selectionModel;
 	}
 
-	
+
 	/**
 	 * @return
 	 */
 	public int getSelectedIndex() {
 		return this.selectionModel.getAnchorSelectionIndex();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see main.Controller#addFile(main.BufferedDDSImage)
 	 */
@@ -67,24 +67,22 @@ public class FilesListModel extends DefaultListModel {
 			if(!this.contains(ddsfile)) {
 
 				if (ddsfile.getTextureType() == DDSFile.TextureType.CUBEMAP ||
-					ddsfile.getTextureType() == DDSFile.TextureType.VOLUME) {
+						ddsfile.getTextureType() == DDSFile.TextureType.VOLUME) {
 					JOptionPane.showMessageDialog(null, 
 							"<html>Error: This programm doesn't support cubemaps or volume textures." +
-							"<br>"+ddsfile.getFile().getName()+" can not be loaded.</html>",	"Error", 
-							JOptionPane.INFORMATION_MESSAGE);
+									"<br>"+ddsfile.getFile().getName()+" can not be loaded.</html>",	"Error", 
+									JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} 
-
-
 				this.add(ddsfile);
 
-		} else {
-			// file already in list
-			JOptionPane.showMessageDialog(null, 
-					"<html>The file is already added.</html>",	"Information", 
-					JOptionPane.INFORMATION_MESSAGE);
-		}		
-		
+			} else {
+				// file already in list
+				JOptionPane.showMessageDialog(null, 
+						"<html>The file is already added.</html>",	"Information", 
+						JOptionPane.INFORMATION_MESSAGE);
+			}		
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, 
@@ -92,9 +90,9 @@ public class FilesListModel extends DefaultListModel {
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
 
-	
+
+
 	/**
 	 * @param files
 	 */
@@ -103,7 +101,7 @@ public class FilesListModel extends DefaultListModel {
 			addFile(files[i]);
 		}
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -119,7 +117,7 @@ public class FilesListModel extends DefaultListModel {
 	public Object removeSelectedItem() {
 		int selectedIndex = this.getSelectedIndex();
 		Object object = this.remove(selectedIndex);
-		
+
 		if (selectedIndex-1 >= 0)  
 			this.setSelectionIndex(selectedIndex-1);
 		else 
@@ -135,7 +133,6 @@ public class FilesListModel extends DefaultListModel {
 		if (this.getSize() <= i && i >= 0) {
 			selectionModel.addSelectionInterval(i, i);
 		}
-		
 	}
 
 	/**
@@ -144,5 +141,5 @@ public class FilesListModel extends DefaultListModel {
 	public boolean isSelectionEmpty() {
 		return this.selectionModel.isSelectionEmpty();
 	}
-	
+
 }

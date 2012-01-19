@@ -60,7 +60,7 @@ public class FilesPanel extends JPanel {
 				String[] extensions = {"dds", "tga", "tex"};
 				if (!file.isHidden() && !file.isDirectory())
 					return FileUtil.isExtension(file, extensions);
-				else if (file.isDirectory()) 
+				else if (!file.isHidden() && file.isDirectory()) 
 					return true;
 				else 
 					return false;
