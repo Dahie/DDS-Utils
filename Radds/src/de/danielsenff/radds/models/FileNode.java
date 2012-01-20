@@ -18,7 +18,7 @@ public class FileNode {
 	private final File file; 
 	private boolean isDirectory = false;
 	private int childrenCount = 0;
-	private List<File> children;
+	private final List<File> children;
 
 	/**
 	 * 
@@ -92,5 +92,9 @@ public class FileNode {
 
 	public int getIndexOfChild(File file) {
 		return isDirectory ? this.children.indexOf(file) : -1;
+	}
+
+	public boolean hasChildren() {
+		return this.childrenCount > 0;
 	}
 }

@@ -77,7 +77,7 @@ public class FileTreeModel implements TreeModel
 
 	@Override
 	public boolean isLeaf(final Object node) {
-		return !((FileNode) node).isDirectory();
+		return !((FileNode) node).isDirectory() || !((FileNode) node).hasChildren();
 	}
 
 	@Override
