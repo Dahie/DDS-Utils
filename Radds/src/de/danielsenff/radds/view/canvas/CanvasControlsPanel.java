@@ -392,6 +392,14 @@ public class CanvasControlsPanel extends JPanel {
 				canvas.requestFocus();
 			}
 		});
+		canvas.addRenderedChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				resizeCanvasToFit(fitSize);
+			}
+		});
+		
 
 		canvas.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 		canvas.addAncestorListener(new AncestorListener() {

@@ -27,10 +27,14 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 import java.awt.image.Raster;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import ddsutil.BIUtil;
 import ddsutil.ImageOperations;
@@ -175,6 +179,7 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		this.getParent().setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
 		changeChannelBi(channelMode, biSource);
 		invalidate();
+		notifyAllRenderedChangeListeners();
 	}
 		
 	/**
@@ -329,5 +334,20 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 				+ data.getSample((int)x, (int)y, 2) + ")";	
 		}
 		this.setToolTipText(tooltip);
+	}
+
+	/** 
+	 * Listeners that get notified if the displayed image changes.
+	 */
+	Set<ChangeListener> renderChangeListeners = new HashSet<ChangeListener>();
+
+	public void addRenderedChangeListener(ChangeListener changeListener) {
+		renderChangeListeners.add(changeListener);
+	}
+	
+	public void notifyAllRenderedChangeListeners() {
+		for(ChangeListener listener : renderChangeListeners) {
+			listener.stateChanged(new ChangeEvent(this));
+		}
 	}
 }
