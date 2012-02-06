@@ -13,11 +13,13 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Vector;
 
+import javax.activation.UnsupportedDataTypeException;
+
 import jogl.DDSImage;
 
 import compression.DXTBufferDecompressor;
 
-import ddsutil.DDSUtil;
+import ddsutil.PixelFormats;
 
 
 /**
@@ -112,11 +114,14 @@ public class DDSFile extends AbstractTextureImage{
 	/**
 	 * Load the ImageData for the specified MipMap.
 	 * @param mipmap
+	 * @throws UnsupportedDataTypeException 
 	 */
-	public void loadImageData(int mipmap) {
+	public void loadImageData(int mipmap) throws UnsupportedDataTypeException {
 		if(mipmap <= this.numMipMaps ) {
+			
+			// TODO FIXME fails for uncompressed data
 			CompressionType compressionType = 
-				DDSUtil.getSquishCompressionFormat(ddsimage.getPixelFormat());
+				PixelFormats.getSquishCompressionFormat(ddsimage.getPixelFormat());
 			ByteBuffer data = ddsimage.getMipMap(mipmap).getData();
 			int width = MipMaps.getMipMapSizeAtIndex(mipmap, ddsimage.getWidth());
 			int height = MipMaps.getMipMapSizeAtIndex(mipmap, ddsimage.getHeight());;
@@ -129,7 +134,8 @@ public class DDSFile extends AbstractTextureImage{
 		}
 	}
 	
-	public void loadImageData() {
+	@Override
+	public void loadImageData() throws UnsupportedDataTypeException {
 		for (int i = 0; i < this.numMipMaps; i++) {
 			loadImageData(i);
 		}
@@ -137,7 +143,7 @@ public class DDSFile extends AbstractTextureImage{
 	
 	@Override
 	public String toString() {
-		return this.file.getAbsolutePath() + verbosePixelformat(this.pixelformat);
+		return this.file.getAbsolutePath() + PixelFormats.verbosePixelformat(this.pixelformat);
 	}
 	
 	@Override

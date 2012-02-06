@@ -20,9 +20,7 @@ import ddsutil.ByteBufferedImage;
  */
 public class DXTBufferDecompressor {
 
-//	protected ByteBuffer compressedBuffer;
 	protected ByteBuffer uncompressedBuffer;
-	//protected int pixelformat;
 	protected CompressionType compressionType;
 	protected Dimension dimension;
 	
@@ -53,7 +51,7 @@ public class DXTBufferDecompressor {
 	/**
 	 * @param compressedBuffer
 	 * @param dimension
-	 * @param pixelformat
+	 * @param type 
 	 */
 	public DXTBufferDecompressor(final ByteBuffer compressedBuffer, 
 			final Dimension dimension, CompressionType type) {

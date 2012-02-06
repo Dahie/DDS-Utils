@@ -106,6 +106,10 @@ public class ImageOperations {
 		return 0x00000000 + ((a & 0xff) << 24) + ((r & 0xff) << 16) + ((g & 0xff) << 8) + ( b & 0xff);
 	}
 	
+	/**
+	 * @param color
+	 * @return
+	 */
 	public static int writePixelARGB(final int[] color) {
 		return writePixelARGB(color[0], color[1], color[2], color[3]);
 	}
@@ -142,7 +146,7 @@ public class ImageOperations {
 	 * Paint a specific RGB-color channel in a color
 	 * Channel RGBA (0,1,2,3)
 	 * This is for {@link ByteBuffer}
-	 * @param bytebbuffer
+	 * @param bytebuffer 
 	 * @param width
 	 * @param height
 	 * @param channel
@@ -165,6 +169,8 @@ public class ImageOperations {
 	 * Paint Channel in a specified value (0-255)
 	 * Channel RGBA (0,1,2,3)
 	 * @param rgba
+	 * @param width 
+	 * @param height 
 	 * @param channel to paint in
 	 * @param color
 	 * @return
@@ -184,7 +190,7 @@ public class ImageOperations {
 	
 
 	/**
-	 * Convertion between float color value to a int value 
+	 * Conversion between float color value to an integer value 
 	 * @param value color
 	 * @return
 	 */
@@ -193,7 +199,7 @@ public class ImageOperations {
 	}
 	
 	/**
-	 * Conversion between float color value to a int value 
+	 * Conversion between double color value to a integer value 
 	 * @param value color
 	 * @return
 	 */
@@ -203,13 +209,13 @@ public class ImageOperations {
 	
 	/**
 	 * Checks a color array if all values are within the possible range of values.
-	 * If the limits are exceed this limits, the value is set to equal the limit. 
+	 * If the limits are exceeded, the value is set to equal the limit. 
 	 * @param color
 	 * @param lowerLimit Upper limit of values
 	 * @param upperLimit Lower limit of values
 	 * @return
 	 */
-	public static int [] limitBoundaries(int[] color, final int lowerLimit, final int upperLimit) {
+	public static int [] limitColorBoundaries(int[] color, final int lowerLimit, final int upperLimit) {
 		for (int i = 0; i < color.length; i++) {
 			color[i] = checkValueLimits(color[i], lowerLimit, upperLimit);
 		}

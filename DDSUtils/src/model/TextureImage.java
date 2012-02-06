@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Vector;
+import java.util.List;
+
+import javax.activation.UnsupportedDataTypeException;
 
 public interface TextureImage {
 
@@ -38,7 +40,8 @@ public interface TextureImage {
 	 */
 	public enum PixelFormat {
 		DXT5, DXT4, DXT3, DXT2, DXT1,
-		A8R8G8B8, X8R8G8B8, R8G8B8, Unknown
+		A8R8G8B8, X8R8G8B8, R8G8B8, 
+		A1R5G5B5, R5G6B5, Unknown
 	}
 	
 	/**
@@ -165,8 +168,9 @@ public interface TextureImage {
 	
 	/**
 	 * Load the data from file into memory.
+	 * @throws UnsupportedDataTypeException 
 	 */
-	public void loadImageData();
+	public void loadImageData() throws UnsupportedDataTypeException;
 	
 	/**
 	 * Returns the stored MipMaps as a {@link BufferedImage}-Array
@@ -178,7 +182,7 @@ public interface TextureImage {
 	 * returns the stored MipMaps as {@link ByteBuffer}-Array
 	 * @return
 	 */
-	public Vector<BufferedImage> generateAllMipMaps();
+	public List<BufferedImage> generateAllMipMaps();
 	
 	/**
 	 * Sets a new {@link BufferedImage} as the Topmost MipMap and generates new MipMaps accordingly.

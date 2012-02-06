@@ -32,7 +32,11 @@ public class ImageUtils {
 
 
 
-	static public String imageTypeName(BufferedImage img) {
+	/**
+	 * @param img
+	 * @return
+	 */
+	static public String imageTypeName(final BufferedImage img) {
 		switch (img.getType()) {
 		case BufferedImage.TYPE_3BYTE_BGR: return "TYPE_3BYTE_BGR";
 		case BufferedImage.TYPE_4BYTE_ABGR: return "TYPE_4BYTE_ABGR";
@@ -53,7 +57,11 @@ public class ImageUtils {
 	}
 
 
-	static public int nrChannels(BufferedImage img) {
+	/**
+	 * @param img
+	 * @return
+	 */
+	static public int nrChannels(final BufferedImage img) {
 		switch (img.getType()) {
 		case BufferedImage.TYPE_3BYTE_BGR: return 3;
 		case BufferedImage.TYPE_4BYTE_ABGR: return 4;
@@ -87,7 +95,8 @@ public class ImageUtils {
 	 * @param temp must be either null or a array with length of w*h
 	 * @return
 	 */
-	public static byte[] getPixelsBGR(BufferedImage img, int y, int w, byte[] array, int[] temp) {
+	public static byte[] getPixelsBGR(final BufferedImage img, 
+			final int y, final int w, final byte[] array, final int[] temp) {
 		final int x= 0;
 		final int h= 1;
 
@@ -129,8 +138,8 @@ public class ImageUtils {
 			break;
 		default:
 			img.getRGB(x, y, w, h, temp, 0, w);
-		ints2bytes(temp, array, 2, 1, 0);  // rgb -->  bgr
-		break;
+			ints2bytes(temp, array, 2, 1, 0);  // rgb -->  bgr
+			break;
 		}
 
 
@@ -144,9 +153,16 @@ public class ImageUtils {
 	 *              but the number of components (w/o alpha, w alpha, gray) must match
 	 *
 	 * does not unmange the image for all (A)RGN and (A)BGR and gray imaged
+	 * @param bgrPixels 
+	 * @param img 
+	 * @param x 
+	 * @param y 
+	 * @param w 
+	 * @param h 
 	 *
 	 */
-	public static void setBGRPixels(byte[] bgrPixels, BufferedImage img, int x, int y, int w, int h) {
+	public static void setBGRPixels(final byte[] bgrPixels, 
+			final BufferedImage img, final int x, final int y, final int w, final int h) {
 		int imageType= img.getType();
 		WritableRaster raster= img.getRaster();
 		//int ttype= raster.getTransferType();
@@ -185,7 +201,16 @@ public class ImageUtils {
 
 
 
-	public static void ints2bytes(int[] in, byte[] out, int index1, int index2, int index3) {
+	/**
+	 * @param in
+	 * @param out
+	 * @param index1
+	 * @param index2
+	 * @param index3
+	 */
+	public static void ints2bytes(final int[] in, 
+			final byte[] out, final int index1, 
+			final int index2, final int index3) {
 		for (int i= 0; i < in.length; i++) {
 			int index= i * 3;
 			int value= in[i];
@@ -198,7 +223,17 @@ public class ImageUtils {
 	}
 
 
-	public static void ints2bytes(int[] in, byte[] out, int index1, int index2, int index3, int index4) {
+	/**
+	 * @param in
+	 * @param out
+	 * @param index1
+	 * @param index2
+	 * @param index3
+	 * @param index4
+	 */
+	public static void ints2bytes(final int[] in, final byte[] out, 
+			final int index1, final int index2, 
+			final int index3, final int index4) {
 		for (int i= 0; i < in.length; i++) {
 			int index= i * 4;
 			int value= in[i];
@@ -213,7 +248,15 @@ public class ImageUtils {
 	}
 
 
-	public static int[] bytes2int(byte[] in, int index1, int index2, int index3) {
+	/**
+	 * @param in
+	 * @param index1
+	 * @param index2
+	 * @param index3
+	 * @return
+	 */
+	public static int[] bytes2int(final byte[] in, final int index1, 
+			final int index2, final int index3) {
 		int[] out= new int[in.length / 3];
 		for (int i= 0; i < out.length; i++) {
 			int index= i * 3;
@@ -226,7 +269,16 @@ public class ImageUtils {
 	}
 
 
-	public static int[] bytes2int(byte[] in, int index1, int index2, int index3, int index4) {
+	/**
+	 * @param in
+	 * @param index1
+	 * @param index2
+	 * @param index3
+	 * @param index4
+	 * @return
+	 */
+	public static int[] bytes2int(final byte[] in, final int index1, 
+			final int index2, final int index3, final int index4) {
 		int[] out= new int[in.length / 4];
 		for (int i= 0; i < out.length; i++) {
 			int index= i * 4;
@@ -240,10 +292,16 @@ public class ImageUtils {
 	}
 
 
-	public static BufferedImage convert(BufferedImage src, int bufImgType) {
-		BufferedImage img= new BufferedImage(src.getWidth(), src.getHeight(), bufImgType);
+	/**
+	 * Converts the {@link BufferedImage} type.
+	 * @param srcImage
+	 * @param destImgType
+	 * @return
+	 */
+	public static BufferedImage convert(final BufferedImage srcImage, final int destImgType) {
+		BufferedImage img= new BufferedImage(srcImage.getWidth(), srcImage.getHeight(), destImgType);
 		Graphics2D g2d= img.createGraphics();
-		g2d.drawImage(src, 0, 0, null);
+		g2d.drawImage(srcImage, 0, 0, null);
 		g2d.dispose();
 		return img;
 	}

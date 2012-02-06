@@ -6,6 +6,8 @@ package test;
 import java.io.File;
 import java.io.IOException;
 
+import javax.activation.UnsupportedDataTypeException;
+
 import jogl.DDSImage;
 
 import model.DDSFile;
@@ -67,7 +69,12 @@ public class DDSImageFileRecompressionTest extends DDSTestCase {
 		File newFile = new File(filename);
 
 		 DDSFile ddsimage = new DDSFile(textureDDS1024);
-		 ddsimage.loadImageData();
+		 try {
+			ddsimage.loadImageData();
+		} catch (UnsupportedDataTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// set new compression
 		if (format != -1) {
@@ -92,8 +99,5 @@ public class DDSImageFileRecompressionTest extends DDSTestCase {
 		if(format != -1)
 			assertEquals(format, newddsimage.getPixelformat());
 	}
-	
-
-	
 	
 }

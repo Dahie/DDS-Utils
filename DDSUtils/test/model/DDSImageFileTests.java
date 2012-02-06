@@ -18,6 +18,8 @@ import model.DDSFile;
 
 import org.junit.Test;
 
+import ddsutil.MipMapsUtil;
+
 import test.DDSTestCase;
 import util.Stopwatch;
 
@@ -68,7 +70,7 @@ public class DDSImageFileTests extends DDSTestCase {
 		try {
 			int numMipMaps = DDSImage.read(textureDDS1024).getNumMipMaps();
 			assertEquals("Number of MipMaps from original:",numMipMaps, ddsimage.getNumMipMaps());
-			assertEquals("calculated number of MipMaps", numMipMaps, DDSFile.calculateMaxNumberOfMipMaps(ddsimage.getWidth(), ddsimage.getHeight()));
+			assertEquals("calculated number of MipMaps", numMipMaps, MipMapsUtil.calculateMaxNumberOfMipMaps(ddsimage.getWidth(), ddsimage.getHeight()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

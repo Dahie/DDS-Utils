@@ -4,7 +4,6 @@
 package ddsutil;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
@@ -182,7 +181,7 @@ public class ByteBufferedImage extends BufferedImage {
 	}
 	
 	/**
-	 * Compliments by Marvin Fröhlich
+	 * Compliments by Marvin Fr√∂hlich
 	 * @param srcBI
 	 * @param trgBI
 	 */

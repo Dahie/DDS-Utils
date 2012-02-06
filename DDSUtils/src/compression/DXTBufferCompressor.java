@@ -81,6 +81,11 @@ public class DXTBufferCompressor {
 		this.compressionType = compressionType;
 	}
 	
+	/**
+	 * @param data
+	 * @param dimension
+	 * @param compressionType
+	 */
 	public DXTBufferCompressor(final int[] data, 
 			final Dimension dimension, 
 			final Squish.CompressionType compressionType) {

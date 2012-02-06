@@ -6,7 +6,11 @@ import javax.imageio.ImageIO;
 
 public class ImageIOUtils {
 
-	public static boolean isImageIOSupported(File file) {
+	/**
+	 * @param file
+	 * @return
+	 */
+	public static boolean isImageIOSupported(final File file) {
 		String[] supportedMIMETypes = ImageIO.getReaderFormatNames();
 		for (int j = 0; j < supportedMIMETypes.length; j++) {
 			if(FileUtil.getFileSuffix(file).contains(supportedMIMETypes[j]))

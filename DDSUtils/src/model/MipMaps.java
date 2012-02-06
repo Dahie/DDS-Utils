@@ -46,7 +46,7 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		this(1);
 	}
 	
-	public MipMaps(int numMipMaps) {
+	public MipMaps(final int numMipMaps) {
 		this.numMipMaps = numMipMaps;
 		this.rescaler = new ImageRescaler();
 		this.mipmaps = new Vector<BufferedImage>(numMipMaps);
@@ -105,11 +105,13 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		return this.numMipMaps;
 	}
 	
+	@Override
 	public int getHeight() {
 		return getMipMap(TOP_MOST_MIP_MAP).getHeight();
 	}
 	
 
+	@Override
 	public int getWidth() {
 		return getMipMap(TOP_MOST_MIP_MAP).getWidth();
 	}
@@ -132,7 +134,10 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		this.mipmaps.set(mipmap, image);
 	}
 	
-	public void addMipMap(BufferedImage image) {
+	/**
+	 * @param image
+	 */
+	public void addMipMap(final BufferedImage image) {
 		this.mipmaps.add(image);
 	}
 	
@@ -142,6 +147,7 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * @param compressionType
 	 * @return
 	 */
+	@Override
 	public ByteBuffer[] getDXTCompressedBuffer(final Squish.CompressionType compressionType) {
 		ByteBuffer[] mipmapBuffer = new ByteBuffer[this.numMipMaps];
 		
@@ -209,19 +215,23 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	/* (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()
 	 */
+	@Override
 	public Iterator<BufferedImage> iterator() {
 		return new Iterator<BufferedImage>() {
 			int count=0;
 			
+			@Override
 			public boolean hasNext() {
 				boolean b = count++ < mipmaps.size()-1;
 				return b;
 			}
 
+			@Override
 			public BufferedImage next() {
 				return mipmaps.get(count);
 			}
 
+			@Override
 			public void remove() {
 				 throw new UnsupportedOperationException();
 			}

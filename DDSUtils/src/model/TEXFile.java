@@ -7,13 +7,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Vector;
+import java.util.List;
+
+import javax.activation.UnsupportedDataTypeException;
 
 import jogl.DDSImage;
 import jogl.TEXImage;
 
 import compression.DXTBufferDecompressor;
-import ddsutil.DDSUtil;
+
+import ddsutil.PixelFormats;
 
 /**
  * TEX for GP4-Texture format.
@@ -45,6 +48,9 @@ public class TEXFile  extends AbstractTextureImage {
 		}
 	}
 	
+	/**
+	 * @param image
+	 */
 	protected void init(final TEXImage image) {
 		this.teximage 		= image;
 		this.width  		= image.getWidth();
@@ -55,7 +61,8 @@ public class TEXFile  extends AbstractTextureImage {
 		this.hasMipMaps		= (image.getNumMipMaps() > 1); // there is always at least the topmost MipMap
 	}
 	
-	public void write(File file) throws IOException {
+	@Override
+	public void write(final File file) throws IOException {
 		ByteBuffer[] mipmaps = new ByteBuffer[getNumMipMaps()];
 		for (int i = 0; i < mipmaps.length; i++) {
 			DDSImage image = TEXImage.read(this.file).getAllEmbeddedMaps().get(i);
@@ -67,6 +74,7 @@ public class TEXFile  extends AbstractTextureImage {
 		outputTEX.close();
 	}
 	
+	@Override
 	public TextureType getTextureType() {
 		return TextureType.TEXTURE;
 	}
@@ -89,6 +97,7 @@ public class TEXFile  extends AbstractTextureImage {
 	 * Returns the stored MipMaps as a {@link BufferedImage}-Array
 	 * @return
 	 */
+	@Override
 	public BufferedImage[] getAllMipMapsBI(){
 		MipMaps mipMaps = new MipMaps();
 		mipMaps.generateMipMaps(getTopMipMap());
@@ -99,15 +108,17 @@ public class TEXFile  extends AbstractTextureImage {
 	 * returns the stored MipMaps as {@link ByteBuffer}-Array
 	 * @return
 	 */
-	public Vector<BufferedImage> generateAllMipMaps(){
+	@Override
+	public List<BufferedImage> generateAllMipMaps(){
 		MipMaps mipMaps = new MipMaps();
 		mipMaps.generateMipMaps(getTopMipMap());
 		return mipMaps.getAllMipMaps();
 	}
 
-	public void loadImageData() {
+	@Override
+	public void loadImageData() throws UnsupportedDataTypeException {
 		CompressionType compressionType = 
-			DDSUtil.getSquishCompressionFormat(teximage.getPixelFormat());
+			PixelFormats.getSquishCompressionFormat(teximage.getPixelFormat());
 		this.mipMaps.setMipMap(0, new DXTBufferDecompressor(
 				teximage.getEmbeddedMaps(0).getMipMap(0).getData(),
 				teximage.getWidth(), 
@@ -115,7 +126,8 @@ public class TEXFile  extends AbstractTextureImage {
 				compressionType).getImage());
 	}
 
-	public BufferedImage getMipMap(int index) {
+	@Override
+	public BufferedImage getMipMap(final int index) {
 		return this.mipMaps.getMipMap(index);
 	}
 	

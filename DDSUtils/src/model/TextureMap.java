@@ -5,6 +5,8 @@ import gr.zdimensions.jsquish.Squish;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
+import javax.activation.UnsupportedDataTypeException;
+
 /**
  * Interface for TextureMaps.
  * @author danielsenff
@@ -17,13 +19,13 @@ public interface TextureMap {
 	 * Height of the topmost MipMap.
 	 * @return
 	 */
-	public abstract int getHeight();
+	public int getHeight();
 	
 	/**
 	 * Width of the topmost MipMap.
 	 * @return
 	 */
-	public abstract int getWidth();
+	public int getWidth();
 	
 	
 	/**
@@ -31,21 +33,23 @@ public interface TextureMap {
 	 * @param compressionType
 	 * @return
 	 */
-	public abstract ByteBuffer[] getDXTCompressedBuffer(final Squish.CompressionType compressionType);
+	public ByteBuffer[] getDXTCompressedBuffer(final Squish.CompressionType compressionType);
 	
 	/**
 	 * All contained MipMaps as {@link ByteBuffer}
 	 * @param compressionType
 	 * @return
 	 */
-	public abstract ByteBuffer[] getUncompressedBuffer();
+	public ByteBuffer[] getUncompressedBuffer();
 	
 	/**
 	 * Returns a ByteBuffer for each MipMap.
 	 * @param pixelformat
 	 * @return
+	 * @throws UnsupportedDataTypeException 
 	 */
-	public ByteBuffer[] getDXTCompressedBuffer(final int pixelformat);
+	public ByteBuffer[] getDXTCompressedBuffer(final int pixelformat) 
+			throws UnsupportedDataTypeException;
 	
 	/**
 	 * Compress a single {@link BufferedImage} into a ByteBuffer.
@@ -54,5 +58,6 @@ public interface TextureMap {
 	 * @return
 	 */
 	public ByteBuffer compress(final BufferedImage bi, 
-			final Squish.CompressionType compressionType); 
+			final Squish.CompressionType compressionType);
+
 }

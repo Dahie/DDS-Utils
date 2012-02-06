@@ -6,6 +6,8 @@ package test;
 import java.io.File;
 import java.io.IOException;
 
+import javax.activation.UnsupportedDataTypeException;
+
 import jogl.DDSImage;
 
 import model.DDSFile;
@@ -29,11 +31,18 @@ public class DDSTestCase {
 	protected File originalB1024 = new File(inputDirectory +"RAIKKONENEXTRA1.dds");
 	protected File original2048 = new File(inputDirectory +"RAIKKONENEXTRA0.dds");
 	
+	protected File textureDDSrfmIcon = new File(inputDirectory +"TestingMODicon.dds");
+	protected File textureDDSrfmSMIcon = new File(inputDirectory +"TestingMODSMicon.dds");
 	
 	public static DDSFile loadDDSFile(File file) {
 		DDSFile ddsimage = null;
 		ddsimage = new DDSFile(file);
-		ddsimage.loadImageData();
+		try {
+			ddsimage.loadImageData();
+		} catch (UnsupportedDataTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return ddsimage;
 	}
 	

@@ -80,6 +80,21 @@ public class DDSImage {
 			return compressionFormat;
 		}
 	}
+	/**
+	 * http://msdn.microsoft.com/en-us/library/bb943984(v=vs.85).aspx
+	 * @author danielsenff
+	 *
+	 */
+	public static class PixelFormat {
+		public int dwSize;
+		public int dwFlags;
+		public int dwFourCC;
+		public int dwRGBBitCount;
+		public int dwRBitMask;
+		public int dwGBitMask;
+		public int dwBBitMask;
+		public int dwABitMask;
+	}
 
 	private FileInputStream fis;
 	private FileChannel     chan;
@@ -139,10 +154,61 @@ public class DDSImage {
 	public static final int DDSCAPS2_VOLUME            = 0x00200000;
 
 	// Known pixel formats
-	public static final int D3DFMT_UNKNOWN   =  0;
-	public static final int D3DFMT_R8G8B8    =  20;
-	public static final int D3DFMT_A8R8G8B8  =  21;
-	public static final int D3DFMT_X8R8G8B8  =  22;
+	public static final int D3DFMT_UNKNOWN   			= 0;
+	public static final int D3DFMT_R8G8B8    			= 20;
+	public static final int D3DFMT_A8R8G8B8  			= 21;
+	public static final int D3DFMT_X8R8G8B8  			= 22;
+	public static final int D3DFMT_R5G6B5               = 23;
+	public static final int D3DFMT_X1R5G5B5             = 24;
+	public static final int D3DFMT_A1R5G5B5             = 25;
+	public static final int D3DFMT_A4R4G4B4             = 26;
+	public static final int D3DFMT_R3G3B2               = 27;
+	public static final int D3DFMT_A8                   = 28;
+	public static final int D3DFMT_A8R3G3B2             = 29;
+	public static final int D3DFMT_X4R4G4B4             = 30;
+	public static final int D3DFMT_A2B10G10R10          = 31;
+	public static final int D3DFMT_A8B8G8R8             = 32;
+	public static final int D3DFMT_X8B8G8R8             = 33;
+	public static final int D3DFMT_G16R16               = 34;
+	public static final int D3DFMT_A2R10G10B10          = 35;
+	public static final int D3DFMT_A16B16G16R16         = 36;
+
+    
+    //DXGI_FORMAT_R8G8_B8G8_UNORM
+    public static final int D3DFMT_R8G8_B8G8 = 0x47424752;
+    
+    //DXGI_FORMAT_G8R8_G8B8_UNORM
+    public static final int D3DFMT_G8R8_G8B8 = 0x42475247;
+    
+    //DXGI_FORMAT_R16G16B16A16_SNORM
+    public static final int D3DFMT_Q16W16V16U16 = 110;
+    
+    //DXGI_FORMAT_R16_FLOAT
+    public static final int D3DFMT_R16F = 111;
+    
+    //DXGI_FORMAT_R16G16_FLOAT
+    public static final int D3DFMT_G16R16F = 112;
+    
+    //DXGI_FORMAT_R16G16B16A16_FLOAT
+    public static final int D3DFMT_A16B16G16R16F = 113;
+    
+    //DXGI_FORMAT_R32_FLOAT
+    public static final int D3DFMT_R32F = 114;
+    
+    //DXGI_FORMAT_R32G32_FLOAT
+    public static final int D3DFMT_G32R32F = 115;
+    
+    //DXGI_FORMAT_R32G32B32A32_FLOAT
+    public static final int D3DFMT_A32B32G32R32F = 116;
+    
+    public static final int D3DFMT_UYVY = 0x59565955;
+    public static final int D3DFMT_YUY2 = 0x32595559;
+    public static final int D3DFMT_CxV8U8 = 117;
+    
+    // This is set only by the nvidia exporter, it is not set by the dx texture tool.
+    // It is ignored by the dx texture tool but it returns the ability to be opened in photoshop so I decided to keep it.
+    public static final int D3DFMT_Q8W8V8U8 = 63;
+    
 	// The following are also valid FourCC codes
 	public static final int D3DFMT_DXT1      =  0x31545844;
 	public static final int D3DFMT_DXT2      =  0x32545844;
@@ -150,6 +216,49 @@ public class DDSImage {
 	public static final int D3DFMT_DXT4      =  0x34545844;
 	public static final int D3DFMT_DXT5      =  0x35545844;
 
+	// DX10 feature
+	
+	public static final int D3D10_RESOURCE_DIMENSION_TEXTURE1D = 2;
+	public static final int D3D10_RESOURCE_DIMENSION_TEXTURE2D = 3;
+	public static final int D3D10_RESOURCE_DIMENSION_TEXTURE3D = 4;
+    
+    // DX10 pixelformat
+	public static final int DX10 = 0x30315844;
+	public static final int DXGI_FORMAT_BC4_UNORM = 0x55344342;
+	public static final int DXGI_FORMAT_BC4_SNORM = 0x53344342;
+	public static final int DXGI_FORMAT_BC5_UNORM = 0x32495441;
+	public static final int DXGI_FORMAT_BC5_SNORM = 0x53354342;
+	
+    private enum LoadSurfaceFormat
+    {
+    Unknown,
+    Dxt1,
+    Dxt3,
+    Dxt5,
+    R8G8B8,
+    B8G8R8,
+    Bgra5551,
+    Bgra4444,
+    Bgr565,
+    Alpha8,
+    X8R8G8B8,
+    A8R8G8B8,
+    A8B8G8R8,
+    X8B8G8R8,
+    RGB555,
+    R32F,
+    R16F,
+    A32B32G32R32F,
+    A16B16G16R16F,
+    Q8W8V8U8,
+    CxV8U8,
+    G16R16F,
+    G32R32F,
+    G16R16,
+    A2B10G10R10,
+    A16B16G16R16
+    }
+    
 	/** Reads a DirectDraw surface from the specified file name,
         returning the resulting DDSImage.
 
@@ -307,7 +416,8 @@ public class DDSImage {
 
 	/** Gets the pixel format of this texture (D3DFMT_*) based on some
         heuristics. Returns D3DFMT_UNKNOWN if could not recognize the
-        pixel format. */
+        pixel format. 
+	 * @return */
 	public int getPixelFormat() {
 		if (isCompressed()) {
 			return getCompressionFormat();
@@ -319,6 +429,12 @@ public class DDSImage {
 						header.pfBBitMask == 0x000000FF &&
 						header.pfABitMask == 0xFF000000) {
 					return D3DFMT_A8R8G8B8;
+				} else if (getDepth() == 16 &&
+						header.pfRBitMask == 0x7c00 &&
+						header.pfGBitMask == 0x3e0 &&
+						header.pfBBitMask == 0x1f &&
+						header.pfABitMask == 0x8000) {
+					return D3DFMT_A1R5G5B5;
 				}
 			} else {
 				if (getDepth() == 24 &&
@@ -331,7 +447,7 @@ public class DDSImage {
 						header.pfGBitMask == 0x0000FF00 &&
 						header.pfBBitMask == 0x000000FF) {
 					return D3DFMT_X8R8G8B8;
-				}
+				} 
 			}
 		}
 
@@ -355,7 +471,7 @@ public class DDSImage {
 	}
 
 	/**
-	 * Indicates whethe this cubemap side present
+	 * Indicates whether this cubemap side present
 	 * @param side Side to test
 	 * @return true if side present or false otherwise
 	 */

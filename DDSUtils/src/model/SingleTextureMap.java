@@ -37,7 +37,8 @@ public class SingleTextureMap extends AbstractTextureMap {
 	/* (non-Javadoc)
 	 * @see DDSUtil.AbstractMipMaps#getDXTCompressedBuffer(gr.zdimensions.jsquish.Squish.CompressionType)
 	 */
-	public ByteBuffer[] getDXTCompressedBuffer(CompressionType compressionType) {
+	@Override
+	public ByteBuffer[] getDXTCompressedBuffer(final CompressionType compressionType) {
 		ByteBuffer[] buffer = new ByteBuffer[1];
 		buffer[0] = super.compress(bi, compressionType);
 		return buffer;
@@ -48,6 +49,7 @@ public class SingleTextureMap extends AbstractTextureMap {
 	/* (non-Javadoc)
 	 * @see DDSUtil.AbstractMipMaps#getHeight()
 	 */
+	@Override
 	public int getHeight() {
 		return this.bi.getHeight();
 	}
@@ -55,6 +57,7 @@ public class SingleTextureMap extends AbstractTextureMap {
 	/* (non-Javadoc)
 	 * @see DDSUtil.AbstractMipMaps#getWidth()
 	 */
+	@Override
 	public int getWidth() {
 		return this.bi.getWidth();
 	}
@@ -62,6 +65,7 @@ public class SingleTextureMap extends AbstractTextureMap {
 	/* (non-Javadoc)
 	 * @see DDSUtil.AbstractTextureMap#getUncompressedBuffer()
 	 */
+	@Override
 	public ByteBuffer[] getUncompressedBuffer() {
 		ByteBuffer[] mipmapBuffer = new ByteBuffer[1];
 		mipmapBuffer[0] = ByteBuffer.wrap(ByteBufferedImage.convertBIintoARGBArray(this.bi));
