@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Application;
@@ -15,7 +14,6 @@ import org.jdesktop.application.Task;
 
 import de.danielsenff.dropps.ConvertController;
 import de.danielsenff.dropps.Dropps;
-import de.danielsenff.dropps.DroppsView;
 import de.danielsenff.dropps.models.ExportOptions;
 import de.danielsenff.dropps.models.IConvertListener;
 import de.danielsenff.dropps.models.IProgressListener;
@@ -57,6 +55,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 			
 			final IProgressListener listener = new IProgressListener() {
 
+				@Override
 				public void update(final ProgressStatus newStatus) {
 					message("startMessage", newStatus.getProcessed(), newStatus.getProcessable());
 					//initial progress
@@ -65,6 +64,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 					status = newStatus;
 				}
 
+				@Override
 				public void error(final ProgressStatus errorStatus) {
 					//localize message
 					if (errorStatus.getMessage() != null) {
@@ -82,10 +82,12 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 			};
 			final IConvertListener convListener = new IConvertListener() {
 
+				@Override
 				public void convertBegin(File originalFile) {
 					setMessage("Conversion of " + originalFile.getName());
 				}
 
+				@Override
 				public void convertEnd(File originalFile) {
 //					setMessage("End Convertion of " + originalFile.getName());
 				}

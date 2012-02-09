@@ -22,6 +22,7 @@ import javax.swing.JSeparator;
 
 import jogl.DDSImage;
 
+import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
 
 import de.danielsenff.dropps.models.ExportOptions;
@@ -55,7 +56,7 @@ public class SettingsPanel extends JPanel implements PropertyChangeListener {
 	public SettingsPanel(ExportOptions exportoptions) {
 		this.exportOptions = exportoptions;
 		
-		this.resourceMap = Dropps.getInstance().getContext().getResourceMap(getClass(), SettingsPanel.class);
+		this.resourceMap = Application.getInstance().getContext().getResourceMap(getClass(), SettingsPanel.class);
 		
 		init();
 	}
@@ -175,6 +176,7 @@ public class SettingsPanel extends JPanel implements PropertyChangeListener {
 				"X8R8G8B8 uncompressed"};
 		this.comboPixelformat = new JComboBox(presetsCompression);
 		this.comboPixelformat.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				final int newPixelformat = convertIndexPixelFormat(((JComboBox)e.getSource()).getSelectedIndex());
 				exportOptions.setNewPixelformat(newPixelformat);
@@ -292,7 +294,8 @@ public class SettingsPanel extends JPanel implements PropertyChangeListener {
 	/** 
 	 * Called when a field's "value" property changes. 
 	 */
-    public void propertyChange(final PropertyChangeEvent e) {
+    @Override
+	public void propertyChange(final PropertyChangeEvent e) {
         final Object source = e.getSource();
 		if (source == this.fldNewWidth) {
             final int width = ((Number)fldNewWidth.getValue()).intValue();

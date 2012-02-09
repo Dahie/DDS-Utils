@@ -15,6 +15,8 @@ import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
+import org.jdesktop.application.Application;
+
 import util.FileUtil;
 import util.ImageIOUtils;
 import ddsutil.DDSUtil;
@@ -85,7 +87,7 @@ public class ConvertController implements IProgressObserverable {
 		notifyProgressListeners(new ProgressStatus(i, filesCount, "progress"));
 
 		BufferedImage imageToConvert = null;
-		final DefaultListModel dlm = (DefaultListModel) ((DroppsView)((Dropps)Dropps.getInstance()).getMainView()).getDropPanel().getModel();
+		final DefaultListModel dlm = (DefaultListModel) ((DroppsView)((Dropps)Application.getInstance()).getMainView()).getDropPanel().getModel();
 		try {
 			System.out.println("Read BufferedImage ...");
 			
@@ -211,10 +213,12 @@ public class ConvertController implements IProgressObserverable {
 		convertListeners.remove(listener);
 	}
 
+	@Override
 	public void addListener(final IProgressListener listener) {
 		progressListeners.add(listener);
 	}
 
+	@Override
 	public void removeListener(final IProgressListener listener) {
 		progressListeners.remove(listener);
 	}

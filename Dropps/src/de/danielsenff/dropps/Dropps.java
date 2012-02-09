@@ -1,13 +1,8 @@
 package de.danielsenff.dropps;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jdesktop.application.Application;
-import org.jdesktop.application.LocalStorage;
 import org.jdesktop.application.SingleFrameApplication;
 
 

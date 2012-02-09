@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Reader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import javax.swing.JFrame;
 
 /**
  * This class makes it easy to drag and drop files from the operating
@@ -267,7 +267,8 @@ public class FileDrop
         if( supportsDnD() )
         {   // Make a drop listener
             dropListener = new java.awt.dnd.DropTargetListener()
-            {   public void dragEnter( java.awt.dnd.DropTargetDragEvent evt )
+            {   @Override
+			public void dragEnter( java.awt.dnd.DropTargetDragEvent evt )
                 {       log( out, "FileDrop: dragEnter event." );
 
                     // Is this an acceptable drag event?
@@ -294,12 +295,14 @@ public class FileDrop
                     }   // end else: drag not ok
                 }   // end dragEnter
 
-                public void dragOver( java.awt.dnd.DropTargetDragEvent evt ) 
+                @Override
+				public void dragOver( java.awt.dnd.DropTargetDragEvent evt ) 
                 {   // This is called continually as long as the mouse is
                     // over the drag target.
                 }   // end dragOver
 
-                public void drop( java.awt.dnd.DropTargetDropEvent evt )
+                @Override
+				public void drop( java.awt.dnd.DropTargetDropEvent evt )
                 {   log( out, "FileDrop: drop event." );
                     try
                     {   // Get whatever was dropped
@@ -386,7 +389,8 @@ public class FileDrop
                     }   // end finally
                 }   // end drop
 
-                public void dragExit( java.awt.dnd.DropTargetEvent evt ) 
+                @Override
+				public void dragExit( java.awt.dnd.DropTargetEvent evt ) 
                 {   log( out, "FileDrop: dragExit event." );
                     // If it's a Swing component, reset its border
                     if( c instanceof javax.swing.JComponent )
@@ -396,7 +400,8 @@ public class FileDrop
                     }   // end if: JComponent
                 }   // end dragExit
 
-                public void dropActionChanged( java.awt.dnd.DropTargetDragEvent evt ) 
+                @Override
+				public void dropActionChanged( java.awt.dnd.DropTargetDragEvent evt ) 
                 {   log( out, "FileDrop: dropActionChanged event." );
                     // Is this an acceptable drag event?
                     if( isDragOk( out, evt ) )
@@ -480,7 +485,8 @@ public class FileDrop
         
         // Listen for hierarchy changes and remove the drop target when the parent gets cleared out.
         c.addHierarchyListener( new java.awt.event.HierarchyListener()
-        {   public void hierarchyChanged( java.awt.event.HierarchyEvent evt )
+        {   @Override
+		public void hierarchyChanged( java.awt.event.HierarchyEvent evt )
             {   log( out, "FileDrop: Hierarchy changed." );
                 java.awt.Component parent = c.getParent();
                 if( parent == null )
@@ -614,7 +620,8 @@ public class FileDrop
             java.awt.BorderLayout.CENTER );
         
         new FileDrop( System.out, text, /*dragBorder,*/ new FileDrop.Listener()
-        {   public void filesDropped( java.io.File[] files )
+        {   @Override
+		public void filesDropped( java.io.File[] files )
             {   for( int i = 0; i < files.length; i++ )
                 {   try
                     {   text.append( files[i].getCanonicalPath() + "\n" );
@@ -625,7 +632,7 @@ public class FileDrop
         }); // end FileDrop.Listener
 
         frame.setBounds( 100, 100, 300, 400 );
-        frame.setDefaultCloseOperation( frame.EXIT_ON_CLOSE );
+        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         frame.show();
     }   // end main
 
