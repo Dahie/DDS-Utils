@@ -4,8 +4,6 @@
 package de.danielsenff.badds.view.GUI;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JLabel;
 
 import de.danielsenff.badds.controller.Application;

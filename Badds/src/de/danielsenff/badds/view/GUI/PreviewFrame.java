@@ -56,10 +56,13 @@ public class PreviewFrame extends JCFrame{
 		canvas.addMouseMotionListener(scrollCanvasListener);
 //		canvas.addMouseWheelListener(scrollCanvasListener);
 		canvas.addAncestorListener(new AncestorListener() {
+			@Override
 			public void ancestorAdded(AncestorEvent arg0) {		}
+			@Override
 			public void ancestorMoved(AncestorEvent arg0) {
 				scrollViewPane.repaint();
 			}
+			@Override
 			public void ancestorRemoved(AncestorEvent arg0) {	}
 			
 		});

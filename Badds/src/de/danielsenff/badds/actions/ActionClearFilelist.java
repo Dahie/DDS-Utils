@@ -24,6 +24,7 @@ public class ActionClearFilelist extends BasicAction {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		controller.getFilesListModel().clear();
 		controller.getView().getActionClearFilelist().setEnabled(false);

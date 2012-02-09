@@ -131,6 +131,7 @@ public class SettingsPanel extends JCPanel implements PropertyChangeListener {
 				"it'll make the pixel either white or black with value 128 as threshold. In most cases if you want \n" +
 				"a DXT1 file, you want a clean white alpha. This function paints the alpha channel white.");
 		chkWhiteAlpha.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				final boolean selected = ((JCheckBox)arg0.getSource()).isSelected();
 				controller.getExportOptions().setPaintWhiteAlpha(selected);
@@ -147,6 +148,7 @@ public class SettingsPanel extends JCPanel implements PropertyChangeListener {
 		chkKeepOriginal.setSelected(true);
 		chkKeepOriginal.getInsets().set(0, 15, 0, 0);
 		chkKeepOriginal.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				controller.getExportOptions().setKeepOriginal(((JCheckBox)arg0.getSource()).isSelected());
 			}
@@ -154,6 +156,7 @@ public class SettingsPanel extends JCPanel implements PropertyChangeListener {
 		
 		
 		chkBackup.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				boolean selected = ((JCheckBox)arg0.getSource()).isSelected();
 				controller.getExportOptions().setMakeBackup(selected);
@@ -177,6 +180,7 @@ public class SettingsPanel extends JCPanel implements PropertyChangeListener {
 				"X8R8G8B8 uncompressed"};
 		this.comboPixelformat = new JComboBox(presetsCompression);
 		this.comboPixelformat.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				final int newPixelformat = convertIndexPixelFormat(((JComboBox)e.getSource()).getSelectedIndex());
 				controller.getExportOptions().setNewPixelformat(newPixelformat);
@@ -205,6 +209,7 @@ public class SettingsPanel extends JCPanel implements PropertyChangeListener {
 		
 		chkMipMaps = new JCheckBox(bundle.getString("Generate_MipMaps_(recommended)"));
 		chkMipMaps.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				
 				boolean selected = ((JCheckBox)arg0.getSource()).isSelected();
@@ -233,6 +238,7 @@ public class SettingsPanel extends JCPanel implements PropertyChangeListener {
 		/* (non-Javadoc)
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 		 */
+		@Override
 		public void actionPerformed(final ActionEvent e) {
 			final JComboBox combo = (JComboBox) e.getSource();
 			final ComboBoxModel model = combo.getModel();
@@ -275,7 +281,8 @@ public class SettingsPanel extends JCPanel implements PropertyChangeListener {
 	
 	
 	/** Called when a field's "value" property changes. */
-    public void propertyChange(final PropertyChangeEvent e) {
+    @Override
+	public void propertyChange(final PropertyChangeEvent e) {
         final Object source = e.getSource();
 		if (source == this.fldNewWidth) {
             final int width = ((Number)fldNewWidth.getValue()).intValue();

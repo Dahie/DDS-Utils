@@ -26,6 +26,7 @@ public class ActionSelectAll extends BasicAction {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		ListSelectionModel selectionModel = controller.getFilesListModel().getSelectionModel();
 		int lowerIndex = selectionModel.getMinSelectionIndex();

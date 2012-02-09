@@ -1,8 +1,6 @@
 package de.danielsenff.badds.view.worker;
 
 import java.awt.BorderLayout;
-import java.awt.Insets;
-
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -45,7 +43,7 @@ public class ProgressDialog extends JDialog {
 
 	private void init(int maxValue, String title) {
 		
-		this.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
 		getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
 		for (int i = 0; i < this.getComponentCount(); i++) {
 			System.out.println(super.getComponent(i) );	

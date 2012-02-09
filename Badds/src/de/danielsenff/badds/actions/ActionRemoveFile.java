@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import javax.swing.ListSelectionModel;
 
 import de.danielsenff.badds.controller.Application;
-import de.danielsenff.badds.util.ResourceLoader;
 import de.danielsenff.badds.util.SelectionHelper;
 import de.danielsenff.badds.view.GUI.FilesTable;
 
@@ -31,6 +30,7 @@ public class ActionRemoveFile extends BasicAction {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(controller.getFilesListModel().size() != 0) {
 			FilesTable openFilesTable = controller.getView().getOpenFilesTable();

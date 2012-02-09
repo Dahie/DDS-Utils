@@ -17,7 +17,6 @@ import util.Stopwatch;
 
 import de.danielsenff.badds.view.View;
 import de.danielsenff.badds.view.GridBagConstraints.LabelConstraints;
-import de.danielsenff.badds.view.GridBagConstraints.MiddleFieldConstraints;
 import de.danielsenff.badds.view.GridBagConstraints.RemainderConstraintsNoFill;
 
 

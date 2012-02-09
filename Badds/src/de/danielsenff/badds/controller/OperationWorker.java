@@ -45,6 +45,7 @@ public abstract class OperationWorker extends SwingWorker {
 		this.dialog.getProgressbar().setValue(i);
 	}
 	
+	@Override
 	public void finished() {
 		this.view.getWorkingView().endWorkingState("All files done.");
 		this.dialog.dispose();

@@ -11,9 +11,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.JViewport;
 
 
@@ -37,6 +35,7 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 	int xOld = 0;
 	int yOld = 0;
 	
+	@Override
 	public void mouseDragged(MouseEvent event) {
 		drag(event);
 	}
@@ -90,6 +89,7 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mouseMoved(MouseEvent event) {
 		xOld = event.getX();
 		yOld = event.getY();
@@ -110,6 +110,7 @@ public class ScrollCanvasListener implements MouseMotionListener, MouseWheelList
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.MouseWheelEvent)
 	 */
+	@Override
 	public void mouseWheelMoved(MouseWheelEvent wheelEvent) {
 		BICanvas canvas = ((BICanvas) wheelEvent.getSource());
 		

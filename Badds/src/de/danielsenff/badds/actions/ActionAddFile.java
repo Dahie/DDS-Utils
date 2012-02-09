@@ -34,6 +34,7 @@ public class ActionAddFile extends BasicAction {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
 			File[] files = controller.showImageFileChooser().openFilesDialogue();

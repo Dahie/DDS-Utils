@@ -40,7 +40,6 @@ import de.danielsenff.badds.view.GUI.JCFrame;
 import de.danielsenff.badds.view.GUI.JToolbar;
 import de.danielsenff.badds.view.GUI.SettingsPanel;
 import de.danielsenff.badds.view.GridBagConstraints.GBConstraints;
-import de.danielsenff.badds.view.GridBagConstraints.RemainderConstraintsNoFill;
 import de.danielsenff.badds.view.worker.WorkingView;
 
 
@@ -117,6 +116,7 @@ public class View extends JCFrame {
 		
 		new FileDrop( System.out, this.getOpenFilesTable(), /*dragBorder,*/ new FileDrop.Listener()
         {   
+			@Override
 			public void filesDropped( java.io.File[] files )
             {   
         		for( int i = 0; i < files.length; i++ )

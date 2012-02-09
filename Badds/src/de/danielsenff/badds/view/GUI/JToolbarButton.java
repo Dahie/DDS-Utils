@@ -18,7 +18,7 @@ public class JToolbarButton extends JButton {
 	 */
 	public JToolbarButton(Action action) {
 		super(action);
-		this.setText((String) action.getValue(action.NAME));
+		this.setText((String) action.getValue(Action.NAME));
 		this.setVerticalTextPosition(SwingConstants.BOTTOM);
 		this.setHorizontalTextPosition(SwingConstants.CENTER);
 	}

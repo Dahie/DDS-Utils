@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.util.Collection;
 import java.util.Vector;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import model.DDSFile;
@@ -42,6 +41,7 @@ public class ActionSaveAll extends BasicAction {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		final Vector<DDSFile> openFiles = controller.getFilesListModel().getOpenFilesList();
 		int numFiles = openFiles.size();

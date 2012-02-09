@@ -4,8 +4,8 @@
 package de.danielsenff.badds.view.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JScrollPane;
@@ -14,7 +14,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -75,7 +74,8 @@ public class FilesTable extends JCPanel {
 		table.setRowSelectionAllowed(true);
 		
 		// start preview on double-click
-		table.addMouseListener(new MouseListener() {
+		table.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) 
 			{
 		         if (e.getClickCount() == 2) 
@@ -83,16 +83,12 @@ public class FilesTable extends JCPanel {
 		        	 new ActionPreview(controller).actionPerformed(null);
 		          }
 			}
-
-			public void mouseEntered(MouseEvent arg0) {}
-			public void mouseExited(MouseEvent arg0) {}
-			public void mousePressed(MouseEvent arg0) {}
-			public void mouseReleased(MouseEvent arg0) {}
 		});
 		
 		// enable and disable buttons on (de)selection
 		selectionModel.addListSelectionListener(new ListSelectionListener() 
 		{
+			@Override
 			public void valueChanged(ListSelectionEvent arg0) 
 			{
 				enableSelectionButtons(selectionModel);
@@ -102,6 +98,7 @@ public class FilesTable extends JCPanel {
 		
 		controller.getFilesListModel().addTableModelListener(new TableModelListener() 
 		{
+			@Override
 			public void tableChanged(TableModelEvent arg0) 
 			{
 				enableListOpButton(controller.getFilesListModel());
@@ -140,16 +137,25 @@ public class FilesTable extends JCPanel {
 		}
 	}
 	
+	/**
+	 * @return
+	 */
 	public int getSelectedRow() {
 		return table.getSelectedRow();
 	}
 	
 	
 
+	/**
+	 * @return
+	 */
 	public JTable getTable() {
 		return this.table;
 	}
 	
+	/**
+	 * @return
+	 */
 	public boolean hasSelectedRow() {
 
 		for (int i = 0; i < table.getRowCount(); i++) {

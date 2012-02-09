@@ -28,6 +28,7 @@ public class FlipCanvas implements Operation {
 	/* (non-Javadoc)
 	 * @see Operations.Operation#run(java.awt.image.BufferedImage)
 	 */
+	@Override
 	public BufferedImage run(BufferedImage bi) {
 
 		WritableRaster raster = bi.getRaster();

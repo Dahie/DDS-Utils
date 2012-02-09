@@ -4,7 +4,6 @@
 package de.danielsenff.badds.operations;
 
 import ddsutil.ImageOperations;
-import util.Debug;
 
 /**
  * @author danielsenff
@@ -34,6 +33,7 @@ public class ChannelBrightness extends ManipulateChannel {
 		this.brightness = (float) value;
 	}
 	
+	@Override
 	public int[] filterRGB(int x, int y, int[] rgba) {
 		int oldValue = rgba[this.channel];
 		int newValue = (int) (oldValue  * (brightness*255));

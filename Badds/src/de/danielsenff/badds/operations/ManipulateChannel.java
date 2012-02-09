@@ -16,6 +16,7 @@ public abstract class ManipulateChannel implements Operation, RGBAFilter {
 	/* (non-Javadoc)
 	 * @see operations.Operation#run(java.awt.image.BufferedImage)
 	 */
+	@Override
 	public BufferedImage run(BufferedImage bi) {
 		
 		WritableRaster raster = bi.getRaster();

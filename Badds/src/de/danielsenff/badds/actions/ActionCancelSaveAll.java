@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 
 import de.danielsenff.badds.controller.Application;
 import de.danielsenff.badds.controller.OperationWorker;
-import de.danielsenff.badds.util.ResourceLoader;
 
 
 
@@ -34,6 +33,7 @@ public class ActionCancelSaveAll extends BasicAction {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		worker.interrupt();
 //		worker.getWorkingView().endWorkingState("Operation aborted");

@@ -199,6 +199,7 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getPreferredScrollableViewportSize()
 	 */
+	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		return null;
 	}
@@ -207,6 +208,7 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableBlockIncrement(java.awt.Rectangle, int, int)
 	 */
+	@Override
 	public int getScrollableBlockIncrement(Rectangle arg0, int arg1, int arg2) {
 		return 50;
 	}
@@ -215,6 +217,7 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableTracksViewportHeight()
 	 */
+	@Override
 	public boolean getScrollableTracksViewportHeight() {
 		return false;
 	}
@@ -223,6 +226,7 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableTracksViewportWidth()
 	 */
+	@Override
 	public boolean getScrollableTracksViewportWidth() {
 		return false;
 	}
@@ -238,13 +242,16 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getScrollableUnitIncrement(java.awt.Rectangle, int, int)
 	 */
+	@Override
 	public int getScrollableUnitIncrement(Rectangle arg0, int arg1, int arg2) {
 		return 15; // pixel
 	}
 
 
+	@Override
 	public void mouseDragged(MouseEvent e) {}
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		int x = (int) (e.getPoint().x/zoomFactor);
 		int y = (int) (e.getPoint().y/zoomFactor);
@@ -253,15 +260,15 @@ public class BICanvas extends JCPanel implements Scrollable, MouseMotionListener
 		String tooltip = "Coordinate (" + x + ", "+ y + "), ";
 		if(biSource.getColorModel().getNumComponents() > 3) {
 			tooltip	+= "ARGB ("
-				+ data.getSample((int)x, (int)y, 3) + ", "
-				+ data.getSample((int)x, (int)y, 0) + ", "
-				+ data.getSample((int)x, (int)y, 1) + ", "
-				+ data.getSample((int)x, (int)y, 2) + ")";
+				+ data.getSample(x, y, 3) + ", "
+				+ data.getSample(x, y, 0) + ", "
+				+ data.getSample(x, y, 1) + ", "
+				+ data.getSample(x, y, 2) + ")";
 		} else {
 			tooltip	+= "RGB ("
-				+ data.getSample((int)x, (int)y, 0) + ", "
-				+ data.getSample((int)x, (int)y, 1) + ", "
-				+ data.getSample((int)x, (int)y, 2) + ")";	
+				+ data.getSample(x, y, 0) + ", "
+				+ data.getSample(x, y, 1) + ", "
+				+ data.getSample(x, y, 2) + ")";	
 		}
 		this.setToolTipText(tooltip);
 	}

@@ -3,10 +3,8 @@
  */
 package de.danielsenff.badds.operations;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import ddsutil.BIUtil;
 import ddsutil.ImageRescaler;
 import ddsutil.Rescaler;
 
@@ -46,6 +44,7 @@ public class ScaleOperation implements Operation{
 	}
 	
 	
+	@Override
 	public BufferedImage run(final BufferedImage bi) {
 		return rescaler.rescaleBI(bi, newWidth, newHeight);
 	}

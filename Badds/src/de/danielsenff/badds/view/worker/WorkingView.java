@@ -5,8 +5,6 @@ package de.danielsenff.badds.view.worker;
 
 import java.awt.Cursor;
 
-import javax.swing.JDialog;
-
 import de.danielsenff.badds.view.View;
 
 

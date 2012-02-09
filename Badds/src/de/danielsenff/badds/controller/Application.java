@@ -2,15 +2,9 @@ package de.danielsenff.badds.controller;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-
-import jogl.DDSImage;
-
 import model.DDSFile;
 
 import de.danielsenff.badds.model.ExportOptions;
@@ -19,7 +13,6 @@ import de.danielsenff.badds.model.PresetsComboModel;
 import de.danielsenff.badds.model.PresetsFactory;
 import de.danielsenff.badds.model.SwingWorker;
 import de.danielsenff.badds.operations.Operation;
-import de.danielsenff.badds.operations.SourceOperation;
 import de.danielsenff.badds.view.View;
 
 

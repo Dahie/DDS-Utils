@@ -7,9 +7,9 @@ import gr.zdimensions.jsquish.Squish;
 
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import javax.activation.UnsupportedDataTypeException;
 import javax.swing.JOptionPane;
 
 import model.DDSFile;
@@ -36,6 +36,7 @@ public class ActionPreview extends BasicAction {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(final ActionEvent arg0) {
 		controller.getView().getWorkingView().startWorkingState(1);
 //		controller.getView().getProgressbar().setIndeterminate(true);
@@ -60,7 +61,7 @@ public class ActionPreview extends BasicAction {
 
 	public void createPreviewFrame() {
 		final int selectedRow = controller.getView().getOpenFilesTable().getSelectedRow();
-		final FilesListModel model = (FilesListModel<DDSFile>) controller.getFilesListModel();
+		final FilesListModel model = controller.getFilesListModel();
 		final DDSFile ddsfile = (DDSFile) model.getRowItem(selectedRow);
 		final DDSFile ddsimagefile ;
 
@@ -75,6 +76,9 @@ public class ActionPreview extends BasicAction {
 			JOptionPane.showMessageDialog(controller.getView(), 
 					"<html>Java is out of memory. Please close other previews before opening yet another.</html>",	"Out of memory", 
 					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		} catch (UnsupportedDataTypeException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 

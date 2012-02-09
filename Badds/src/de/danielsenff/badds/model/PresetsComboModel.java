@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
-import model.DDSFile;
+import ddsutil.PixelFormats;
 
 
 
@@ -95,7 +95,7 @@ public class PresetsComboModel extends DefaultComboBoxModel {
 					"presets.csv has faulty data", "Corrupt file", JOptionPane.ERROR_MESSAGE);
 		}
 		
-		return new Preset(name, width, height, DDSFile.verbosePixelformat(pixelformat), mipmaps);
+		return new Preset(name, width, height, PixelFormats.verbosePixelformat(pixelformat), mipmaps);
 				
 	}
 	

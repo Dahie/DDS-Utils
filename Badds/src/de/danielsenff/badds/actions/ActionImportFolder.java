@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import util.FileUtil;
 
 import de.danielsenff.badds.controller.Application;
-import de.danielsenff.badds.util.ResourceLoader;
 
 
 
@@ -32,10 +31,12 @@ public class ActionImportFolder extends BasicAction {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		try {
 			File directory = controller.showImageFileChooser().openDirectoryDialog();
 			File[] files = directory.listFiles(new FileFilter(){
+				@Override
 				public boolean accept(final File f) {
 					// TODO this could be done recursively through the filesystem
 					//return (f.isDirectory() || FileUtil.getFileSuffix(file).contains("dds"));

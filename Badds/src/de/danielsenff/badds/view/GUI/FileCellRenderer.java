@@ -33,6 +33,7 @@ public class FileCellRenderer extends JPanel implements ListCellRenderer,
 	/* (non-Javadoc)
 	 * @see javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing.JList, java.lang.Object, int, boolean, boolean)
 	 */
+	@Override
 	public Component getListCellRendererComponent(
 			JList list,          // the list being redrawn
 			Object value,        // value to display
@@ -87,6 +88,7 @@ public class FileCellRenderer extends JPanel implements ListCellRenderer,
 	/* (non-Javadoc)
 	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
 	 */
+	@Override
 	public Component getTableCellRendererComponent(
 			JTable table, 
 			Object value,

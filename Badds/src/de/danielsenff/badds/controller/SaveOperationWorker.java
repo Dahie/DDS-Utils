@@ -14,10 +14,12 @@ import javax.swing.JOptionPane;
 
 import jogl.DDSImage;
 
+import model.AbstractTextureImage;
 import model.DDSFile;
 
 import ddsutil.DDSUtil;
 import ddsutil.NonCubicDimensionException;
+import ddsutil.PixelFormats;
 import de.danielsenff.badds.model.ExportOptions;
 import de.danielsenff.badds.operations.ChannelBrightness;
 import de.danielsenff.badds.operations.Operation;
@@ -78,7 +80,7 @@ public class SaveOperationWorker extends OperationWorker {
 		}
 		
 		System.out.println("Width: " + newWidth + " Height: " + newHeight);
-		System.out.println("Pixelformat: " + DDSFile.verbosePixelformat(pixelformat) + " with MipMaps " + hasGeneratedMipMaps);
+		System.out.println("Pixelformat: " + PixelFormats.verbosePixelformat(pixelformat) + " with MipMaps " + hasGeneratedMipMaps);
 		
 	}
 
@@ -122,8 +124,8 @@ public class SaveOperationWorker extends OperationWorker {
 
 		try {
 			if(hasGeneratedMipMaps 
-					&& !DDSFile.isPowerOfTwo(sourceDDS.getWidth()) 
-					&& !DDSFile.isPowerOfTwo(sourceDDS.getHeight())) 
+					&& !AbstractTextureImage.isPowerOfTwo(sourceDDS.getWidth()) 
+					&& !AbstractTextureImage.isPowerOfTwo(sourceDDS.getHeight())) 
 				throw new NonCubicDimensionException();
 
 			imagefile = new DDSFile(sourceDDS.getFile());

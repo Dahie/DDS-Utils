@@ -35,6 +35,7 @@ public class ActionClose extends BasicAction implements KeyListener {
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		frame.dispose();
 	}
@@ -44,6 +45,7 @@ public class ActionClose extends BasicAction implements KeyListener {
 	/* (non-Javadoc)
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
 	 */
+	@Override
 	public void keyPressed(KeyEvent event) {
 		int keyCode = event.getKeyCode();
 		int expectedKeyCode = ((KeyStroke) this.getValue(ACCELERATOR_KEY)).getKeyCode();
@@ -59,6 +61,7 @@ public class ActionClose extends BasicAction implements KeyListener {
 	/* (non-Javadoc)
 	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
 	 */
+	@Override
 	public void keyReleased(KeyEvent arg0) {}
 
 
@@ -66,6 +69,7 @@ public class ActionClose extends BasicAction implements KeyListener {
 	/* (non-Javadoc)
 	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
 	 */
+	@Override
 	public void keyTyped(KeyEvent arg0) {}
 
 }
