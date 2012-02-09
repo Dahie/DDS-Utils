@@ -58,6 +58,7 @@ public class TEXFile  extends AbstractTextureImage {
 		this.depth 			= image.getDepth();
 		this.pixelformat 	= image.getPixelFormat();
 		this.numMipMaps 	= image.getNumMipMaps();
+		this.mipMaps 		= new MipMaps(this.numMipMaps);
 		this.hasMipMaps		= (image.getNumMipMaps() > 1); // there is always at least the topmost MipMap
 	}
 	

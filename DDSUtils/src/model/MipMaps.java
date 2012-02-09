@@ -57,13 +57,13 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * @param topmost 
 	 */
 	public void generateMipMaps(BufferedImage topmost) {
-		this.mipmaps.add(topmost);
+		getMipMaps().add(topmost);
 		
 		if(!DDSFile.isPowerOfTwo(topmost.getWidth()) 
 				&& !DDSFile.isPowerOfTwo(topmost.getHeight())) 
 			throw new NonCubicDimensionException();
 		
-		this.mipmaps = generateMipMapArray(this.mipmaps);	
+		this.mipmaps = generateMipMapArray(getMipMaps());	
 	}
 
 	private Vector<BufferedImage> generateMipMapArray(Vector<BufferedImage> mipMapsVector) {
@@ -122,23 +122,30 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * @return
 	 */
 	public BufferedImage getMipMap(final int index) {
-		return this.mipmaps.get(index);
+		return getMipMaps().get(index);
 	}
 	
 	/**
 	 * Set the given {@link BufferedImage} as MipMap in the index.
-	 * @param mipmap
+	 * @param mipmapIndex
 	 * @param image
 	 */
-	public void setMipMap(int mipmap, BufferedImage image) {
-		this.mipmaps.set(mipmap, image);
+	public void setMipMap(int mipmapIndex, BufferedImage image) {
+		if(getMipMaps().size() == mipmapIndex)
+			getMipMaps().add(mipmapIndex, image);
+		else
+			getMipMaps().set(mipmapIndex, image);
+	}
+
+	private Vector<BufferedImage> getMipMaps() {
+		return this.mipmaps;
 	}
 	
 	/**
 	 * @param image
 	 */
 	public void addMipMap(final BufferedImage image) {
-		this.mipmaps.add(image);
+		getMipMaps().add(image);
 	}
 	
 	/**
@@ -163,7 +170,7 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * @return
 	 */
 	public Vector<BufferedImage> getAllMipMaps() {
-		return this.mipmaps;
+		return getMipMaps();
 	}
 	
 	/**
@@ -171,7 +178,7 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 	 * @return
 	 */
 	public BufferedImage[] getAllMipMapsArray() {
-		return (BufferedImage[]) this.mipmaps.toArray();
+		return (BufferedImage[]) getMipMaps().toArray();
 	}
 
 	/* (non-Javadoc)

@@ -161,7 +161,7 @@ public abstract class AbstractTextureImage implements TextureImage {
 	 */
 	@Override
 	public boolean isCompressed() {
-		return DDSUtil.isDXTCompressed(pixelformat);
+		return PixelFormats.isDXTCompressed(pixelformat);
 	}
 	
 	/**
