@@ -24,6 +24,7 @@ import ddsutil.PixelFormats;
  */
 public abstract class AbstractTextureMap implements TextureMap {
 
+	public AbstractTextureMap() {}
 	
 	@Override
 	public ByteBuffer[] getDXTCompressedBuffer(final int pixelformat) 

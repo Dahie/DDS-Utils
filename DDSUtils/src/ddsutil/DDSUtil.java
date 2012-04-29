@@ -2,7 +2,6 @@ package ddsutil;
 
 
 import gr.zdimensions.jsquish.Squish;
-import gr.zdimensions.jsquish.Squish.CompressionType;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,16 +13,12 @@ import javax.activation.UnsupportedDataTypeException;
 
 import jogl.DDSImage;
 import jogl.TEXImage;
+import model.TextureMap;
+import util.FileUtil;
+import util.ImageUtils;
 
 import compression.DXTBufferCompressor;
 import compression.DXTBufferDecompressor;
-
-import model.MipMaps;
-import model.SingleTextureMap;
-import model.TextureMap;
-
-import util.FileUtil;
-import util.ImageUtils;
 
 
 

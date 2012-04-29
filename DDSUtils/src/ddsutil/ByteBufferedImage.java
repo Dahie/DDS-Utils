@@ -12,6 +12,8 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import util.ImageUtils;
+
 
 
 
@@ -102,9 +104,9 @@ public class ByteBufferedImage extends BufferedImage {
 		DataBuffer dataBuffer = bi.getRaster().getDataBuffer();
  
 		// read channel count
-		int componentCount = bi.getColorModel().getNumComponents() ;
+		int componentCount = bi.getColorModel().getNumComponents();
 		
-		byte[] convertDataBufferToArray = convertDataBufferToArray(bi.getWidth(), 
+		byte[] convertDataBufferToArray = convertDataBufferToARGBArray(bi.getWidth(), 
 				bi.getHeight(), dataBuffer, componentCount, bi.getType());
 		return convertDataBufferToArray;
 	}
@@ -119,26 +121,41 @@ public class ByteBufferedImage extends BufferedImage {
 	 * @param bufferedImageType
 	 * @return
 	 */
-	private static byte[] convertDataBufferToArray(final int width, 
+	private static byte[] convertDataBufferToARGBArray(final int width, 
 			final int height,
 			final DataBuffer dataBuffer, 
-			final int componentCount,
+			int componentCount,
 			final int bufferedImageType) {
 		int length = height * width * 4;
 		byte[] argb = new byte[length];
  
 		int r, g, b, a;
 		int count = 0;
-		for (int i = 0; i < length; i=i+4) {
+		System.out.println(width);
+		System.out.println(height);
+		System.out.println(bufferedImageType);
+//		if(length != dataBuffer.getSize())
+//			throw new IllegalStateException("Databuffer has not the expected length: " + dataBuffer.getSize()+ " instead of " + length);
+		
+		for (int i = 0; i < dataBuffer.getSize(); i=i+componentCount) {
 			// databuffer has unsigned integers, they must be converted to signed byte 
  
 			// original order from BufferedImage
- 
- 
+//			System.out.println(componentCount);
+//			System.out.println(length);
+//			System.out.println(i);
+			
 			if(componentCount > 3) {
 				// 32bit image
- 
-				if (bufferedImageType != BufferedImage.TYPE_4BYTE_ABGR) {
+				if (bufferedImageType == BufferedImage.TYPE_INT_ARGB) {
+					int value = (dataBuffer.getElem(count) ); 
+					int[] channels = ImageOperations.readPixelARGB(value);
+					a =  channels[0];
+					r =  channels[1];
+					g =  channels[2];
+					b =  channels[3];
+					count ++;
+				} else if (bufferedImageType != BufferedImage.TYPE_4BYTE_ABGR) {
 					/* working with png+alpha */
 					a =  (dataBuffer.getElem(i) );
 					r =  (dataBuffer.getElem(i+1));
@@ -160,7 +177,7 @@ public class ByteBufferedImage extends BufferedImage {
 			else 
 			{ //24bit image
 				
-				b =  (dataBuffer.getElem(count) );
+				b =  (dataBuffer.getElem(count));
 				count++;
 				g =  (dataBuffer.getElem(count));
 				count++;

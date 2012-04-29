@@ -16,15 +16,14 @@ public abstract class AbstractTextureImage implements TextureImage {
 	protected int width;
 	protected int pixelformat;
 	protected File file = null;
-	protected boolean hasMipMaps;
-	protected int numMipMaps;
+	protected boolean hasMipMaps = false;
+	protected int numMipMaps = 0;
 	protected int depth;
 	
 	/**
 	 * MipMap at the highest Level, ie the original 
 	 */
-//	protected BufferedImage topmost;
-	protected MipMaps mipMaps;
+	protected MipMaps mipMaps = new MipMaps();
 	
 	/**
 	 * Depth of color for all channels

@@ -27,23 +27,27 @@ public class BufferedImageTests extends DDSTestCase {
 	@Test
 	public void convertBI3x3intoByteArray() {
 		int[] firstPixel = {255, 255, 0,0};
-		assertBI(imageBMP3, firstPixel);
+		assertBI(imageBMP3, firstPixel, 3);
 	}
 	
 	@Test
 	public void convertBISUAintoByteArray() {
 		int[] firstPixel = {255, 0, 0,0};
-		assertBI(texturePNG64x64, firstPixel);
+		assertBI(texturePNG64x64, firstPixel, 4);
 	}
 
-	private void assertBI(File file, int[] firstPixel) {
+	private void assertBI(File file, int[] firstPixel, final int expectedComponentCount) {
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		assertEquals("component count", expectedComponentCount, image.getColorModel().getNumComponents());
+		
+		
 		byte[] newPixels = ByteBufferedImage.convertBIintoARGBArray(image);
+		
 		
 		assertEquals("length", image.getWidth()*image.getHeight()*4, newPixels.length);
 		assertEquals("first pixel a", firstPixel[0], (newPixels[0] & 0xFF));

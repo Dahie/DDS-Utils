@@ -99,6 +99,7 @@ public class InfoPanel extends JPanel {
 	 * @param texture
 	 */
 	public void setTextureFile(final TextureImage texture) {
+		System.out.println(texture.getPixelformat());
 		this.setData(texture.getNumMipMaps(), 
 				texture.getWidth(), 
 				texture.getHeight(),

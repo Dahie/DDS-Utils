@@ -7,10 +7,7 @@ import gr.zdimensions.jsquish.Squish;
 import gr.zdimensions.jsquish.Squish.CompressionType;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-
-import ddsutil.ByteBufferedImage;
 
 
 /**
@@ -18,11 +15,9 @@ import ddsutil.ByteBufferedImage;
  * @author danielsenff
  *
  */
-public class DXTBufferDecompressor {
+public class DXTBufferDecompressor extends BufferDecompressor{
 
-	protected ByteBuffer uncompressedBuffer;
 	protected CompressionType compressionType;
-	protected Dimension dimension;
 	
 
 	/**
@@ -62,27 +57,13 @@ public class DXTBufferDecompressor {
 		
 	}
 
-	/**
-	 * @return
-	 */
-	public BufferedImage getImage() {
-		
-//		ByteBuffer byteBuf = squishDecompressBuffer(compressedBuffer, dimension.width, dimension.height, compressionType );
-		BufferedImage image = new ByteBufferedImage(
-				this.dimension.width, 
-				this.dimension.height, 
-				this.uncompressedBuffer);
-		return image;
-	}
-	
-	
 
 	/**
 	 * Compresses a Byte-Array into a DXT-compressed {@link ByteBuffer}
-	 * If the type is null, it returns the uncompressed ByteBuffer
+	 * If the type is null, it returns the uncompressed ByteBuffer.
 	 * 
-	 * Decompresses a DXT-compressed Byte-Array and returns a byte-Array
-	 * If the {@link CompressionType} is null, it return the source data
+	 * Decompresses a DXT-compressed Byte-Array and returns a byte-Array.
+	 * If the {@link CompressionType} is null, it return the source data.
 	 * @param compressedData
 	 * @param width
 	 * @param height

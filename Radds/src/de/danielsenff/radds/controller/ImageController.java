@@ -116,6 +116,10 @@ public class ImageController {
 		if(image != null) {
 			image.loadImageData();
 			getView().setImage(image);
+		} else {
+			JOptionPane.showMessageDialog(null, 
+					"<html>Error, image can not be loaded.</html>",	"Attention", 
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }

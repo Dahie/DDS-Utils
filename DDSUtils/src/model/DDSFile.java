@@ -11,14 +11,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Vector;
+import java.util.List;
 
 import javax.activation.UnsupportedDataTypeException;
 
 import jogl.DDSImage;
 
+import compression.ARGBBufferDecompressor;
+import compression.BufferDecompressor;
 import compression.DXTBufferDecompressor;
 
+import ddsutil.MipMapsUtil;
 import ddsutil.PixelFormats;
 
 
@@ -75,25 +78,25 @@ public class DDSFile extends AbstractTextureImage{
 	 * @param filename
 	 * @param bi
 	 * @param pixelformat
-	 * @param hasmipmaps
+	 * @param hasMipMaps
 	 */
 	public DDSFile(final File filename, 
-			BufferedImage bi, 
+			final BufferedImage bi, 
 			final int pixelformat, 
-			final boolean hasmipmaps) {
+			final boolean hasMipMaps) {
 		this.file = filename;
 		
-		this.height = bi.getHeight();
 		this.width  = bi.getWidth();
-		this.hasMipMaps = hasmipmaps;
-		if(hasmipmaps) {
-			
+		this.height = bi.getHeight();
+		this.pixelformat = pixelformat;
+		this.hasMipMaps = hasMipMaps;
+		if(hasMipMaps) {
+			this.numMipMaps = MipMapsUtil.calculateMaxNumberOfMipMaps(width, height);
 		} else {
 			this.numMipMaps = 1;
 		}
 		this.mipMaps = new MipMaps(this.numMipMaps);
 		this.mipMaps.setMipMap(0, bi); 
-		this.pixelformat = pixelformat;
 	}
 	
 	/**
@@ -112,25 +115,34 @@ public class DDSFile extends AbstractTextureImage{
 	}
 
 	/**
-	 * Load the ImageData for the specified MipMap.
+	 * Load the ImageData for the specified MipMap from original {@link DDSImage}.
 	 * @param mipmap
 	 * @throws UnsupportedDataTypeException 
 	 */
 	public void loadImageData(int mipmap) throws UnsupportedDataTypeException {
 		if(mipmap <= this.numMipMaps ) {
 			
-			// TODO FIXME fails for uncompressed data
-			CompressionType compressionType = 
-				PixelFormats.getSquishCompressionFormat(ddsimage.getPixelFormat());
-			ByteBuffer data = ddsimage.getMipMap(mipmap).getData();
 			int width = MipMaps.getMipMapSizeAtIndex(mipmap, ddsimage.getWidth());
-			int height = MipMaps.getMipMapSizeAtIndex(mipmap, ddsimage.getHeight());;
-			DXTBufferDecompressor dxtBufferDecompressor = new DXTBufferDecompressor(
-					data,
-					width, 
-					height, 
-					compressionType);
-			this.mipMaps.addMipMap(dxtBufferDecompressor.getImage());
+			int height = MipMaps.getMipMapSizeAtIndex(mipmap, ddsimage.getHeight());
+			ByteBuffer data = ddsimage.getMipMap(mipmap).getData();
+			
+			BufferDecompressor bufferDecompressor;
+			if(isCompressed()) {
+				CompressionType compressionType = 
+						PixelFormats.getSquishCompressionFormat(ddsimage.getPixelFormat());
+				bufferDecompressor = new DXTBufferDecompressor(
+						data,
+						width, 
+						height, 
+						compressionType);
+			} else {
+				bufferDecompressor = new ARGBBufferDecompressor(
+						data,
+						width, 
+						height, 
+						this.pixelformat);
+			}
+			this.mipMaps.addMipMap(bufferDecompressor.getImage());
 		}
 	}
 	
@@ -223,16 +235,14 @@ public class DDSFile extends AbstractTextureImage{
 	 * @return
 	 */
 	public BufferedImage[] getAllMipMapsBI(){
-		MipMaps mipMaps = new MipMaps();
-		mipMaps.generateMipMaps(getTopMipMap());
-		return mipMaps.getAllMipMapsArray();		
+		return mipMaps.getAllMipMapsArray();
 	}
 	
 	/**
 	 * returns the stored MipMaps as {@link ByteBuffer}-Array
 	 * @return
 	 */
-	public Vector<BufferedImage> generateAllMipMaps(){
+	public List<BufferedImage> generateAllMipMaps(){
 		MipMaps mipMaps = new MipMaps();
 		mipMaps.generateMipMaps(getTopMipMap());
 		return mipMaps.getAllMipMaps();
@@ -241,5 +251,5 @@ public class DDSFile extends AbstractTextureImage{
 	public BufferedImage getMipMap(int index) {
 		return this.mipMaps.getMipMap(index);
 	}
-	
+
 }

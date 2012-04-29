@@ -24,6 +24,7 @@ public class SingleTextureMap extends AbstractTextureMap {
 	 * @param bi
 	 */
 	public SingleTextureMap(final BufferedImage bi) {
+		super();
 		this.bi = bi;
 	}
 	
