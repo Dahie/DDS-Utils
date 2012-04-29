@@ -388,11 +388,11 @@ public class TEXImage {
 			Vector<EmbeddedBuffer> embeddedBuffer = new Vector<EmbeddedBuffer>();
 			/*
 			 *  iterate over 5 tables, mapping pixelformat
-			 *  Table #1 Ý r8g8b8, x8r8g8b8, r5g6b5, x1r5g5b5 
-			 *  Table #2 Ý a8r8g8b8, a4r4g4b4, DXT2, DXT3, DXT4 
-			 *	Table #3 Ý a1r5g5b5 
-			 * 	Table #4 Ý DXT1 
-			 *  Table #5 Ý DXT5
+			 *  Table #1 : r8g8b8, x8r8g8b8, r5g6b5, x1r5g5b5 
+			 *  Table #2 : a8r8g8b8, a4r4g4b4, DXT2, DXT3, DXT4 
+			 *	Table #3 : a1r5g5b5 
+			 * 	Table #4 : DXT1 
+			 *  Table #5 : DXT5
 			 */
 			for (int t = 0; t < 5; t++) {
 				// iterate over 8 maps
