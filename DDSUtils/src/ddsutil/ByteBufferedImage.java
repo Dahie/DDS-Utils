@@ -12,6 +12,8 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import javax.activation.UnsupportedDataTypeException;
+
 import util.ImageUtils;
 
 
@@ -131,31 +133,18 @@ public class ByteBufferedImage extends BufferedImage {
  
 		int r, g, b, a;
 		int count = 0;
-		System.out.println(width);
-		System.out.println(height);
-		System.out.println(bufferedImageType);
-//		if(length != dataBuffer.getSize())
-//			throw new IllegalStateException("Databuffer has not the expected length: " + dataBuffer.getSize()+ " instead of " + length);
+//		if() TODO FIXME, what is the other supported?
+//			throw new UnsupportedDataTypeException("BufferedImages types TYPE_4BYTE_ABGR supported")
+		if(length != dataBuffer.getSize())
+			throw new IllegalStateException("Databuffer has not the expected length: " + dataBuffer.getSize()+ " instead of " + length);
 		
 		for (int i = 0; i < dataBuffer.getSize(); i=i+componentCount) {
 			// databuffer has unsigned integers, they must be converted to signed byte 
- 
 			// original order from BufferedImage
-//			System.out.println(componentCount);
-//			System.out.println(length);
-//			System.out.println(i);
-			
+//			
 			if(componentCount > 3) {
 				// 32bit image
-				if (bufferedImageType == BufferedImage.TYPE_INT_ARGB) {
-					int value = (dataBuffer.getElem(count) ); 
-					int[] channels = ImageOperations.readPixelARGB(value);
-					a =  channels[0];
-					r =  channels[1];
-					g =  channels[2];
-					b =  channels[3];
-					count ++;
-				} else if (bufferedImageType != BufferedImage.TYPE_4BYTE_ABGR) {
+				if (bufferedImageType != BufferedImage.TYPE_4BYTE_ABGR) {
 					/* working with png+alpha */
 					a =  (dataBuffer.getElem(i) );
 					r =  (dataBuffer.getElem(i+1));
