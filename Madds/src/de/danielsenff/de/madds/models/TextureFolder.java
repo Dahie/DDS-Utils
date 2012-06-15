@@ -24,4 +24,14 @@ public class TextureFolder implements SizableNode {
 		return this.sumSize;
 	}
 
+	@Override
+	public File getFile() {
+		return this.folder;
+	}
+
+	@Override
+	public String getFileName() {
+		return this.folder.getName();
+	}
+
 }

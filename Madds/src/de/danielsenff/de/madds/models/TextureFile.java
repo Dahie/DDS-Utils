@@ -65,5 +65,10 @@ public class TextureFile implements SizableNode{
 	public int getSize() {
 		return this.sizeInMemory;
 	}
+
+	@Override
+	public File getFile() {
+		return this.file;
+	}
 	
 }
