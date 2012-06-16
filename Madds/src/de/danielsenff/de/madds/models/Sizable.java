@@ -2,9 +2,11 @@ package de.danielsenff.de.madds.models;
 
 import java.io.File;
 
-public interface SizableNode {
+public interface Sizable {
 
 	public File getFile();
 	public String getFileName();
-	public int getSize();
+	public long getSize();
+	public void setSize(long size);
+	public void addSize(long diff);
 }

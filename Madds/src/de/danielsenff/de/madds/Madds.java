@@ -5,10 +5,12 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 import de.danielsenff.de.madds.models.Inventorizer;
-import de.danielsenff.de.madds.models.SizableNode;
-import de.danielsenff.de.madds.models.Tree;
+import de.danielsenff.de.madds.models.Sizable;
 import de.danielsenff.de.madds.util.ByteConverter;
 import de.danielsenff.de.madds.util.Logger;
+import de.danielsenff.de.madds.view.MaddsView;
+import de.master.core.graph.base.Graph;
+import de.master.core.graph.base.Node;
 
 public class Madds {
 
@@ -28,18 +30,23 @@ public class Madds {
 
 			Inventorizer inventorizer = new Inventorizer(rootDirectory, ".dds");
 			inventorizer.startInventoring(rootDirectory);
-			Tree<SizableNode> tree = inventorizer.getFileSizeTree();
-			displaySizableNode(tree, tree.getRoot());
-		}	
+			Graph<Sizable> graph = inventorizer.getFileSizeTree();
+			displaySizableNode(graph.getFirst());
+			
+			
+			new MaddsView(inventorizer);
+		}
 	}
 
-	private  void displaySizableNode(Tree<SizableNode> tree, SizableNode node) {
-		String message = node.getFileName() +": " +ByteConverter.bit2MibiByte(node.getSize())+ " MibiByte";
+	private  void displaySizableNode(Node<Sizable> node) {
+		Sizable file = node.getData();
+		String message = file.getFileName() +": " +ByteConverter.bit2MibiByte(file.getSize())+ " MibiByte";
 
 		Logger.getLogger(getClass()).log(message);
 		
-		for (SizableNode child : tree.getSuccessors(node)) {
-			displaySizableNode(tree, child);
+		for(Node<Sizable> neighbour : node.getNeighbours() ) {
+			Logger.getLogger(getClass()).log(neighbour);
+//			displaySizableNode(neighbour);
 		}
 	}
 

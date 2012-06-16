@@ -2,25 +2,27 @@ package de.danielsenff.de.madds.models;
 
 import java.io.File;
 
-public class TextureFolder implements SizableNode {
+public class TextureFolder implements Sizable {
 
 	File folder;
-	int sumSize;
+	long sumSize;
 	
 	public TextureFolder(File folder) {
 		this.folder = folder;
 	}
 	
-	public void addSize(int diff) {
+	@Override
+	public void addSize(long diff) {
 		this.sumSize += diff;
 	}
 	
-	public void setSize(int size) {
+	@Override
+	public void setSize(long size) {
 		this.sumSize = size;
 	}
 	
 	@Override
-	public int getSize() {
+	public long getSize() {
 		return this.sumSize;
 	}
 

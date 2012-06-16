@@ -6,13 +6,13 @@ import java.io.IOException;
 
 import jogl.DDSImage;
 
-public class TextureFile implements SizableNode{
+public class TextureFile implements Sizable{
 
 	private File file;
 	private DDSImage image;
 	private Dimension dimension;
 	private int bitrate;
-	private int sizeInMemory;
+	private long sizeInMemory;
 	private Material material;
 	
 	public TextureFile(File file) {
@@ -23,7 +23,15 @@ public class TextureFile implements SizableNode{
 		this.image = DDSImage.read(this.file);
 		this.dimension = new Dimension(image.getWidth(), image.getHeight());
 		
-		this.bitrate = image.getDepth();
+		if(image.getDepth() > 0)
+			this.bitrate = image.getDepth();
+		else if (image.getPixelFormat() == DDSImage.D3DFMT_DXT5) {
+			this.bitrate = 32;
+		}else if (image.getPixelFormat() == DDSImage.D3DFMT_DXT1) {
+			this.bitrate = 32;
+		}else if (image.getPixelFormat() == DDSImage.D3DFMT_DXT3) {
+			this.bitrate = 32;
+		}
 		
 		if(containsFileName("_s.")) {
 			// specular map
@@ -39,9 +47,10 @@ public class TextureFile implements SizableNode{
 		}
 		
 		// size in memory without mipmaps
-		this.sizeInMemory = image.getDepth()*image.getWidth()*image.getHeight();
-		// size in memory with mipmaps
-		// TODO
+		this.sizeInMemory = 0;
+		for (int i = 0; i < image.getNumMipMaps(); i++) {
+			this.sizeInMemory += image.mipMapSizeInBytes(i)*8;
+		}
 	}
 
 	private boolean containsFileName(String string) {
@@ -62,13 +71,27 @@ public class TextureFile implements SizableNode{
 	 * size in memory without mipmaps
 	 */
 	@Override
-	public int getSize() {
+	public long getSize() {
 		return this.sizeInMemory;
 	}
 
 	@Override
 	public File getFile() {
 		return this.file;
+	}
+
+	@Override
+	public void setSize(long size) {
+		this.sizeInMemory = size;
+	}
+
+	@Override
+	public void addSize(long diff) {
+		this.sizeInMemory += diff;
+	}
+
+	public Material getMaterial() {
+		return this.material;
 	}
 	
 }

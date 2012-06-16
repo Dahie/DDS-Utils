@@ -966,7 +966,7 @@ public class DDSImage {
 		return Math.max(height, 1);
 	}
 
-	private int mipMapSizeInBytes(int map) {
+	public int mipMapSizeInBytes(int map) {
 		int width  = mipMapWidth(map);
 		int height = mipMapHeight(map);
 		if (isCompressed()) {

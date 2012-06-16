@@ -5,14 +5,14 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import de.danielsenff.de.madds.models.SizableNode;
+import de.danielsenff.de.madds.models.Sizable;
 import de.danielsenff.de.madds.models.Tree;
 
-public class PartitionTreeVisPanel extends JPanel {
+public class PartitionPanel extends JPanel {
 
-	Tree<SizableNode> tree;
+	Tree<Sizable> tree;
 	
-	public PartitionTreeVisPanel(Tree<SizableNode> tree2) {
+	public PartitionPanel(Tree<Sizable> tree2) {
 		this.tree = tree2;
 	}
 	
@@ -27,7 +27,7 @@ public class PartitionTreeVisPanel extends JPanel {
 		
 	}
 
-	private void paintSizableNode(SizableNode root, int i) {
+	private void paintSizableNode(Sizable root, int i) {
 		// TODO Auto-generated method stub
 		
 	}
