@@ -1,6 +1,9 @@
 package de.danielsenff.de.madds.view;
 
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
@@ -12,14 +15,14 @@ public class StatisticsPanel extends JPanel {
 	JTable summaryTable;
 	
 	public StatisticsPanel(Inventorizer inventory) {
-		
-		
-		TableModel tModel = new SummaryTableModel(inventory.getTextureFiles());
+		TableModel tModel = new SummaryTableModel(inventory.getTextureFiles().values());
 		
 		this.summaryTable = new JTable();
 		summaryTable.setModel(tModel);
-		System.out.println("he2");
-		add(summaryTable);
+		summaryTable.setShowHorizontalLines(true);
+		JScrollPane scrollPane = new JScrollPane(summaryTable);
+		scrollPane.setPreferredSize(new Dimension(300, 130));
+		add(scrollPane);
 	}
 	
 }

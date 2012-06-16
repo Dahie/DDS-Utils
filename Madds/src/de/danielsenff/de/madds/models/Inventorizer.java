@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Vector;
 
 import de.master.core.graph.base.Graph;
@@ -15,19 +16,13 @@ public class Inventorizer {
 	private File rootDirectory;
 	private FileFilter filter;
 	private Graph<Sizable> fileTree;
-	private Vector<TextureFile> textureFiles;
+	private HashMap<File, TextureFile> textureFiles;
 	
 	public Inventorizer(File rootDirectory, final String extension) {
 		this.rootDirectory = rootDirectory;
-		this.filter = new FileFilter() {
-			
-			@Override
-			public boolean accept(File pathname) {
-				return pathname.isDirectory() || pathname.getName().toLowerCase().endsWith(extension);
-			}
-		};
+		this.filter = new TextureNodeFileFilter(extension);
 		this.fileTree = new Graph<>();
-		this.textureFiles = new Vector<>();
+		this.textureFiles = TextureHashMap.getTextureHashMap();
 	}
 	
 	public void makeInventoryForDir(Node<Sizable> parentNode, File[] files) {
@@ -36,7 +31,7 @@ public class Inventorizer {
 			
 			if(file.isDirectory()) {
 				TextureFolder tfolder = new TextureFolder(file);
-				Node folderNode = new Node((Sizable)tfolder);
+				Node<Sizable> folderNode = new Node((Sizable)tfolder);
 				fileTree.insertAt(0.0, parentNode, folderNode);
 				makeInventoryForDir(folderNode, file.listFiles(filter));
 				parentNode.getData().addSize(tfolder.getSize());
@@ -45,11 +40,9 @@ public class Inventorizer {
 				try {
 					TextureFile tfile = TextureFile.read(file);
 					fileTree.insertAt(0.0, parentNode, new Node<>((Sizable)tfile));
-					this.textureFiles.add(tfile);
-					System.out.println(file.getName() + "   " + tfile.getSize());
+					this.textureFiles.put(file, tfile);
 					parentNode.getData().addSize(tfile.getSize());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -58,7 +51,7 @@ public class Inventorizer {
 
 	public void startInventoring(File rootDirectory) {
 		TextureFolder tfolder = new TextureFolder(rootDirectory);
-		Node rootFolderNode = new Node(tfolder);
+		Node<Sizable> rootFolderNode = new Node(tfolder);
 		fileTree.insert(0, rootFolderNode);
 		makeInventoryForDir(rootFolderNode, rootDirectory.listFiles(filter));
 	}
@@ -67,7 +60,7 @@ public class Inventorizer {
 		return this.fileTree;
 	}
 	
-	public Collection<TextureFile> getTextureFiles() {
+	public HashMap<File, TextureFile> getTextureFiles() {
 		return this.textureFiles;
 	}
 }

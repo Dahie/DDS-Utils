@@ -1,11 +1,19 @@
 package de.danielsenff.de.madds;
 
+import java.awt.BorderLayout;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
+import net.bouthier.treemapSwing.TMView;
+import net.bouthier.treemapSwing.TreeMap;
+import net.bouthier.treemapSwing.fileViewer.TMFileModelDraw;
+import net.bouthier.treemapSwing.fileViewer.TMFileModelSize;
 import de.danielsenff.de.madds.models.Inventorizer;
 import de.danielsenff.de.madds.models.Sizable;
+import de.danielsenff.de.madds.models.TMTextureModelDraw;
+import de.danielsenff.de.madds.models.TMTextureNode;
 import de.danielsenff.de.madds.util.ByteConverter;
 import de.danielsenff.de.madds.util.Logger;
 import de.danielsenff.de.madds.view.MaddsView;
@@ -26,16 +34,34 @@ public class Madds {
 	public void start() {
 		File rootDirectory = openFile();
 		if(rootDirectory != null) {
-			Logger.getLogger(getClass()).log(rootDirectory);
-
 			Inventorizer inventorizer = new Inventorizer(rootDirectory, ".dds");
 			inventorizer.startInventoring(rootDirectory);
-			Graph<Sizable> graph = inventorizer.getFileSizeTree();
-			displaySizableNode(graph.getFirst());
-			
-			
-			new MaddsView(inventorizer);
+//			displaySizableNode(graph.getFirst());
+
+			showTMApp(inventorizer, rootDirectory);
 		}
+	}
+
+	private void showTMApp(Inventorizer inventorizer, File rootFile) {
+		TMTextureNode model = new TMTextureNode(rootFile);
+		if (model == null) {
+			System.err.println(
+					"Error : can't start treemap from "
+							+ rootFile.getAbsolutePath());
+			return;
+		}
+
+		TreeMap treeMap = new TreeMap(model);
+		String name = rootFile.getAbsolutePath();
+
+		TMFileModelSize fSize = new TMFileModelSize();
+		TMTextureModelDraw fDraw = new TMTextureModelDraw();
+		TMView view = treeMap.getView(fSize, fDraw);
+//		view.getAlgorithm().setCushion(true);
+		view.setLayout(new BorderLayout());
+
+		MaddsView maddsView = new MaddsView(inventorizer, view);
+		
 	}
 
 	private  void displaySizableNode(Node<Sizable> node) {
@@ -43,10 +69,10 @@ public class Madds {
 		String message = file.getFileName() +": " +ByteConverter.bit2MibiByte(file.getSize())+ " MibiByte";
 
 		Logger.getLogger(getClass()).log(message);
-		
+
 		for(Node<Sizable> neighbour : node.getNeighbours() ) {
 			Logger.getLogger(getClass()).log(neighbour);
-//			displaySizableNode(neighbour);
+			//			displaySizableNode(neighbour);
 		}
 	}
 
