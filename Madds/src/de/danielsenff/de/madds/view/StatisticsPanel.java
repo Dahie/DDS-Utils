@@ -15,14 +15,17 @@ public class StatisticsPanel extends JPanel {
 	JTable summaryTable;
 	
 	public StatisticsPanel(Inventorizer inventory) {
-		TableModel tModel = new SummaryTableModel(inventory.getTextureFiles().values());
+		LegendPanel legend = new LegendPanel();
+		add(legend);
 		
+		TableModel tModel = new SummaryTableModel(inventory.getTextureFiles().values());
 		this.summaryTable = new JTable();
 		summaryTable.setModel(tModel);
 		summaryTable.setShowHorizontalLines(true);
 		JScrollPane scrollPane = new JScrollPane(summaryTable);
-		scrollPane.setPreferredSize(new Dimension(300, 130));
+		scrollPane.setPreferredSize(new Dimension(300, 100));
 		add(scrollPane);
+		
 	}
 	
 }

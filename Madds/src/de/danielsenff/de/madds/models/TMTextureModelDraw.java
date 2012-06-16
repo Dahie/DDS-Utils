@@ -5,6 +5,7 @@ import java.awt.Paint;
 
 import net.bouthier.treemapSwing.fileViewer.TMFileModelDraw;
 import de.danielsenff.de.madds.util.ByteConverter;
+import de.danielsenff.de.madds.view.ColorPalette;
 
 public class TMTextureModelDraw extends TMFileModelDraw {
 
@@ -14,16 +15,16 @@ public class TMTextureModelDraw extends TMFileModelDraw {
 		TextureFile textureNode = TextureHashMap.getTextureHashMap().get(node);
 		if(textureNode instanceof TextureFile) {
 			switch (textureNode.getMaterial()) {
-			case Normal:	return Color.CYAN;
-			case Diffuse:	return Color.RED;
-			case Specular:	return Color.BLUE;
-			case Other:	return Color.ORANGE;
+			case Normal:	return ColorPalette.colorNormal;
+			case Diffuse:	return ColorPalette.colorDiffuse;
+			case Specular:	return ColorPalette.colorSpecular;
+			case Other:	return ColorPalette.colorOther;
 			default:
 				break;
 			}
 		}
 		
-		return Color.BLACK; 
+		return ColorPalette.colorDefault; 
 	}
 	
 	@Override

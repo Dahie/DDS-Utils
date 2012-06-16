@@ -48,7 +48,7 @@ public class SummaryTableModel extends AbstractTableModel {
 		switch(columnIndex) {
 		case 0: return "Material";
 		case 1: return "Number of files";
-		case 2: return "Sum in MibiByte";
+		case 2: return "Sum in MByte";
 		}
 		return "";
 	}
