@@ -18,6 +18,7 @@ public class TMTextureModelDraw extends TMFileModelDraw {
 			case Normal:	return ColorPalette.colorNormal;
 			case Diffuse:	return ColorPalette.colorDiffuse;
 			case Specular:	return ColorPalette.colorSpecular;
+			case Animation:	return ColorPalette.colorAnimation;
 			case Other:	return ColorPalette.colorOther;
 			default:
 				break;

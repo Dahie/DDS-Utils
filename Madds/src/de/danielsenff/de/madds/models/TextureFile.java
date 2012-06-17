@@ -33,7 +33,10 @@ public class TextureFile implements Sizable{
 			this.bitrate = 32;
 		}
 		
-		if(containsFileName("_s.")) {
+		if(matchesFileName("(.+)(_[rdbns][0-9]+)(\\..+)")) {
+			// animations
+			this.material = Material.Animation;
+		} else 	if(containsFileName("_s.")) {
 			// specular map
 			this.material = Material.Specular;
 		} else if(containsFileName("_b.")) {
@@ -55,6 +58,10 @@ public class TextureFile implements Sizable{
 
 	private boolean containsFileName(String string) {
 		return getFileName().toLowerCase().contains(string);
+	}
+	
+	private boolean matchesFileName(String string) {
+		return getFileName().toLowerCase().matches(string);
 	}
 	
 	public String getFileName() {

@@ -23,7 +23,7 @@ public class StatisticsPanel extends JPanel {
 		summaryTable.setModel(tModel);
 		summaryTable.setShowHorizontalLines(true);
 		JScrollPane scrollPane = new JScrollPane(summaryTable);
-		scrollPane.setPreferredSize(new Dimension(300, 100));
+		scrollPane.setPreferredSize(new Dimension(300, 120));
 		add(scrollPane);
 		
 	}

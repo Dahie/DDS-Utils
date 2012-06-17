@@ -9,4 +9,5 @@ public class ColorPalette {
 	public static final Color colorNormal = new Color(156, 217, 240);
 	public static final Color colorOther = new Color(224, 238, 105);
 	public static final Color colorDefault = new Color(205, 238, 105);
+	public static final Color colorAnimation = new Color(255, 227, 119);
 }
