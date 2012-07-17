@@ -13,13 +13,11 @@ import de.master.core.graph.base.Node;
 
 public class Inventorizer {
 
-	private File rootDirectory;
 	private FileFilter filter;
 	private Graph<Sizable> fileTree;
 	private HashMap<File, TextureFile> textureFiles;
 	
-	public Inventorizer(File rootDirectory, final String extension) {
-		this.rootDirectory = rootDirectory;
+	public Inventorizer(final String extension) {
 		this.filter = new TextureNodeFileFilter(extension);
 		this.fileTree = new Graph<>();
 		this.textureFiles = TextureHashMap.getTextureHashMap();
