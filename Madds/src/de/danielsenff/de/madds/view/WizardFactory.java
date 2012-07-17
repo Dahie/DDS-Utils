@@ -7,14 +7,14 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import net.bouthier.treemapSwing.TMView;
-import net.bouthier.treemapSwing.TreeMap;
-import net.bouthier.treemapSwing.fileViewer.TMFileModelSize;
 
 import org.ciscavate.cjwizard.PageFactory;
 import org.ciscavate.cjwizard.WizardPage;
@@ -22,8 +22,6 @@ import org.ciscavate.cjwizard.WizardSettings;
 
 import de.danielsenff.de.madds.Madds;
 import de.danielsenff.de.madds.models.Inventorizer;
-import de.danielsenff.de.madds.models.TMTextureModelDraw;
-import de.danielsenff.de.madds.models.TMTextureNode;
 
 public class WizardFactory implements PageFactory {
 
@@ -44,7 +42,7 @@ public class WizardFactory implements PageFactory {
 
 	
 	private WizardPage createTreeMapPage(final WizardSettings settings) {
-		final WizardPage wp = new WizardPage("Memory visualization", "hey") {
+		final WizardPage wp = new WizardPage("Memory visualization", "Visualize DDS in directories") {
 			{
 				Inventorizer inventorizer = (Inventorizer)settings.get("inventorizer");
 				TMView view = (TMView) settings.get("view");
@@ -67,25 +65,37 @@ public class WizardFactory implements PageFactory {
 	}
 
 	private WizardPage createDirectorySelectPage(final WizardSettings settings) {
-		final WizardPage wp = new WizardPage("Select directory", "hey") {
+		final WizardPage wp = new WizardPage("Select directory", "Select directory") {
 			{
-				String text = "<html><b>Welcome to Madds to test Memory Access of DDS</b>"
-						+"<p>This utility helps you to get a quick overview on the " +
+				setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+				JLabel label1 = new JLabel("<html><b>Welcome to Madds to test Memory Access of DDS</b>"
+						+"<p><p>This utility helps you to get a quick overview on the " +
 						"texture memory usage of your Mod/Game." +
-						"<p>Select the root-folder of your project to analyze all containing DDS-files.";
-				add(new JLabel(text));
-				String text2 = "Select your Mod's Vehicles-folder.";
-				add(new JLabel(text2));
+						"<p><p>Select the root-folder of your project to analyze all containing DDS-files.<p>");
+				label1.setAlignmentX(LEFT_ALIGNMENT);
+				add(label1);
+				add(new JSeparator());
+				JLabel label2 = new JLabel("<html><p>Select your Mod's Vehicles-folder.<p>");
+				label2.setAlignmentX(LEFT_ALIGNMENT);
+				add(label2);
 				JPanel panel = createDirectorySelectPanel(settings);
+				panel.setAlignmentX(LEFT_ALIGNMENT);
+				panel.setMaximumSize(new Dimension(400, 20));
 				add(panel);
+				JLabel label3 = new JLabel("<html><p>This tool only analyzes only DDS files. TGA, BMP or any other formats are ignored.");
+				label3.setAlignmentX(LEFT_ALIGNMENT);
+				add(label3);
+				add(new JSeparator());
 			}
 
 			private JPanel createDirectorySelectPanel(
 					final WizardSettings settings) {
+				
 				JPanel panel = new JPanel();
 				panel.setOpaque(false);
 				panel.setLayout(new BorderLayout());
-				final JTextField textfield = new JTextField();
+				final String startFolder = System.getProperty("user.home");
+				final JTextField textfield = new JTextField(startFolder);
 				textfield.setEnabled(false);
 				textfield.setPreferredSize(new Dimension(400, 20));
 				textfield.setName("rootDirectory");
@@ -95,7 +105,7 @@ public class WizardFactory implements PageFactory {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						File file = Madds.openFile();
+						File file = Madds.openFile(startFolder);
 						if(file != null && file.exists()) {
 							textfield.setText(file.getAbsolutePath());
 							settings.put("rootDirectory", file.getAbsolutePath());

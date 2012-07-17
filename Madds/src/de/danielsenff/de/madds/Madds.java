@@ -75,12 +75,12 @@ public class Madds {
 			public void onPageChanged(WizardPage newPage, List<WizardPage> path) {
 				log.debug("settings: "+wizard.getSettings());
 				// Set the dialog title to match the description of the new page:
-				dialog.setTitle(newPage.getDescription());
+				dialog.setTitle("Madds - "+newPage.getDescription());
 			}
 		});
 
 		dialog.getContentPane().add(wizard);
-		dialog.setPreferredSize(new Dimension(800, 600));
+		dialog.setPreferredSize(new Dimension(700, 500));
 		dialog.pack();
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);
@@ -101,9 +101,6 @@ public class Madds {
 		TMFileModelSize fSize = new TMFileModelSize();
 		TMTextureModelDraw fDraw = new TMTextureModelDraw();
 		return treeMap.getView(fSize, fDraw);
-
-		
-		
 	}
 
 //	private  void displaySizableNode(Node<Sizable> node) {
@@ -121,9 +118,9 @@ public class Madds {
 
 
 
-	public static File openFile() {
+	public static File openFile(String startFolder) {
 
-		final JFileChooser fc = new JFileChooser();
+		final JFileChooser fc = new JFileChooser(startFolder);
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		//		fc.setFileFilter(new FileNameExtensionFilter("DirectDrawSurface", "DDS"));
 
