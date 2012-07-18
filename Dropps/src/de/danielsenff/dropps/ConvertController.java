@@ -5,6 +5,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -105,8 +106,10 @@ public class ConvertController implements IProgressObserverable {
 				return;
 			}
 			
+			InputStream fis = new FileInputStream(file);
 			if(ImageIOUtils.isImageIOSupported(file)) {
-				imageToConvert = ImageIO.read(file);
+				imageToConvert = ImageIO.read(fis);
+				fis.close();
 				System.out.println(imageToConvert.getType());
 			} else if (FileUtil.getFileSuffix(file).contains("tex")) {
 				imageToConvert = DDSUtil.decompressTexture(file);
@@ -114,14 +117,16 @@ public class ConvertController implements IProgressObserverable {
 				try {
 					final TextureImageFormatLoaderTGA loader = new TextureImageFormatLoaderTGA();
 
-					final BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+					final BufferedInputStream in = new BufferedInputStream(fis);
 					imageToConvert = loader.loadTextureImage(in , true, false);
+					fis.close();
 				} catch (final Exception ex) {
 					ex.printStackTrace();
 					JOptionPane.showMessageDialog(Dropps.getApplication().getMainFrame(), 
 							"<html>Error: The TGA-file could not be loaded. Only 32bit TGA are supported." +
 							"<br>The operation is aborted. </html>",	"Error", 
 							JOptionPane.ERROR_MESSAGE);
+					fis.close();
 				}
 			}
 			
