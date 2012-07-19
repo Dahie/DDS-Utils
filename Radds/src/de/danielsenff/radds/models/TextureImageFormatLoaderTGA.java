@@ -35,6 +35,8 @@ import java.awt.image.DataBufferByte;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
+import javax.activation.UnsupportedDataTypeException;
+
 //import org.jagatoo.util.image.ImageUtility;
 
 /**
@@ -507,6 +509,7 @@ public class TextureImageFormatLoaderTGA
    }
 
    /**
+    * can return null for invalid tga files
     * {@inheritDoc}
     */
    public BufferedImage loadTextureImage( BufferedInputStream in, boolean acceptAlpha, boolean flipVertically ) throws IOException
@@ -521,7 +524,8 @@ public class TextureImageFormatLoaderTGA
        final int headerType = compareFormatHeader( in, header );
 
        if ( headerType == HEADER_INVALID )
-           return ( null );
+    	   throw new IOException("headers are invalid");
+           //return ( null );
 
        BufferedImage image = null;
 
