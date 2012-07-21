@@ -94,7 +94,7 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
     @Override 
     protected void failed(final Throwable e) {
         logger.log(Level.WARNING, "couldn't load " + getFile(), e);
-        final String msg = getResourceMap().getString("loadFailedMessage", getFile());
+        final String msg = getResourceMap().getString("loadFailedMessage", getFile()) + e.getMessage();
         final String title = getResourceMap().getString("loadFailedTitle");
         final int type = JOptionPane.ERROR_MESSAGE;
         RaddsView.getProgressBar().setIndeterminate(false);

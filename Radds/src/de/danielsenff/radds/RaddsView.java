@@ -10,14 +10,18 @@ import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JSplitPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 
 import model.TextureImage;
 
@@ -54,6 +58,8 @@ public class RaddsView extends FrameView {
 	private boolean modified = false;
 	private boolean paste = false;
 
+	private File chooserDirectory;
+	
 	private TextureImage textureImage;
 	
 	/**
@@ -64,6 +70,7 @@ public class RaddsView extends FrameView {
 		super(radds);
 		
 		this.openFilesModel = new FilesListModel();
+		this.chooserDirectory = FileSystemView.getFileSystemView().getHomeDirectory();
 		
 		// menu
 		initMenu();
@@ -93,6 +100,7 @@ public class RaddsView extends FrameView {
 		else
 			menuFile = new JMenu(resourceMap.getString("file.menu"));
 		menuFile.add(getAction("open"));
+		menuFile.add(getAction("export"));
 		menuBar.add(menuFile);
 		
 		final JMenu menuEdit = new JMenu(resourceMap.getString("edit.menu"));
@@ -204,16 +212,6 @@ public class RaddsView extends FrameView {
 	}
 	
 	/**
-	 * Returns the currently loaded {@link BufferedImage} shown on the canvas.
-	 * This may be different from the origin Image, as the canvas 
-	 * may be only displaying certain channels.
-	 * @return
-	 */
-	public BufferedImage getImage() {
-		return getCanvas().getCanvas();
-	}
-	
-	/**
 	 * Returns the currently opened {@link TextureImage}.
 	 * @return
 	 */
@@ -277,12 +275,63 @@ public class RaddsView extends FrameView {
 	@Action
 	(enabledProperty = "opened")
 	public void copy() { 
-		BufferedImage bi = getImage();
+		/* Returns the currently loaded {@link BufferedImage} shown on the canvas.
+		 * This may be different from the origin Image, as the canvas 
+		 * may be only displaying certain channels.
+		 */
+		BufferedImage bi = getCanvas().getCanvas();
 		Clipboard myClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();	
 		ClipImage ci = new ClipImage(bi); 
 		myClipboard.setContents(ci, new ClipboardOwner() {
 			public void lostOwnership(Clipboard clipboard, Transferable contents) {	}
 		});
+	}
+	
+	/**
+	 * Export the opened image
+	 */
+	@Action
+	(enabledProperty = "opened")
+	public void export() {
+		
+		String currentFileName = getFile().getName();
+		File defaultFileName = new File(currentFileName.substring(0, currentFileName.lastIndexOf('.')) + ".png");
+		final JFileChooser fc = new JFileChooser(chooserDirectory);
+		fc.setSelectedFile(defaultFileName);
+        fc.setFileFilter(new FileNameExtensionFilter("JPEG", "jpg"));
+        fc.setFileFilter(new FileNameExtensionFilter("PNG", "png"));
+
+		final int option = fc.showSaveDialog(getFrame());
+		if(option == JFileChooser.APPROVE_OPTION) {
+			try {
+
+				File file = fc.getSelectedFile();
+				chooserDirectory = file.getParentFile();
+				// TODO if(file.exists()= blabla 
+				
+				if(file.getName().toLowerCase().contains(".png")) {
+					//Get source image including alpha.
+					BufferedImage bi = getCanvas().getSource();
+					// TODO maybe option to say whether to save with or without alpha
+					// Save as PNG
+					ImageIO.write(bi, "png", file);
+				} else if(file.getName().toLowerCase().contains(".jpg") || file.getName().toLowerCase().contains(".jpeg")) {
+					//Get source image including alpha.
+					BufferedImage bi = getCanvas().getCanvas();
+					// TODO maybe option to say whether to save with or without alpha
+					// Save as jpg
+					ImageIO.write(bi, "jpg", file);
+				}
+				
+			} catch (IOException e) {
+				final String msg = getResourceMap().getString("exportFailedMessage", getFile()) + e.getMessage();
+				final String title = getResourceMap().getString("exportFailedTitle");
+				final int type = JOptionPane.ERROR_MESSAGE;
+				RaddsView.getProgressBar().setIndeterminate(false);
+				RaddsView.getProgressBar().setVisible(false);
+				JOptionPane.showMessageDialog(getFrame(), msg, title, type);
+			}
+		}
 	}
 	
 	/**
