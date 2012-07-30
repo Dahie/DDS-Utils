@@ -14,6 +14,7 @@ public class TextureFile implements Sizable{
 	private int bitrate;
 	private long sizeInMemory;
 	private Material material;
+	private int compression;
 	
 	public TextureFile(File file) {
 		this.file = file;
@@ -22,6 +23,7 @@ public class TextureFile implements Sizable{
 	private void setup() throws IOException {
 		this.image = DDSImage.read(this.file);
 		this.dimension = new Dimension(image.getWidth(), image.getHeight());
+		this.compression = image.getCompressionFormat();
 		
 		if(image.getDepth() > 0)
 			this.bitrate = image.getDepth();
@@ -62,6 +64,18 @@ public class TextureFile implements Sizable{
 	
 	private boolean matchesFileName(String string) {
 		return getFileName().toLowerCase().matches(string);
+	}
+	
+	public Dimension getDimension() {
+		return dimension;
+	}
+	
+	public int getCompression() {
+		return compression;
+	}
+	
+	public int getBitrate() {
+		return bitrate;
 	}
 	
 	public String getFileName() {
