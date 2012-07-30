@@ -84,7 +84,6 @@ public class Madds {
 		dialog.pack();
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);
-		
 	}
 	
 	public static TMView showTMApp(Inventorizer inventorizer, File rootFile) throws IllegalAccessException {

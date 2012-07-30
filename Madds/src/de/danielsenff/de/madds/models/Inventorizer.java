@@ -19,7 +19,7 @@ public class Inventorizer {
 	
 	public Inventorizer(final String extension) {
 		this.filter = new TextureNodeFileFilter(extension);
-		this.fileTree = new Graph<>();
+		this.fileTree = new Graph<Sizable>();
 		this.textureFiles = TextureHashMap.getTextureHashMap();
 	}
 	
@@ -37,7 +37,7 @@ public class Inventorizer {
 				// add file to tree
 				try {
 					TextureFile tfile = TextureFile.read(file);
-					fileTree.insertAt(0.0, parentNode, new Node<>((Sizable)tfile));
+					fileTree.insertAt(0.0, parentNode, new Node<Sizable>((Sizable)tfile));
 					this.textureFiles.put(file, tfile);
 					parentNode.getData().addSize(tfile.getSize());
 				} catch (IOException e) {

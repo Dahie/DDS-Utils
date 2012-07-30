@@ -51,7 +51,7 @@ public class Graph<T>
 	public Graph()
 	{
 		nodes 			= new LinkedList<Node<T>>();
-		weights			= new HashMap<>();
+		weights			= new HashMap<Node<T>, Map<Node<T>, Double>>();
 		predecessors 	= new HashMap<Node<T>, Node<T>>();
 	}
 
@@ -190,7 +190,7 @@ public class Graph<T>
 		removeWeight(pre, node);
 		
 		// remove also from neighbours
-		Stack<Node> buffer = new Stack<>();
+		Stack<Node> buffer = new Stack<Node>();
 		for(Node n : node.getNeighbours())
 		{
 			buffer.push(n);
@@ -224,7 +224,7 @@ public class Graph<T>
 			weights.put(a, link);
 		} 
 		else {
-			link = new HashMap<>();
+			link = new HashMap<Node<T>, Double>();
 			link.put(b, weight);
 			weights.put(a, link);
 		}
@@ -237,7 +237,7 @@ public class Graph<T>
 		} 
 		else 
 		{
-			link= new HashMap<>();
+			link= new HashMap<Node<T>, Double>();
 			link.put(a, weight);
 			weights.put(b, link);
 		}

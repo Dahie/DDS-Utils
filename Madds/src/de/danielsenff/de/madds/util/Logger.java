@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class Logger {
 	
-	private static Map<Class<?>, Logger> logger = new HashMap<>();
+	private static Map<Class<?>, Logger> logger = new HashMap<Class<?>, Logger>();
 	
 	private PrintStream printer;
 	private boolean enabled;

@@ -33,7 +33,7 @@ public class Node<T>  {// extends Comparable<T>> implements Comparable<Node<T>>{
 	public Node(final T data)
 	{
 		this.data = data;
-		this.edges = new LinkedList<>();
+		this.edges = new LinkedList<Node<T>>();
 		this.id = ++currentID;
 	}
 	

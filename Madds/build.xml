@@ -3,15 +3,17 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="/Users/danielsenff/madds.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="build/madds.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="de.danielsenff.de.madds.Madds"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
-            <fileset dir="/Users/danielsenff/Produktion/Java/workspace/DDS-Utils/Madds/bin"/>
-            <zipfileset excludes="META-INF/*.SF" src="/Users/danielsenff/Produktion/Java/workspace/DDS-Utils/Madds/lib/TMAppletSwing.jar"/>
-            <fileset dir="/Users/danielsenff/Produktion/Java/workspace/DDS-Utils/Madds/lib"/>
-            <zipfileset excludes="META-INF/*.SF" src="/Users/danielsenff/Produktion/Java/workspace/DDS-Utils/Madds/lib/DDSUtils.jar"/>
+            <fileset dir="bin"/>
+            <fileset dir="lib"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/TMAppletSwing.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/DDSUtils.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/CJWizards-0.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/commons-logging-1.1.1.jar"/>
         </jar>
     </target>
 </project>

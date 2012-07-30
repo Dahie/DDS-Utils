@@ -17,7 +17,7 @@ public class SummaryTableModel extends AbstractTableModel {
 	
 	public SummaryTableModel(Collection<TextureFile> collection) {
 		this.files = collection;
-		this.table = new HashMap<>();
+		this.table = new HashMap<Integer, CalculatedValue>();
 		
 		for (TextureFile textureFile : collection) {
 			
