@@ -66,12 +66,17 @@ public class WizardFactory implements PageFactory {
 
 	private WizardPage createDirectorySelectPage(final WizardSettings settings) {
 		final WizardPage wp = new WizardPage("Select directory", "Select directory") {
+			
+			public final String startFolder = System.getProperty("user.home");
+
 			{
 				setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+				String guides = "";
+				
 				JLabel label1 = new JLabel("<html><b>Welcome to Madds to test Memory Access of DDS</b>"
 						+"<p><p>This utility helps you to get a quick overview on the " +
 						"texture memory usage of your Mod/Game." +
-						"<p><p>Select the root-folder of your project to analyze all containing DDS-files.<p>");
+						"<p><p>Select the root-folder of your project to analyze all containing DDS-files." + guides);
 				label1.setAlignmentX(LEFT_ALIGNMENT);
 				add(label1);
 				add(new JSeparator());
@@ -82,19 +87,18 @@ public class WizardFactory implements PageFactory {
 				panel.setAlignmentX(LEFT_ALIGNMENT);
 				panel.setMaximumSize(new Dimension(400, 20));
 				add(panel);
-				JLabel label3 = new JLabel("<html><p>This tool only analyzes only DDS files. TGA, BMP or any other formats are ignored.");
+				JLabel label3 = new JLabel("<html><p>This tool analyzes only DDS files. TGA, BMP or any other formats are ignored.");
 				label3.setAlignmentX(LEFT_ALIGNMENT);
 				add(label3);
 				add(new JSeparator());
 			}
-
+			
 			private JPanel createDirectorySelectPanel(
 					final WizardSettings settings) {
 				
 				JPanel panel = new JPanel();
 				panel.setOpaque(false);
 				panel.setLayout(new BorderLayout());
-				final String startFolder = System.getProperty("user.home");
 				final JTextField textfield = new JTextField(startFolder);
 				textfield.setEnabled(false);
 				textfield.setPreferredSize(new Dimension(400, 20));
@@ -110,6 +114,7 @@ public class WizardFactory implements PageFactory {
 							textfield.setText(file.getAbsolutePath());
 							settings.put("rootDirectory", file.getAbsolutePath());
 						}
+						setNextEnabled(true);
 					}
 				});
 
@@ -121,7 +126,7 @@ public class WizardFactory implements PageFactory {
 			public void rendering(List<WizardPage> path, WizardSettings settings) {
 				super.rendering(path, settings);
 				setFinishEnabled(false);
-				setNextEnabled(true);
+				setNextEnabled(false);
 			} 
 			
 			@Override
@@ -129,7 +134,13 @@ public class WizardFactory implements PageFactory {
 				super.updateSettings(settings);
 				String rootDirectory = (String)settings.get("rootDirectory");
 				File rootFile = new File(rootDirectory);
-				if(!rootDirectory.isEmpty() && rootFile.exists()) {
+				if(rootDirectory.isEmpty()) {
+					System.err.println("root directory empty string");
+				} else if(rootDirectory.equals(startFolder)) {
+					System.err.println("root directory same as startfolder");
+				} else if (!rootFile.exists()){
+					System.err.println("root directory not found");
+				} else {
 					Inventorizer inventorizer = new Inventorizer(".dds");
 					inventorizer.startInventoring(rootFile);
 					settings.put("inventorizer", inventorizer);
@@ -142,6 +153,7 @@ public class WizardFactory implements PageFactory {
 					} catch (IllegalAccessException e) {
 						e.printStackTrace();
 					}
+					
 				}
 			}
 		};
