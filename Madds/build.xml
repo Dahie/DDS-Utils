@@ -2,7 +2,10 @@
 <project default="create_run_jar" name="Create Runnable Jar for Project Madds">
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
-    <target name="create_run_jar">
+    <property name="bin.dir" location="${basedir}/bin" /> 
+	<property name="src.dir" location="${basedir}/src" /> 
+	
+    <target name="create_run_jar" depends="compile">
         <jar destfile="build/madds.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="de.danielsenff.de.madds.Madds"/>
@@ -16,4 +19,18 @@
             <zipfileset excludes="META-INF/*.SF" src="lib/commons-logging-1.1.1.jar"/>
         </jar>
     </target>
+    
+    <target name="compile" description="Fresh compile Java class files">
+    	<mkdir dir="${bin.dir}" />
+		<!-- copy all files from src which are not java-files -->
+		<copy todir="${bin.dir}">
+			<fileset dir="${src.dir}" excludes="**.java, packaging/" />
+		</copy>
+		<javac srcdir="src" destdir="${bin.dir}" />
+		
+		<copy todir="${bin.dir}/res">
+			<fileset dir="res" />
+		</copy>
+		
+	</target>
 </project>
