@@ -1,14 +1,12 @@
-package de.danielsenff.de.madds.models;
+package de.danielsenff.madds.models;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Paint;
 
 import net.bouthier.treemapSwing.fileViewer.TMFileModelDraw;
-import ddsutil.DDSUtil;
 import ddsutil.PixelFormats;
-import de.danielsenff.de.madds.util.ByteConverter;
-import de.danielsenff.de.madds.view.ColorPalette;
+import de.danielsenff.madds.util.ByteConverter;
+import de.danielsenff.madds.view.ColorPalette;
 
 public class TMTextureModelDraw extends TMFileModelDraw {
 

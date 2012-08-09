@@ -1,4 +1,4 @@
-package de.danielsenff.de.madds.util;
+package de.danielsenff.madds.util;
 
 import java.io.PrintStream;
 import java.util.Calendar;

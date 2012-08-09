@@ -1,4 +1,4 @@
-package de.danielsenff.de.madds.util;
+package de.danielsenff.madds.util;
 
 public class ByteConverter {
 

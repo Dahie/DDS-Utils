@@ -1,4 +1,4 @@
-package de.danielsenff.de.madds.models;
+package de.danielsenff.madds.models;
 
 import java.awt.Dimension;
 import java.io.File;

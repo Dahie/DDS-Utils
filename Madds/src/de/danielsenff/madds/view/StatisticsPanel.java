@@ -1,4 +1,4 @@
-package de.danielsenff.de.madds.view;
+package de.danielsenff.madds.view;
 
 import java.awt.Dimension;
 
@@ -7,8 +7,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
-import de.danielsenff.de.madds.models.Inventorizer;
-import de.danielsenff.de.madds.models.SummaryTableModel;
+import de.danielsenff.madds.models.Inventorizer;
+import de.danielsenff.madds.models.SummaryTableModel;
 
 public class StatisticsPanel extends JPanel {
 

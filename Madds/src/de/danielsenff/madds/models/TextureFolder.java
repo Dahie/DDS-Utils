@@ -1,4 +1,4 @@
-package de.danielsenff.de.madds.models;
+package de.danielsenff.madds.models;
 
 import java.io.File;
 

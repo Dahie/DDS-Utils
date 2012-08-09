@@ -1,4 +1,4 @@
-package de.danielsenff.de.madds;
+package de.danielsenff.madds;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -19,10 +19,10 @@ import org.ciscavate.cjwizard.WizardListener;
 import org.ciscavate.cjwizard.WizardPage;
 import org.ciscavate.cjwizard.WizardSettings;
 
-import de.danielsenff.de.madds.models.Inventorizer;
-import de.danielsenff.de.madds.models.TMTextureModelDraw;
-import de.danielsenff.de.madds.models.TMTextureNode;
-import de.danielsenff.de.madds.view.WizardFactory;
+import de.danielsenff.madds.models.Inventorizer;
+import de.danielsenff.madds.models.TMTextureModelDraw;
+import de.danielsenff.madds.models.TMTextureNode;
+import de.danielsenff.madds.view.WizardFactory;
 
 public class Madds {
 

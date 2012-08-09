@@ -1,14 +1,11 @@
-package de.danielsenff.de.madds.models;
+package de.danielsenff.madds.models;
 
 import java.util.Collection;
 import java.util.HashMap;
 
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 
-import de.danielsenff.de.madds.util.ByteConverter;
-import de.danielsenff.de.madds.util.Logger;
+import de.danielsenff.madds.util.ByteConverter;
 
 public class SummaryTableModel extends AbstractTableModel {
 

@@ -1,4 +1,4 @@
-package de.danielsenff.de.madds.view;
+package de.danielsenff.madds.view;
 
 import java.awt.Color;
 

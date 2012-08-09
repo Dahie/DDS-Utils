@@ -1,4 +1,4 @@
-package de.danielsenff.de.madds.view;
+package de.danielsenff.madds.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,8 +28,8 @@ import org.ciscavate.cjwizard.PageFactory;
 import org.ciscavate.cjwizard.WizardPage;
 import org.ciscavate.cjwizard.WizardSettings;
 
-import de.danielsenff.de.madds.Madds;
-import de.danielsenff.de.madds.models.Inventorizer;
+import de.danielsenff.madds.Madds;
+import de.danielsenff.madds.models.Inventorizer;
 
 public class WizardFactory implements PageFactory {
 
