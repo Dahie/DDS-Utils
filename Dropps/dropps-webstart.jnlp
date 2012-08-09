@@ -4,17 +4,22 @@
     <information>
         <title>Dropps</title>
         <vendor>Daniel Senff (CTDP)</vendor>
+        <homepage href="http://www.ctdp.net/ddsutils.html"/>
+        <icon href="http://download.ctdp.net/tools/icon_dropps.png" kind="default"/>
+        <offline-allowed/> 
     </information>
     <resources>
         <!-- Application Resources -->
-        <j2se version="1.6+"
+        <j2se version="1.6+"   java-vm-args="-esa"
+            initial-heap-size="64m" max-heap-size="512m"
               href="http://java.sun.com/products/autodl/j2se"/>
         <jar href="http://download.ctdp.net/tools/Dropps.jar" main="true" />
 
     </resources>
     <security>
        <all-permissions/>
-    </security>    
+    </security>
+    
     <application-desc
          name="Dropps - Drop a DDS"
          main-class="de.danielsenff.dropps.Dropps"

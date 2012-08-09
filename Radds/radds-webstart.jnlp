@@ -4,11 +4,17 @@
     <information>
         <title>Radds</title>
         <vendor>Daniel Senff (CTDP)</vendor>
+        <homepage href="http://www.ctdp.net/ddsutils.html"/>
+        <icon href="http://download.ctdp.net/tools/icon_radds.png" kind="default"/>
+        <!--
+		<association mime-type="application-x/swingset2-file" extensions="swingset2">-->
+		<offline-allowed/> 
     </information>
     <resources>
         <!-- Application Resources -->
-        <j2se version="1.6+"
-              href="http://java.sun.com/products/autodl/j2se"/>
+        <j2se version="1.6+" java-vm-args="-esa"
+			initial-heap-size="64m" max-heap-size="512m"
+			href="http://java.sun.com/products/autodl/j2se"/>
         <jar href="http://download.ctdp.net/tools/Radds.jar" main="true" />
     </resources>
     <security>
