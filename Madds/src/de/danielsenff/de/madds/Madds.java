@@ -80,7 +80,7 @@ public class Madds {
 		});
 
 		dialog.getContentPane().add(wizard);
-		dialog.setPreferredSize(new Dimension(700, 500));
+		dialog.setPreferredSize(new Dimension(800, 600));
 		dialog.pack();
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);

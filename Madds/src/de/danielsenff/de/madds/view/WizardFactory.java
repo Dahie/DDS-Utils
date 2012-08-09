@@ -1,18 +1,26 @@
 package de.danielsenff.de.madds.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 
 import net.bouthier.treemapSwing.TMView;
 
@@ -71,26 +79,50 @@ public class WizardFactory implements PageFactory {
 
 			{
 				setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-				String guides = "";
 				
-				JLabel label1 = new JLabel("<html><b>Welcome to Madds to test Memory Access of DDS</b>"
-						+"<p><p>This utility helps you to get a quick overview on the " +
-						"texture memory usage of your Mod/Game." +
-						"<p><p>Select the root-folder of your project to analyze all containing DDS-files." + guides);
-				label1.setAlignmentX(LEFT_ALIGNMENT);
-				add(label1);
+				JPanel intro = new JPanel();
+				intro.setLayout(new BorderLayout());
+				intro.setBackground(Color.WHITE);
+				
+				try {
+					InputStream is = Madds.class.getResourceAsStream("/res/intro.jpg");
+					ImageIcon imageIcon = new ImageIcon(ImageIO.read(is)); 
+					intro.add(new JLabel(imageIcon), BorderLayout.LINE_START);
+				} catch (IOException ex) {}
+				
+				JTextPane tp = new MoreWebbableView("res/guide.html");
+				JScrollPane js = new JScrollPane(tp);
+				js.setBorder(null);
+				js.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+				
+				intro.add(js);
+				add(intro);
+				
+				
+				
+				
 				add(new JSeparator());
+				
+				JPanel dirPanel = new JPanel();
+				dirPanel.setLayout(new BorderLayout());
 				JLabel label2 = new JLabel("<html><p>Select your Mod's Vehicles-folder.<p>");
 				label2.setAlignmentX(LEFT_ALIGNMENT);
-				add(label2);
+				dirPanel.add(label2, BorderLayout.LINE_START);
+				
 				JPanel panel = createDirectorySelectPanel(settings);
 				panel.setAlignmentX(LEFT_ALIGNMENT);
-				panel.setMaximumSize(new Dimension(400, 20));
-				add(panel);
+				panel.setMaximumSize(new Dimension(800, 300));
+				dirPanel.add(panel, BorderLayout.LINE_END);
+				
 				JLabel label3 = new JLabel("<html><p>This tool analyzes only DDS files. TGA, BMP or any other formats are ignored.");
 				label3.setAlignmentX(LEFT_ALIGNMENT);
-				add(label3);
+				dirPanel.add(label3, BorderLayout.PAGE_END);
+				
+				add(dirPanel);
 				add(new JSeparator());
+				
+				
+				
 			}
 			
 			private JPanel createDirectorySelectPanel(
