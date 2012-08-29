@@ -6,7 +6,7 @@
 	<property name="src.dir" location="${basedir}/src" /> 
 	
     <target name="create_run_jar" depends="compile">
-        <jar destfile="build/madds.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="build/Madds.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="de.danielsenff.de.madds.Madds"/>
                 <attribute name="Class-Path" value="."/>
