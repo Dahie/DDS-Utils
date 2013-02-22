@@ -378,15 +378,9 @@ public class DDSImage {
 	public void write(String filename) throws IOException {
 		write(new File(filename));
 	}
-
-	/**
-	 * Writes this DDSImage to the specified file name.
-	 * @param file File object to write to
-	 * @throws java.io.IOException if an I/O exception occurred
-	 */
-	public void write(File file) throws IOException {
-		FileOutputStream stream = new FileOutputStream(file);
-		FileChannel chan = stream.getChannel();
+	
+	public void write(FileOutputStream fos) throws IOException {
+		FileChannel chan = fos.getChannel();
 		// Create ByteBuffer for header in case the start of our
 		// ByteBuffer isn't actually memory-mapped
 		ByteBuffer hdr = ByteBuffer.allocate(Header.writtenSize());
@@ -398,6 +392,16 @@ public class DDSImage {
 		chan.write(buf);
 		chan.force(true);
 		chan.close();
+	}
+
+	/**
+	 * Writes this DDSImage to the specified file name.
+	 * @param file File object to write to
+	 * @throws java.io.IOException if an I/O exception occurred
+	 */
+	public void write(File file) throws IOException {
+		FileOutputStream stream = new FileOutputStream(file);
+		write(stream);
 		stream.close();
 	}
 
