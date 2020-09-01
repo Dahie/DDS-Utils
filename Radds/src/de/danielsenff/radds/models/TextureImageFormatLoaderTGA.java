@@ -35,10 +35,6 @@ import java.awt.image.DataBufferByte;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
-import javax.activation.UnsupportedDataTypeException;
-
-//import org.jagatoo.util.image.ImageUtility;
-
 /**
 * Reads TGA files from an InputStream.
 * 
@@ -315,8 +311,6 @@ public class TextureImageFormatLoaderTGA
     * @param in
     * @param acceptAlpha
     * @param flipVertically
-    * @param allowStreching
-    * @param texFactory
     * 
     * @return the TextureImage or null.
     * 
@@ -374,8 +368,6 @@ public class TextureImageFormatLoaderTGA
     * @param in
     * @param acceptAlpha
     * @param flipVertically
-    * @param allowStreching
-    * @param texFactory
     * 
     * @return the TextureImage or null.
     * 

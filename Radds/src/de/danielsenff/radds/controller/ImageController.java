@@ -110,7 +110,7 @@ public class ImageController {
 			if(image.getTextureType() == DDSFile.TextureType.CUBEMAP ||
 					image.getTextureType() == DDSFile.TextureType.VOLUME) {
 				JOptionPane.showMessageDialog(null, // TODO move to locales
-						"<html>Error: This programm doesn't support cubemaps or volume textures." +
+						"<html>Error: This program doesn't support cubemaps or volume textures." +
 						"<br>"+image.getFile().getName()+" can not be loaded.</html>",	"Attention", 
 						JOptionPane.INFORMATION_MESSAGE);
 				return;
