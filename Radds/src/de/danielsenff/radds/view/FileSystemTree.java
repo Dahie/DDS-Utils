@@ -136,13 +136,11 @@ public class FileSystemTree extends JTree {
 	 * @param node
 	 */
 	private void prepareChildTreeNodes(DefaultMutableTreeNode node)	{
-		Enumeration<DefaultMutableTreeNode> e = node.children();
-		System.out.println(node);
-		while(e.hasMoreElements())    
-		{
-			DefaultMutableTreeNode child = e.nextElement();
+		Enumeration<TreeNode> e = node.children();
+		while(e.hasMoreElements()) {
+			TreeNode child = e.nextElement();
 			System.out.println("child: "+ child);	
-			prepareTreeNode(child);
+			prepareTreeNode((DefaultMutableTreeNode) child);
 		}
 	}
 	
