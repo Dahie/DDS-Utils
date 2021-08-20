@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.Enumeration;
+import java.util.Arrays;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -32,18 +33,17 @@ public class FileSystemTree extends JTree {
 		updateTreeNodes();
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		setRootVisible(true);
-		setCellRenderer(new DefaultTreeCellRenderer() 
-		{
+		setCellRenderer(new DefaultTreeCellRenderer() {
 			@Override
 			public Component getTreeCellRendererComponent(JTree tree, Object value, 
 					boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) 
 			{
-				JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-				File f = (File)node.getUserObject();
-				label.setText(fileSystemView.getSystemDisplayName(f));
-				label.setIcon(fileSystemView.getSystemIcon(f));
-				return label;
+			JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+			File f = (File)node.getUserObject();
+			label.setText(fileSystemView.getSystemDisplayName(f));
+			label.setIcon(fileSystemView.getSystemIcon(f));
+			return label;
 			}
 		});
 		addKeyListener(new KeyListener() {
@@ -67,8 +67,7 @@ public class FileSystemTree extends JTree {
 			public void keyReleased(KeyEvent e) {}
 			public void keyTyped(KeyEvent e) {}
 		});
-		addTreeExpansionListener(new TreeExpansionListener() 
-		{
+		addTreeExpansionListener(new TreeExpansionListener() {
 			public void treeCollapsed(TreeExpansionEvent event) 
 			{
 				TreePath path = event.getPath();
@@ -103,8 +102,6 @@ public class FileSystemTree extends JTree {
 	 * 
 	 */
 	public void updateTreeNodes() {
-		//final File[] roots = fileSystemView.getRoots();
-		//File file = roots[0];
 		File file = fileSystemView.getHomeDirectory();
 		DefaultMutableTreeNode node = new FileSystemTreeNode(file);
 		prepareTreeNode(node);
@@ -121,14 +118,21 @@ public class FileSystemTree extends JTree {
 	public void prepareTreeNode(DefaultMutableTreeNode node) {
 		File f = (File) node.getUserObject();
 		File[] files = fileSystemView.getFiles(f, true);
+		Arrays.sort(files);
 		for(int i = 0; i < files.length; i++) {
 			File file = files[i];
-			if(file.isDirectory() 
-					|| FileUtil.getFileSuffix(file).contains("dds")
-					|| FileUtil.getFileSuffix(file).contains("tex")
-					|| FileUtil.getFileSuffix(file).contains("tga"))
+			if(file.isDirectory() || supportedFileSuffix(FileUtil.getFileSuffix(file)) )
 				node.add(new FileSystemTreeNode(file));
 		}
+	}
+
+	protected boolean supportedFileSuffix(String fileSuffix) {
+		return fileSuffix.contains("dds")
+				|| fileSuffix.contains("tex")
+				|| fileSuffix.contains("png")
+				|| fileSuffix.contains("jpg")
+				|| fileSuffix.contains("bmp")
+				|| fileSuffix.contains("tga");
 	}
 	
 	/**

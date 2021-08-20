@@ -40,19 +40,15 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 	public ConvertFilesTask(final Application app, 
 			final Collection<File> fileList, 
 			final ExportOptions options) {
-		super(app, "convertFiles");
+		super(app);
 		this.fileList = fileList;
 		this.options = options;
 	}
 
 	@Override protected ProgressStatus doInBackground() {
-		
 		((Dropps)getApplication()).getMainView().getFrame().setEnabled(false);
 		
 		if (!fileList.isEmpty()) {
-//			final ConvertionController converter = new ConvertionController(fileList,	options, deleteOriginal, overwriteFiles);
-			
-			
 			final IProgressListener listener = new IProgressListener() {
 
 				@Override
@@ -66,7 +62,6 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 
 				@Override
 				public void error(final ProgressStatus errorStatus) {
-					//localize message
 					if (errorStatus.getMessage() != null) {
 						
 						StringTokenizer tokenizer = new StringTokenizer(errorStatus.getMessage(), "_");
@@ -84,6 +79,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 
 				@Override
 				public void convertBegin(File originalFile) {
+
 					setMessage("Conversion of " + originalFile.getName());
 				}
 
@@ -91,7 +87,6 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 				public void convertEnd(File originalFile) {
 //					setMessage("End Convertion of " + originalFile.getName());
 				}
-				
 			};
 			
 			final List<IProgressListener> listeners = new ArrayList<IProgressListener>();
@@ -110,8 +105,7 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 					converter.addListener(iConvertListener);
 				}
 			}
-			
-//			setMessage("Handle files");
+
 			converter.convertFiles(fileList);
 		}
 		((Dropps)getApplication()).getMainView().getFrame().setEnabled(true);
@@ -125,7 +119,9 @@ public class ConvertFilesTask extends Task<ProgressStatus, Void> {
 	protected void succeeded(final ProgressStatus result) {
 		if (result != null) {
 			if (!result.isError()) {
-				message("finishedMessage", getExecutionDuration(TimeUnit.SECONDS), getExecutionDuration(TimeUnit.SECONDS) / 60);
+				message("finishedMessage",
+						getExecutionDuration(TimeUnit.SECONDS),
+						getExecutionDuration(TimeUnit.SECONDS) / 60);
 			} else {
 				showErrorDialog(result.getMessage());
 			}

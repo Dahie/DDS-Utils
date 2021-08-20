@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.danielsenff.radds.view.canvas;
 
 import java.awt.BorderLayout;
@@ -8,7 +5,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -17,7 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Hashtable;
@@ -35,7 +30,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import model.TextureImage;
@@ -60,17 +54,13 @@ import de.danielsenff.radds.util.FileDrop;
  *
  */
 public class CanvasControlsPanel extends JPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3204480115770320549L;
-	private BICanvas canvas;
-	private JComboBox<Integer> zoomCombo;
-	private JSlider zoomSlider;
-	private RaddsView view;
-	private JComboBox<Integer> mipMapCombo;
-	private JScrollPane scrollViewPane;
+	private final BICanvas canvas;
+	private final JComboBox<Integer> zoomCombo;
+	private final JSlider zoomSlider;
+	private final RaddsView view;
+	private final JComboBox<Integer> mipMapCombo;
+	private final JScrollPane scrollViewPane;
 	private boolean fitSize;
 
 	/**
@@ -80,31 +70,30 @@ public class CanvasControlsPanel extends JPanel {
 		this.view = view;
 
 		setLayout(new BorderLayout());
-		scrollViewPane = initScrollCanvas();
-		final JPanel navigateCanvas = initNavigationPanel();
-
-		getCanvas().addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent pChangeEvent) {
-				if(pChangeEvent.getPropertyName().equals("zoomFactor")){
-					float newValue = (Float) pChangeEvent.getNewValue();
-					Integer percentage = Integer.valueOf((int) (newValue * 100));
-					zoomSlider.setValue(percentage);
-					zoomCombo.setSelectedItem("" +percentage);
-				}
-			}
-		});
-
-		new FileDrop( scrollViewPane, new FileDrop.Listener(){ 
-			@Override
-			public void filesDropped( java.io.File[] files ) {   
-				// handle first file
-				openImage(files[0]);
-			}   // end filesDropped
-		}); // end FileDrop.Listener
+		canvas = newBICanvas();
+		scrollViewPane = newScrollCanvas();
+		mipMapCombo = newMipmapCombo();
+		zoomSlider = newZoomSlider();
+		zoomCombo = newZoomCombo();
 
 		this.add(scrollViewPane, BorderLayout.CENTER);
-		this.add(navigateCanvas, BorderLayout.SOUTH);
+		this.add(newNavigationPanel(), BorderLayout.SOUTH);
+	}
+
+	private FileDrop newFileDrop(JComponent component) {
+		return new FileDrop(component, files -> openImage(files[0]));
+	}
+
+	private PropertyChangeListener newListenerForZoomLevel() {
+		return pChangeEvent -> {
+			if(!pChangeEvent.getPropertyName().equals("zoomFactor")){
+				return;
+			}
+			float newValue = (Float) pChangeEvent.getNewValue();
+			Integer percentage = Integer.valueOf((int) (newValue * 100));
+			zoomSlider.setValue(percentage);
+			zoomCombo.setSelectedItem("" +percentage);
+		};
 	}
 
 	private void openImage(File file) {
@@ -117,107 +106,90 @@ public class CanvasControlsPanel extends JPanel {
 	 * Initialize components in the navigation panel for this BICanvas. 
 	 * @return
 	 */
-	private JPanel initNavigationPanel() {
-		
-		// Action buttons
-		
+	private JPanel newNavigationPanel() {
 		MigLayout miglayout = new MigLayout("nogrid, fillx, wrap, gap 0, ins 0");
 		final JPanel panel = new JPanel();
 		panel.setLayout(miglayout);
-		final JButton copyButton = new JButton(view.getAction("copy"));
-		panel.add(copyButton, "sg");
-
-		final JButton bgColorButton = initTransparencyColorButton();
-		panel.add(bgColorButton, "sg");
+		panel.add(new JButton(view.getAction("copy")), "sg");
+		panel.add(new JButton(view.getAction("export")), "sg");
+		panel.add(newTransparencyColorButton(), "sg");
 
 		// Color Channel
 		
 		final JLabel lblChannelCombo = new JLabel(getResourceMap().getString("Channels")+":");
 		panel.add(lblChannelCombo, "gap push");
-		final JComboBox<ColorChannel> channelCombo = initColorChannelCombo();
-		panel.add(channelCombo, "sg");
+		panel.add(newColorChannelCombo(), "sg");
 
 		// MipMaps
 		
 		JLabel lblMipMap = new JLabel(getResourceMap().getString("MipMap")+":");
 		panel.add(lblMipMap, "gap push");
-
-		initMipmapCombo();
 		panel.add(mipMapCombo, "sg, wrap");
 
 		// ZO_om
 		
-		JLabel lblZoom = new JLabel(getResourceMap().getString("Zoom")+":"); 
-		panel.add(lblZoom, "");
-
-		initZoomCombo();
-		panel.add(zoomCombo, "");
-
-		initZoomSlider();
+		panel.add(new JLabel(getResourceMap().getString("Zoom")+":"), "");
+		panel.add(newZoomCombo(), "");
 		panel.add(zoomSlider, "");
-		
-		JCheckBox chkZoomFitSize = initFitZoomCheckbox();
-		panel.add(chkZoomFitSize, "");
+		panel.add(newFitZoomCheckbox(), "");
 
 		return panel;
 	}
 
-	private JCheckBox initFitZoomCheckbox() {
+	private JCheckBox newFitZoomCheckbox() {
 		JCheckBox chkZoomFitSize = new JCheckBox(getResourceString("Zoom_to_fit"));
-		chkZoomFitSize.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				fitSize = ((JCheckBox)e.getSource()).isSelected();
-				resizeCanvasToFit(fitSize);
-			}
-
-		});
+		chkZoomFitSize.addChangeListener(newChangeListenerForResizeFit());
 		return chkZoomFitSize;
 	}
 
-	private JButton initTransparencyColorButton() {
+	private ChangeListener newChangeListenerForResizeFit() {
+		return e -> {
+			fitSize = ((JCheckBox)e.getSource()).isSelected();
+			resizeCanvasToFit(fitSize);
+		};
+	}
+
+	private JButton newTransparencyColorButton() {
 		final JButton bgColorButton = new JButton(getResourceString("Background"));
 		bgColorButton.setToolTipText(getResourceString("set_background_color"));
 		bgColorButton.setIcon(initColorImageIcon(canvas.getTransparencyColor()));
-		bgColorButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				BICanvas canvas = getCanvas();
-				Color returnValue = null;
-				try {
-					returnValue = JColorChooser.showDialog(canvas, 
-							getResourceString("set_background_color"), 
-							canvas.getTransparencyColor());
-					if(returnValue != null) {
-						canvas.setTransparencyColor(returnValue);
-						canvas.repaint();
-						bgColorButton.setIcon(initColorImageIcon(returnValue));
-						bgColorButton.repaint();
-					} 
-				} catch (Exception ex) {
-
-				}
-			}
-		});
+		bgColorButton.addActionListener(newActionListenerSettingBgColor(bgColorButton));
 		return bgColorButton;
 	}
 
-	private JComboBox<ColorChannel> initColorChannelCombo() {
-		final JComboBox<ColorChannel> channelCombo = new JComboBox<ColorChannel>(composeColorChannelModel());
-		channelCombo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent event) {
-				final JComboBox<ColorChannel> channelCombo = (JComboBox<ColorChannel>) event.getSource();
-				final ColorChannel channel = (ColorChannel) channelCombo.getSelectedItem();
-				canvas.setChannelMode(channel.getChannel());
-			}
+	private ActionListener newActionListenerSettingBgColor(JButton bgColorButton) {
+		return e -> {
+			BICanvas canvas = getCanvas();
+			Color returnValue = null;
+			try {
+				returnValue = JColorChooser.showDialog(canvas,
+						getResourceString("set_background_color"),
+						canvas.getTransparencyColor());
+				if(returnValue != null) {
+					canvas.setTransparencyColor(returnValue);
+					canvas.repaint();
+					bgColorButton.setIcon(initColorImageIcon(returnValue));
+					bgColorButton.repaint();
+				}
+			} catch (Exception ex) {
 
-		});
+			}
+		};
+	}
+
+	private JComboBox<ColorChannel> newColorChannelCombo() {
+		final JComboBox<ColorChannel> channelCombo = new JComboBox<>(composeColorChannelModel());
+		channelCombo.addActionListener(newActionListenerForChannelChoice());
 		return channelCombo;
 	}
 
+	private ActionListener newActionListenerForChannelChoice() {
+		return event -> {
+			final JComboBox<ColorChannel> channelCombo = (JComboBox<ColorChannel>) event.getSource();
+			final ColorChannel channel = (ColorChannel) channelCombo.getSelectedItem();
+			canvas.setChannelMode(channel.getChannel());
+		};
+	}
 
 	private ImageIcon initColorImageIcon(Color color) {
 		BufferedImage colorImage = new BufferedImage(16, 16, BufferedImage.TYPE_4BYTE_ABGR);
@@ -230,9 +202,9 @@ public class CanvasControlsPanel extends JPanel {
 		return new ImageIcon(colorImage);
 	}
 
-	private void initZoomSlider() {
-		zoomSlider = new JSlider(0, 500, 100);
-		Hashtable<Integer, JComponent> labels = new Hashtable<Integer, JComponent>();
+	private JSlider newZoomSlider() {
+		JSlider zoomSlider = new JSlider(0, 500, 100);
+		Hashtable<Integer, JComponent> labels = new Hashtable<>();
 		labels.put(10, new JLabel("0.1x"));
 		labels.put(100, new JLabel("1x"));
 		labels.put(250, new JLabel("2.5x"));
@@ -243,50 +215,55 @@ public class CanvasControlsPanel extends JPanel {
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setPaintLabels(true);
 		zoomSlider.setPreferredSize(new Dimension(250, 14));
-		zoomSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent e) {
-				final int zoomValue = ((JSlider)e.getSource()).getValue();
-				canvas.setZoomFactor( (Float.valueOf(zoomValue)) * 0.01f);
-				canvas.revalidate();
-			}
-
+		zoomSlider.addChangeListener(e -> {
+			final int zoomValue = ((JSlider)e.getSource()).getValue();
+			canvas.setZoomFactor( (Float.valueOf(zoomValue)) * 0.01f);
+			canvas.revalidate();
 		});
+		return zoomSlider;
 	}
 
-	private void initMipmapCombo() {
-		mipMapCombo = new JComboBox<Integer>();
+	private JComboBox<Integer> newMipmapCombo() {
+		JComboBox<Integer> mipMapCombo = new JComboBox<>();
 		updateNumMipMaps();
-		mipMapCombo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				if(mipMapCombo.getItemCount() > 0) {
-					int index = (Integer) ((JComboBox<Integer>)e.getSource()).getSelectedItem();
-					TextureImage textureImage = view.getTextureImage();
-					if(index < textureImage.getNumMipMaps()) {
-						BufferedImage bi = textureImage.getMipMap(index-1);
-						canvas.setSourceBI(bi);
-						canvas.revalidate();
-					}
+		mipMapCombo.addActionListener(createActionListenerForMipMapLevel());
+		return mipMapCombo;
+	}
+
+	private ActionListener createActionListenerForMipMapLevel() {
+		return e -> {
+			if(mipMapCombo.getItemCount() > 0) {
+				int index = (Integer) ((JComboBox<Integer>)e.getSource()).getSelectedItem();
+				TextureImage textureImage = view.getTextureImage();
+				if(index < textureImage.getNumMipMaps()) {
+					BufferedImage bi = textureImage.getMipMap(index-1);
+					canvas.setSourceBI(bi);
+					canvas.revalidate();
 				}
 			}
-		});
+		};
 	}
 
-	private void initZoomCombo() {
+	private JComboBox newZoomCombo() {
 		final String[] defaultZooms = { "25", "50", "100", "150", "200", "400"};
-		zoomCombo = new JComboBox(defaultZooms);
+		JComboBox zoomCombo = new JComboBox(defaultZooms);
 		zoomCombo.setSelectedIndex(2);
 		zoomCombo.setEditable(true);
-		zoomCombo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				float zoomValue = (Float.valueOf((String) zoomCombo.getSelectedItem())) / 100;
-				canvas.setZoomFactor( zoomValue);
-				canvas.repaint();
-			}
-		});
-		zoomCombo.addKeyListener(new KeyAdapter() {
+		zoomCombo.addActionListener(newZoomComboListener());
+		zoomCombo.addKeyListener(newZoomComboKeyListener());
+		return zoomCombo;
+	}
+
+	private ActionListener newZoomComboListener() {
+		return e -> {
+			float zoomValue = (Float.valueOf((String) zoomCombo.getSelectedItem())) / 100;
+			canvas.setZoomFactor( zoomValue);
+			canvas.repaint();
+		};
+	}
+
+	private KeyAdapter newZoomComboKeyListener() {
+		return new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -295,19 +272,15 @@ public class CanvasControlsPanel extends JPanel {
 					canvas.repaint();
 				}
 			}
-		});
+		};
 	}
 
-
-
 	private void resizeCanvasToFit(boolean fitSize) {
-		float zoomValue;
+		float zoomValue = (Float.valueOf((String) zoomCombo.getSelectedItem())) * 0.01f;
 		if (fitSize) {
-			zoomValue= calculateZoomfactorFitWidth();
-		} else {
-			zoomValue = (Float.valueOf((String) zoomCombo.getSelectedItem())) * 0.01f;
+			zoomValue = calculateZoomfactorFitWidth();
 		}
-		canvas.setZoomFactor( zoomValue);
+		canvas.setZoomFactor(zoomValue);
 		canvas.repaint();
 	}
 
@@ -316,7 +289,7 @@ public class CanvasControlsPanel extends JPanel {
 		float factorWidth = (float) ( (scrollViewPane.getSize().getWidth()-insets.left-insets.right) / canvas.getSource().getWidth());
 		float factorHeight = (float) ( (scrollViewPane.getSize().getHeight()-insets.bottom-insets.top) / canvas.getSource().getHeight());
 		
-		return (factorWidth < factorHeight) ? factorWidth : factorHeight; 
+		return Math.min(factorWidth, factorHeight);
 	}
 
 	private String getResourceString(final String text) {
@@ -336,49 +309,41 @@ public class CanvasControlsPanel extends JPanel {
 		}
 	}
 
-
 	/**
 	 * Init ComboBox for selecting different Color Channels of an Image.
 	 * @return
 	 */
 	private DefaultComboBoxModel<ColorChannel> composeColorChannelModel() {
 		final DefaultComboBoxModel<ColorChannel> combo = new DefaultComboBoxModel<ColorChannel>();
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RGB, getResourceMap().getString("rgb_channels")));
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RED, getResourceMap().getString("r_channel")));
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.GREEN, getResourceMap().getString("g_channel")));
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.BLUE, getResourceMap().getString("b_channel")));
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.ALPHA, getResourceMap().getString("a_channel")));
-		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RGBA, getResourceMap().getString("rgba_transparent")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RGB, getResourceString("rgb_channels")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RED, getResourceString("r_channel")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.GREEN, getResourceString("g_channel")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.BLUE, getResourceString("b_channel")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.ALPHA, getResourceString("a_channel")));
+		combo.addElement(new ColorChannel(ImageOperations.ChannelMode.RGBA, getResourceString("rgba_transparent")));
 		return combo;
 	}
 
 	private ResourceMap getResourceMap() {
 		final Radds instance = Radds.getInstance(Radds.class);
 		final ApplicationContext context = instance.getContext();
-		final org.jdesktop.application.ResourceMap resourceMap = context.getResourceMap(RaddsView.class);
-		return resourceMap;
+		return context.getResourceMap(RaddsView.class);
 	}
 
 	private ImageIcon getResourceIcon(String file){
 		return new ImageIcon(Class.class.getResource(file));
 	}
 
-	private JScrollPane initScrollCanvas() {
-		final ImageIcon defaultImage = (ImageIcon)getResourceMap().getIcon("Canvas.default_image"); 
-
-		canvas = new BICanvas(BIUtil.convertImageToBufferedImage(defaultImage.getImage(), 
+	private BICanvas newBICanvas() {
+		final ImageIcon defaultImage = (ImageIcon)getResourceMap().getIcon("Canvas.default_image");
+		BICanvas canvas = new BICanvas(BIUtil.convertImageToBufferedImage(defaultImage.getImage(),
 				BufferedImage.TYPE_4BYTE_ABGR));
-		
-		// JScrollPane
-		final JScrollPane scrollViewPane = new JScrollPane(canvas);
-		scrollViewPane.setPreferredSize(new Dimension(700,300));
-		scrollViewPane.addComponentListener(new ComponentAdapter() {
-		
-			@Override
-			public void componentResized(ComponentEvent event) {
-				resizeCanvasToFit(fitSize);
-			}
-		});
+		canvas.addPropertyChangeListener(newListenerForZoomLevel());
+		return canvas;
+	}
+
+	private JScrollPane newScrollCanvas() {
+		final JScrollPane scrollViewPane = newCanvasScrollPane(canvas);
 		
 		final ScrollCanvasListener scrollCanvasListener = new ScrollCanvasListener(scrollViewPane);
 		canvas.addMouseMotionListener(scrollCanvasListener);
@@ -392,17 +357,31 @@ public class CanvasControlsPanel extends JPanel {
 				canvas.requestFocus();
 			}
 		});
-		canvas.addRenderedChangeListener(new ChangeListener() {
-			
+		canvas.addRenderedChangeListener(e -> resizeCanvasToFit(fitSize));
+
+		canvas.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+		canvas.addAncestorListener(newCanvasAncestorListener());
+
+		newFileDrop(scrollViewPane);
+
+		return scrollViewPane;
+	}
+
+	private JScrollPane newCanvasScrollPane(JPanel panel) {
+		JScrollPane scrollPane = new JScrollPane(panel);
+		scrollPane.setPreferredSize(new Dimension(700,300));
+		scrollPane.addComponentListener(new ComponentAdapter() {
+
 			@Override
-			public void stateChanged(ChangeEvent e) {
+			public void componentResized(ComponentEvent event) {
 				resizeCanvasToFit(fitSize);
 			}
 		});
-		
+		return scrollPane;
+	}
 
-		canvas.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-		canvas.addAncestorListener(new AncestorListener() {
+	private AncestorListener newCanvasAncestorListener() {
+		return new AncestorListener() {
 			@Override
 			public void ancestorAdded(final AncestorEvent arg0) {}
 			@Override
@@ -411,12 +390,7 @@ public class CanvasControlsPanel extends JPanel {
 			}
 			@Override
 			public void ancestorRemoved(final AncestorEvent arg0) {	}
-		});
-
-		
-
-		
-		return scrollViewPane;
+		};
 	}
 
 	/**

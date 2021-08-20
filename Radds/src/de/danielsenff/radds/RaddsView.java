@@ -73,7 +73,7 @@ public class RaddsView extends FrameView {
 		this.chooserDirectory = FileSystemView.getFileSystemView().getHomeDirectory();
 		
 		// menu
-		initMenu();
+		setMenuBar(newMenuBar());
 		
 		// general layout
 		filesPanel = new FilesPanel();
@@ -89,21 +89,16 @@ public class RaddsView extends FrameView {
 		setComponent(splitPane);
 	}
 
-	private void initMenu() {
+	private JMenuBar newMenuBar() {
 		final JMenuBar menuBar = new JMenuBar();
-		
-		final ResourceMap resourceMap = getResourceMap();
-		
-		JMenu menuFile;
-		if(OS.isMacOS()) 
-			menuFile = new JMenu(resourceMap.getString("file.osx.menu"));
-		else
-			menuFile = new JMenu(resourceMap.getString("file.menu"));
+
+		String menuName = OS.isMacOS() ? "file.osx.menu" : "file.menu";
+		JMenu menuFile = new JMenu(getResourceString(menuName));
 		menuFile.add(getAction("open"));
 		menuFile.add(getAction("export"));
 		menuBar.add(menuFile);
 		
-		final JMenu menuEdit = new JMenu(resourceMap.getString("edit.menu"));
+		final JMenu menuEdit = new JMenu(getResourceString("edit.menu"));
 		menuEdit.add(getAction("copy"));
 		menuBar.add(menuEdit);
 		
@@ -112,10 +107,9 @@ public class RaddsView extends FrameView {
 		menuHelp.add(getAction("openWebsiteURL"));
 		menuHelp.add(getAction("openBugTrackerURL"));
 		menuBar.add(menuHelp);
-		
-		setMenuBar(menuBar);
+		return menuBar;
 	}
-	
+
 	/**
 	 * @return the progressbar
 	 */
@@ -293,19 +287,11 @@ public class RaddsView extends FrameView {
 	@Action
 	(enabledProperty = "opened")
 	public void export() {
-		
-		String currentFileName = getFile().getName();
-		File defaultFileName = new File(currentFileName.substring(0, currentFileName.lastIndexOf('.')) + ".png");
-		final JFileChooser fc = new JFileChooser(chooserDirectory);
-		fc.setSelectedFile(defaultFileName);
-        fc.setFileFilter(new FileNameExtensionFilter("JPEG", "jpg"));
-        fc.setFileFilter(new FileNameExtensionFilter("PNG", "png"));
+		final JFileChooser fileChooser = newExportFileChooser();
 
-		final int option = fc.showSaveDialog(getFrame());
-		if(option == JFileChooser.APPROVE_OPTION) {
+		if(fileChooser.showSaveDialog(getFrame()) == JFileChooser.APPROVE_OPTION) {
 			try {
-
-				File file = fc.getSelectedFile();
+				File file = fileChooser.getSelectedFile();
 				chooserDirectory = file.getParentFile();
 				// TODO if(file.exists()= blabla 
 				
@@ -333,6 +319,20 @@ public class RaddsView extends FrameView {
 			}
 		}
 	}
+
+	private JFileChooser newExportFileChooser() {
+		final JFileChooser fileChooser = new JFileChooser(chooserDirectory);
+		fileChooser.setSelectedFile(newDefaultFile());
+		fileChooser.setFileFilter(new FileNameExtensionFilter("JPEG", "jpg"));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("PNG", "png"));
+		return fileChooser;
+	}
+
+	private File newDefaultFile() {
+		String currentFileName = getFile().getName();
+		String filename = currentFileName.substring(0, currentFileName.lastIndexOf('.')) + ".png";
+		return new File(filename);
+	}
 	
 	/**
 	 * Open a texture image file via FileChooser dialogue.
@@ -350,19 +350,23 @@ public class RaddsView extends FrameView {
 				return null;
 			}
 		} */
-		final JFileChooser fc = new JFileChooser();
-        final String[] allExtensions = {"dds", "tga", "bmp", "gif", "jpg", "jpeg"};
-        fc.setFileFilter(new FileNameExtensionFilter("DirectDrawSurface texture", "dds"));
-        fc.setFileFilter(new FileNameExtensionFilter("GrandPrix4 TEX texture", "tex"));
-        fc.setFileFilter(new FileNameExtensionFilter("All supported images", allExtensions));
+		final JFileChooser fileChooser = newOpenFileChooser();
 
 		LoadImageTask task = null;
-		final int option = fc.showOpenDialog(null);
-		if (option == JFileChooser.APPROVE_OPTION) {
+		if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			this.setModified(false);
-			task = new LoadImageTask(fc.getSelectedFile());
+			task = new LoadImageTask(fileChooser.getSelectedFile());
 		}
 		return task;		
+	}
+
+	private JFileChooser newOpenFileChooser() {
+		final JFileChooser fileChooser = new JFileChooser();
+		final String[] allExtensions = {"dds", "tga", "bmp", "gif", "jpg", "jpeg"};
+		fileChooser.setFileFilter(new FileNameExtensionFilter("DirectDrawSurface texture", "dds"));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("GrandPrix4 TEX texture", "tex"));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("All supported images", allExtensions));
+		return fileChooser;
 	}
 	
 	/**
