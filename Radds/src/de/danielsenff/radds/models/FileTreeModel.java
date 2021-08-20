@@ -85,7 +85,8 @@ public class FileTreeModel implements TreeModel
 		final FileNode node = ((FileNode) parent);
 //		List<File> sortedFiles = getSortedFiles(file);
 		return node.isDirectory() ? new FileNode(node.getChild(index), fileFilter) : null;
-	} 
+	}
+
 	@Override
 	public int getIndexOfChild(final Object parent, final Object child) {
 		 final File file = ((FileNode) child).getFile(); 
@@ -109,12 +110,15 @@ public class FileTreeModel implements TreeModel
 	public static void main(final String[] args) {
 		final File userHomeDir = new File(System.getProperty("user.home"));
 		final JTree tree = new JTree(new FileTreeModel(userHomeDir));
-		tree.setCellRenderer(new DefaultTreeCellRenderer() 
-		{
+		tree.setCellRenderer(new DefaultTreeCellRenderer() {
 			@Override
-			public Component getTreeCellRendererComponent(final JTree tree, final Object value, 
-					final boolean sel, final boolean expanded, final boolean leaf, final int row, final boolean hasFocus) 
-			{
+			public Component getTreeCellRendererComponent(final JTree tree,
+														  final Object value,
+														  final boolean sel,
+														  final boolean expanded,
+														  final boolean leaf,
+														  final int row,
+														  final boolean hasFocus) {
 				final JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 				final File f = ((FileNode)value).getFile();
 				label.setText(FILE_SYSTEM_VIEW.getSystemDisplayName(f));
@@ -127,14 +131,14 @@ public class FileTreeModel implements TreeModel
 
 			@Override
 			public void keyPressed(final KeyEvent event) {
-				final TreePath selectionPath = tree.getSelectionPath();
-				if (	(event.isMetaDown() || event.isControlDown())
-						&& event.getKeyCode() == KeyEvent.VK_R	) {
-					tree.setModel(new FileTreeModel(userHomeDir));
-					tree.expandPath(selectionPath);
-					tree.setSelectionPath(selectionPath);
-					tree.invalidate();
-				}
+			final TreePath selectionPath = tree.getSelectionPath();
+			if ((event.isMetaDown() || event.isControlDown())
+					&& event.getKeyCode() == KeyEvent.VK_R	) {
+				tree.setModel(new FileTreeModel(userHomeDir));
+				tree.expandPath(selectionPath);
+				tree.setSelectionPath(selectionPath);
+				tree.invalidate();
+			}
 			}
 		});
 		

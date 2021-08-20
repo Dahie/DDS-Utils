@@ -33,21 +33,33 @@ public class FileSystemTree extends JTree {
 		updateTreeNodes();
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		setRootVisible(true);
-		setCellRenderer(new DefaultTreeCellRenderer() {
-			@Override
-			public Component getTreeCellRendererComponent(JTree tree, Object value, 
-					boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) 
-			{
-			JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-			File f = (File)node.getUserObject();
-			label.setText(fileSystemView.getSystemDisplayName(f));
-			label.setIcon(fileSystemView.getSystemIcon(f));
-			return label;
-			}
-		});
-		addKeyListener(new KeyListener() {
+		setCellRenderer(newTreeCellRenderer());
+		addKeyListener(newKeyListener());
+		addTreeExpansionListener(newTreeExpansionListener());
+	}
 
+	private DefaultTreeCellRenderer newTreeCellRenderer() {
+		return new DefaultTreeCellRenderer() {
+			@Override
+			public Component getTreeCellRendererComponent(JTree tree,
+														  Object value,
+														  boolean sel,
+														  boolean expanded,
+														  boolean leaf,
+														  int row,
+														  boolean hasFocus) {
+				JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+				File file = (File) node.getUserObject();
+				label.setText(fileSystemView.getSystemDisplayName(file));
+				label.setIcon(fileSystemView.getSystemIcon(file));
+				return label;
+			}
+		};
+	}
+
+	private KeyListener newKeyListener() {
+		return new KeyListener() {
 			public void keyPressed(KeyEvent event) {
 				TreePath selectionPath = getSelectionPath();
 				if(event.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -66,9 +78,12 @@ public class FileSystemTree extends JTree {
 
 			public void keyReleased(KeyEvent e) {}
 			public void keyTyped(KeyEvent e) {}
-		});
-		addTreeExpansionListener(new TreeExpansionListener() {
-			public void treeCollapsed(TreeExpansionEvent event) 
+		};
+	}
+
+	private TreeExpansionListener newTreeExpansionListener() {
+		return new TreeExpansionListener() {
+			public void treeCollapsed(TreeExpansionEvent event)
 			{
 				TreePath path = event.getPath();
 				TreeNode collapsedNode = (TreeNode) path.getLastPathComponent();
@@ -90,17 +105,14 @@ public class FileSystemTree extends JTree {
 				else
 					return isSelectedNodeInCollapsedNode(selectedNodeParent.getParent(), collapsedNode);
 			}
-			
+
 			public void treeExpanded(TreeExpansionEvent event)    {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
 				prepareChildTreeNodes(node);
 			}
-		});
+		};
 	}
-	
-	/**
-	 * 
-	 */
+
 	public void updateTreeNodes() {
 		File file = fileSystemView.getHomeDirectory();
 		DefaultMutableTreeNode node = new FileSystemTreeNode(file);
