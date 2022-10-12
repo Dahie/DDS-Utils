@@ -14,10 +14,18 @@ I use eclipse to check each one out. The Tools require the DDSUtils-project in t
 
 ## History
 
-The project stem from some hobby work I did in summer 2008. 
-Out of boredom I wanted to be able to load DDS files in Java and write tools
-for reviewing and processing in Java. This was my first own bigger java project and therefore
+The project some game development work in summer 2008. I needed some tools for 
+for reviewing and processing DDS texture files. This was my first own bigger java project and therefore
 I'm sure there are things that can be nicer and I'm open for feedback and criticism. 
+
+### State of the project
+
+Core development finished around 2011 and the projects did not get any updates in regards to 
+Java language changes or modern ways of code organization.
+The tools still run, if you add them in Eclipse or IntelliJ and setup the right build paths.
+
+I moved on from Java a while ago and do not have plans for this project. 
+I therefore welcome if anyone wants to fork this or modernize it.
 
 
 ## More Information
