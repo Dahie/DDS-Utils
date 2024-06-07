@@ -1,6 +1,7 @@
 # DDS-Utils
 
-DDS-Utils are a selection of tools to work with DirectDrawSurfaces textures in Java.
+DDS-Utils are a bunch of tools to work cross-platform with DirectDrawSurfaces textures in Java.
+These work well decent on MacOS and provide an alternative to the nVidia Texture Tools.
 
 ## DDS-Utils Provides
 
@@ -14,7 +15,7 @@ I use eclipse to check each one out. The Tools require the DDSUtils-project in t
 
 ## History
 
-The project some game development work in summer 2008. I needed some tools for 
+The project came from some game development projects in summer 2008. I needed tools for 
 for reviewing and processing DDS texture files. This was my first own bigger java project and therefore
 I'm sure there are things that can be nicer and I'm open for feedback and criticism. 
 
@@ -29,15 +30,18 @@ I therefore welcome if anyone wants to fork this or modernize it.
 
 
 ## More Information
+
 Please see the [wiki][wiki]
 
 ## Author
+
 DDS-Utils are written by [Daniel Senff][dahie]
 
 ## License
+
 Released under a [GNU General Public License v3][license].
 
 [dahie]: http://github.com/Dahie
 [imagej]: http://rsb.info.nih.gov/ij/
-[wiki]: http://wiki.github.com/Dahie/DDS-Utils
+[wiki]: https://github.com/Dahie/DDS-Utils/wiki
 [license]: http://github.com/Dahie/DDS-Utils/blob/master/LICENSE.md
