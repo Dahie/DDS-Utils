@@ -5,7 +5,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import org.jdesktop.application.Task;
 
@@ -42,12 +42,8 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
     	super(Radds.getApplication());
 		this.file = file;
 		this.view = (RaddsView) Radds.getApplication().getMainView();
-//        super(DocumentEditorView.this.getApplication(), file);
     }
 
-    
-    
-    
     /**
      * Called on the EDT if doInBackground completes without 
      * error and this Task isn't cancelled.  We update the
@@ -58,14 +54,11 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
 	protected void succeeded(final T fileContents) {
         getView().setFile(getFile());
 //        view.setGraphController((GraphController)fileContents);
-        RaddsView.getProgressBar().setIndeterminate(false);
-    	RaddsView.getProgressBar().setVisible(false);
+        getProgressBar().setIndeterminate(false);
+    	getProgressBar().setVisible(false);
 //        textArea.setText(fileContents);
         getView().setModified(false);
     }
-
-
-
 
 	protected RaddsView getView() {
 		return view;
@@ -81,12 +74,16 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
 
     @Override
     protected void cancelled() {
-    	RaddsView.getProgressBar().setIndeterminate(false);
-    	RaddsView.getProgressBar().setVisible(false);
+    	getProgressBar().setIndeterminate(false);
+    	getProgressBar().setVisible(false);
     	super.cancelled();
     }
-    
-	/* Called on the EDT if doInBackground fails because
+
+    private JProgressBar getProgressBar() {
+        return RaddsView.getProgressBar();
+    }
+
+    /* Called on the EDT if doInBackground fails because
      * an uncaught exception is thrown.  We show an error
      * dialog here.  The dialog is configured with resources
      * loaded from this Tasks's ResourceMap.
@@ -97,8 +94,8 @@ public abstract class LoadFileTask<T, V> extends Task<T, V> {
         final String msg = getResourceMap().getString("loadFailedMessage", getFile()) + e.getMessage();
         final String title = getResourceMap().getString("loadFailedTitle");
         final int type = JOptionPane.ERROR_MESSAGE;
-        RaddsView.getProgressBar().setIndeterminate(false);
-    	RaddsView.getProgressBar().setVisible(false);
+        getProgressBar().setIndeterminate(false);
+    	getProgressBar().setVisible(false);
         JOptionPane.showMessageDialog(getView().getFrame(), msg, title, type);
     }
 

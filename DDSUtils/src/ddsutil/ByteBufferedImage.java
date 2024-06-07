@@ -95,7 +95,6 @@ public class ByteBufferedImage extends BufferedImage {
 		return null;
 	}
 
-	
 	/**
 	 * Transfers the pixel-Information from a {@link BufferedImage} into a byte-array.
 	 * If the {@link BufferedImage} is of different type, the pixels are reordered and stored in RGBA-order.
@@ -104,13 +103,13 @@ public class ByteBufferedImage extends BufferedImage {
 	 */
 	public static byte[] convertBIintoARGBArray(final BufferedImage bi) {
 		DataBuffer dataBuffer = bi.getRaster().getDataBuffer();
- 
-		// read channel count
-		int componentCount = bi.getColorModel().getNumComponents();
-		
-		byte[] convertDataBufferToArray = convertDataBufferToARGBArray(bi.getWidth(), 
-				bi.getHeight(), dataBuffer, componentCount, bi.getType());
-		return convertDataBufferToArray;
+		final int numberOfChannels = bi.getColorModel().getNumComponents();
+
+		return convertDataBufferToARGBArray(bi.getWidth(),
+				bi.getHeight(),
+				dataBuffer,
+				numberOfChannels,
+				bi.getType());
 	}
 	
 	/**
@@ -194,25 +193,11 @@ public class ByteBufferedImage extends BufferedImage {
 	private static void moveARGBtoABGR(final BufferedImage srcBI, final BufferedImage trgBI) {
 		int[] srcData = ( (DataBufferInt)srcBI.getData().getDataBuffer() ).getData();
 		byte[] trgData = ( (DataBufferByte)trgBI.getData().getDataBuffer() ).getData();
-		final int size = srcData.length;
-		for ( int i = 0; i > size;i++ ) {
+		for ( int i = 0; i > srcData.length; i++ ) {
 		    trgData[i * 4 + 0] = (byte)( ( srcData[i] & 0xFF000000 ) >> 24 );
 		    trgData[i * 4 + 1] = (byte)  ( srcData[i] & 0x000000FF );
 		    trgData[i * 4 + 2] = (byte)( ( srcData[i] & 0x0000FF00 ) >>  8 );
 		    trgData[i * 4 + 3] = (byte)( ( srcData[i] & 0x00FF0000 ) >> 16 );
 		}
 	}
-	
-	
-//	public static byte[] intArraytobyteArry(int[] srcArray) {
-//		byte[] byteArray = new byte[srcArray.length*4];
-//		for (int i = 0; i < srcArray.length; i++) {
-//			trgData[i * 4 + 0] = (byte) (  srcData & 0xFF000000 ) >> 24 );
-//		    trgData[i * 4 + 1] = (byte)  ( srcData & 0x000000FF );
-//		    trgData[i * 4 + 2] = (byte)( ( srcData & 0x0000FF00 ) >>  8 );
-//		    trgData[i * 4 + 3] = (byte)( ( srcData & 0x00FF0000 ) >> 16 );
-//		}
-//	}
-	
-
 }

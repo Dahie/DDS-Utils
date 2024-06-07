@@ -107,7 +107,6 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	}
 
 	private void changeChannelBi(ImageOperations.ChannelMode channel, BufferedImage currentImage) {
-		
 		switch(channel){
 			default:
 			case RGBA:
@@ -205,7 +204,6 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		return this.zoomFactor;
 	}
 
-	
 	/**
 	 * @return the transparencyColor
 	 */
@@ -213,14 +211,12 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		return this.transparencyColor;
 	}
 
-
 	/**
 	 * @param transparencyColor the transparencyColor to set
 	 */
 	public final void setTransparencyColor(Color transparencyColor) {
 		this.transparencyColor = transparencyColor;
 	}
-
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -243,14 +239,12 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		//g.drawImage(this.displayBi, 0, 0, this);
 		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);   
         g.drawImage(biRendered, offsetX, offsetY, newW+offsetX, newH+offsetY, moveX, moveY, biRendered.getWidth(), biRendered.getHeight(), null);
-  	
 	}
 
 	private void drawBackground(Graphics g) {
 		g.setColor(this.transparencyColor);
 		g.fillRect(0, 0, (int) (zoomFactor * biRendered.getWidth()), (int) (zoomFactor * biRendered.getHeight()));
 	}
-
 
 	/* (non-Javadoc)
 	 * @see javax.swing.Scrollable#getPreferredScrollableViewportSize()
@@ -311,29 +305,44 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	public void mouseMoved(MouseEvent e) {
 		int x = (int) (e.getPoint().x/zoomFactor);
 		int y = (int) (e.getPoint().y/zoomFactor);
-		
+		this.setToolTipText(getTooltip(x, y));
+	}
+
+	private String getTooltip(int x, int y) {
 		Raster data = biSource.getData();
 		String tooltip = "Coordinate (" + x + ", "+ y + "), ";
-		int index = y*biSource.getWidth() + x;
+		int index = y *biSource.getWidth() + x;
 		if(biSource.getColorModel() instanceof IndexColorModel) {
-			tooltip	+= "Index Colors ("
+			tooltip	+= getIndexColorTooltip(index);
+		} else if(biSource.getColorModel().getNumComponents() > 3) {
+			tooltip	+= getNumComponentTooltip((int) x, (int) y, data);
+		} else {
+			tooltip	+= getRgbTooltip((int) x, (int) y, data);
+		}
+		return tooltip;
+	}
+
+	private String getRgbTooltip(int x, int y, Raster data) {
+		return "RGB ("
+				+ data.getSample(x, y, 0) + ", "
+				+ data.getSample(x, y, 1) + ", "
+				+ data.getSample(x, y, 2) + ")";
+	}
+
+	private String getNumComponentTooltip(int x, int y, Raster data) {
+		return "ARGB ("
+				+ data.getSample(x, y, 3) + ", "
+				+ data.getSample(x, y, 0) + ", "
+				+ data.getSample(x, y, 1) + ", "
+				+ data.getSample(x, y, 2) + ")";
+	}
+	
+	private String getIndexColorTooltip(int index) {
+		return "Index Colors ("
 				+ biSource.getColorModel().getAlpha(index) + ", "
 				+ biSource.getColorModel().getRed(index) + ", "
 				+ biSource.getColorModel().getGreen(index) + ", "
 				+ biSource.getColorModel().getBlue(index) + ")";
-		} else if(biSource.getColorModel().getNumComponents() > 3) {
-			tooltip	+= "ARGB ("
-				+ data.getSample((int)x, (int)y, 3) + ", "
-				+ data.getSample((int)x, (int)y, 0) + ", "
-				+ data.getSample((int)x, (int)y, 1) + ", "
-				+ data.getSample((int)x, (int)y, 2) + ")";
-		} else {
-			tooltip	+= "RGB ("
-				+ data.getSample((int)x, (int)y, 0) + ", "
-				+ data.getSample((int)x, (int)y, 1) + ", "
-				+ data.getSample((int)x, (int)y, 2) + ")";	
-		}
-		this.setToolTipText(tooltip);
 	}
 
 	/** 

@@ -62,15 +62,19 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		addMipMap(topmost);
 		System.out.println("Generate Mipmaps");
 		
-		if(!DDSFile.isPowerOfTwo(topmost.getWidth()) 
-				&& !DDSFile.isPowerOfTwo(topmost.getHeight())) 
+		if(hasCubicDimensions(topmost)) {
 			throw new NonCubicDimensionException();
+		}
 		
-		generateMipMapArray();	
+		generateMipMapArray(topmost);
 	}
 
-	private void generateMipMapArray() {
-		BufferedImage topmost = getMipMaps().get(0);
+	private boolean hasCubicDimensions(BufferedImage topmost) {
+		return !DDSFile.isPowerOfTwo(topmost.getWidth())
+				&& !DDSFile.isPowerOfTwo(topmost.getHeight());
+	}
+
+	private void generateMipMapArray(BufferedImage topmost) {
 		// dimensions of first map
 		int mipmapWidth = topmost.getWidth(); 
 		int mipmapHeight = topmost.getHeight();
@@ -197,33 +201,6 @@ public class MipMaps extends AbstractTextureMap implements Iterable<BufferedImag
 		}
 		return mipmapBuffer;
 	}
-
-	/**
-	 * @param topmost
-	 * @param mipmapWidth
-	 * @param mipmapHeight
-	 * @param mipmapBI
-	 * @return
-	 */
-	/*public static BufferedImage[] generateMipMaps(final BufferedImage topmost, 
-			int mipmapWidth,
-			int mipmapHeight, 
-			final BufferedImage[] mipmapBI) {
-		int i = 0; // cause the first already is set
-		ImageRescaler rescaler = new ImageRescaler();
-		while(true) {
-			
-			mipmapBI[i] = rescaler.rescaleBI(mipmapBI[i], mipmapWidth, mipmapHeight);
-			
-			if (mipmapWidth == 1 || mipmapHeight == 1) 
-				break;
-			
-			i++;
-			mipmapWidth = calculateMipMapSize(mipmapWidth);
-			mipmapHeight = calculateMipMapSize(mipmapHeight);
-		}
-		return mipmapBI;
-	}*/
 
 	/* (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()

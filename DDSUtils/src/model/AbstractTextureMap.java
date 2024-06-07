@@ -41,8 +41,8 @@ public abstract class AbstractTextureMap implements TextureMap {
 	@Override
 	public ByteBuffer compress(final BufferedImage bi, 
 			final Squish.CompressionType compressionType) {
-		DXTBufferCompressor compi = new DXTBufferCompressor(bi, compressionType);
-		return compi.getByteBuffer();
+		DXTBufferCompressor compressor = new DXTBufferCompressor(bi, compressionType);
+		return compressor.getByteBuffer();
 	}
 
 }

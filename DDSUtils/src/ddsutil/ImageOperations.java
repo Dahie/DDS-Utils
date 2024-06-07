@@ -122,9 +122,6 @@ public class ImageOperations {
 	public static int unsignedByteToInt(final byte b) {
 		return (int) b & 0xFF;
     }
-	
-	
-	
 		
 	/**
 	 * Paint Channel in a specified value (0-255)
@@ -164,7 +161,6 @@ public class ImageOperations {
 				channel, greyValue);
 	}
 	
-	
 	/**
 	 * Paint Channel in a specified value (0-255)
 	 * Channel RGBA (0,1,2,3)
@@ -186,8 +182,6 @@ public class ImageOperations {
 		
 		return rgba;
 	}
-	
-	
 
 	/**
 	 * Conversion between float color value to an integer value 

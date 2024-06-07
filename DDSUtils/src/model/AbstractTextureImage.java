@@ -40,7 +40,6 @@ public abstract class AbstractTextureImage implements TextureImage {
 	 */
 	@Override
 	public int getChannelDepth() {
-		
 		switch(this.pixelformat){
 			case DDSImage.D3DFMT_A8R8G8B8:
 			case DDSImage.D3DFMT_X8R8G8B8:
@@ -99,7 +98,6 @@ public abstract class AbstractTextureImage implements TextureImage {
 	public int getWidth() {
 		return this.width;
 	}
-	
 
 	/**
 	 * Get the Format in which pixel are stored in the file as internal stored Integer-value.

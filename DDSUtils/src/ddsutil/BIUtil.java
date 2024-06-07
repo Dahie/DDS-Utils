@@ -28,21 +28,10 @@ public class BIUtil {
 	public static BufferedImage getChannel(final BufferedImage sourceBi, final ChannelMode channelMode) {
 		
 		BufferedImage newBi = new BufferedImage(sourceBi.getWidth(), 
-				sourceBi.getHeight(), BufferedImage.TYPE_3BYTE_BGR);		
-		
-		/*int pixelcount = sourceBi.getWidth() * sourceBi.getHeight();
-		for (int y = 0; y < sourceBi.getHeight(); y++) {
-			for (int x = 0; x < sourceBi.getWidth(); x++) {
-				int pixel = sourceBi.getColorModel().getBlue(p);
-				newBi.setRGB(x, y, );
-			}
-		}*/
-		
+				sourceBi.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		
 		for (int y = 0; y < sourceBi.getHeight(); y++) {
 			for (int x = 0; x < sourceBi.getWidth(); x++) {
-				
-//				ColorModel color = sourceBi.getColorModel();
 				int[] argb = ImageOperations.readPixelARGB(sourceBi.getRGB(x,y)); 
 
 				switch(channelMode){
