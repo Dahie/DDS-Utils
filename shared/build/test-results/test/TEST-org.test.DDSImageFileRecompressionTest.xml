@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.test.DDSImageFileRecompressionTest" tests="7" skipped="0" failures="7" errors="0" timestamp="2024-06-08T21:08:44" hostname="MBP-23-Daniel.fritz.box" time="0.007">
+  <properties/>
+  <testcase name="testUncompressedMipmap()" classname="org.test.DDSImageFileRecompressionTest" time="0.0">
+    <failure message="java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0" type="java.lang.ArrayIndexOutOfBoundsException">java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0
+	at java.base/java.util.Vector.get(Vector.java:750)
+	at org.model.MipMaps.getMipMap(MipMaps.java:131)
+	at org.model.AbstractTextureImage.getTopMipMap(AbstractTextureImage.java:209)
+	at org.model.AbstractTextureImage.setHasMipMaps(AbstractTextureImage.java:180)
+	at org.test.DDSImageFileRecompressionTest.writeRecompressedData(DDSImageFileRecompressionTest.java:88)
+	at org.test.DDSImageFileRecompressionTest.testUncompressedMipmap(DDSImageFileRecompressionTest.java:66)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="testRecompressOriginal()" classname="org.test.DDSImageFileRecompressionTest" time="0.001">
+    <failure message="java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0" type="java.lang.ArrayIndexOutOfBoundsException">java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0
+	at java.base/java.util.Vector.get(Vector.java:750)
+	at org.model.MipMaps.getMipMap(MipMaps.java:131)
+	at org.model.AbstractTextureImage.getTopMipMap(AbstractTextureImage.java:209)
+	at org.model.AbstractTextureImage.setHasMipMaps(AbstractTextureImage.java:180)
+	at org.test.DDSImageFileRecompressionTest.writeRecompressedData(DDSImageFileRecompressionTest.java:88)
+	at org.test.DDSImageFileRecompressionTest.testRecompressOriginal(DDSImageFileRecompressionTest.java:30)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="testUncompressedNoMipmap()" classname="org.test.DDSImageFileRecompressionTest" time="0.0">
+    <failure message="java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0" type="java.lang.ArrayIndexOutOfBoundsException">java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0
+	at java.base/java.util.Vector.get(Vector.java:750)
+	at org.model.MipMaps.getMipMap(MipMaps.java:131)
+	at org.model.AbstractTextureImage.getTopMipMap(AbstractTextureImage.java:209)
+	at org.model.AbstractTextureImage.setHasMipMaps(AbstractTextureImage.java:180)
+	at org.test.DDSImageFileRecompressionTest.writeRecompressedData(DDSImageFileRecompressionTest.java:88)
+	at org.test.DDSImageFileRecompressionTest.testUncompressedNoMipmap(DDSImageFileRecompressionTest.java:48)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="testRecompressDXT5Mipmap()" classname="org.test.DDSImageFileRecompressionTest" time="0.001">
+    <failure message="java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0" type="java.lang.ArrayIndexOutOfBoundsException">java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0
+	at java.base/java.util.Vector.get(Vector.java:750)
+	at org.model.MipMaps.getMipMap(MipMaps.java:131)
+	at org.model.AbstractTextureImage.getTopMipMap(AbstractTextureImage.java:209)
+	at org.model.AbstractTextureImage.setHasMipMaps(AbstractTextureImage.java:180)
+	at org.test.DDSImageFileRecompressionTest.writeRecompressedData(DDSImageFileRecompressionTest.java:88)
+	at org.test.DDSImageFileRecompressionTest.testRecompressDXT5Mipmap(DDSImageFileRecompressionTest.java:60)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="testRecompressDXT1Mipmap()" classname="org.test.DDSImageFileRecompressionTest" time="0.001">
+    <failure message="java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0" type="java.lang.ArrayIndexOutOfBoundsException">java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0
+	at java.base/java.util.Vector.get(Vector.java:750)
+	at org.model.MipMaps.getMipMap(MipMaps.java:131)
+	at org.model.AbstractTextureImage.getTopMipMap(AbstractTextureImage.java:209)
+	at org.model.AbstractTextureImage.setHasMipMaps(AbstractTextureImage.java:180)
+	at org.test.DDSImageFileRecompressionTest.writeRecompressedData(DDSImageFileRecompressionTest.java:88)
+	at org.test.DDSImageFileRecompressionTest.testRecompressDXT1Mipmap(DDSImageFileRecompressionTest.java:54)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="testRecompressDXT1noMipmap()" classname="org.test.DDSImageFileRecompressionTest" time="0.001">
+    <failure message="java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0" type="java.lang.ArrayIndexOutOfBoundsException">java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0
+	at java.base/java.util.Vector.get(Vector.java:750)
+	at org.model.MipMaps.getMipMap(MipMaps.java:131)
+	at org.model.AbstractTextureImage.getTopMipMap(AbstractTextureImage.java:209)
+	at org.model.AbstractTextureImage.setHasMipMaps(AbstractTextureImage.java:180)
+	at org.test.DDSImageFileRecompressionTest.writeRecompressedData(DDSImageFileRecompressionTest.java:88)
+	at org.test.DDSImageFileRecompressionTest.testRecompressDXT1noMipmap(DDSImageFileRecompressionTest.java:42)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <testcase name="testRecompressDXT5noMipmap()" classname="org.test.DDSImageFileRecompressionTest" time="0.001">
+    <failure message="java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0" type="java.lang.ArrayIndexOutOfBoundsException">java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 0
+	at java.base/java.util.Vector.get(Vector.java:750)
+	at org.model.MipMaps.getMipMap(MipMaps.java:131)
+	at org.model.AbstractTextureImage.getTopMipMap(AbstractTextureImage.java:209)
+	at org.model.AbstractTextureImage.setHasMipMaps(AbstractTextureImage.java:180)
+	at org.test.DDSImageFileRecompressionTest.writeRecompressedData(DDSImageFileRecompressionTest.java:88)
+	at org.test.DDSImageFileRecompressionTest.testRecompressDXT5noMipmap(DDSImageFileRecompressionTest.java:36)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.test.ImageOperationTests" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-06-08T21:08:44" hostname="MBP-23-Daniel.fritz.box" time="0.003">
+  <properties/>
+  <testcase name="testReadWriteARGB()" classname="org.test.ImageOperationTests" time="0.0"/>
+  <testcase name="testUpperBoundaries()" classname="org.test.ImageOperationTests" time="0.0"/>
+  <testcase name="testReadARGB()" classname="org.test.ImageOperationTests" time="0.0"/>
+  <testcase name="testWithinBoundaries()" classname="org.test.ImageOperationTests" time="0.001"/>
+  <testcase name="testReadRGB()" classname="org.test.ImageOperationTests" time="0.0"/>
+  <testcase name="testLowerBoundaries()" classname="org.test.ImageOperationTests" time="0.001"/>
+  <testcase name="testReadWriteRGB()" classname="org.test.ImageOperationTests" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
