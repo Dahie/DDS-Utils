@@ -4,9 +4,13 @@ dropps/build/
 shared/build/
 badds/build/
 madds/build/
+/build/
+/buildSrc/build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+!gradle-wrapper.jar
+
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -19,6 +23,12 @@ madds/build/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+# Cache of project
+.gradletasknamecache
+
+.idea
+
 
 ### Eclipse ###
 .apt_generated

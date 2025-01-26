@@ -33,6 +33,10 @@ I therefore welcome if anyone wants to fork this or modernize it.
 
 Please see the [wiki][wiki]
 
+## Usage
+
+Project setup based on https://docs.gradle.org/current/samples/sample_building_java_applications.html
+
 ## Author
 
 DDS-Utils are written by [Daniel Senff][dahie]
