@@ -37,6 +37,11 @@ Please see the [wiki][wiki]
 
 Project setup based on https://docs.gradle.org/current/samples/sample_building_java_applications.html
 
+
+    ./gradlew run
+
+Run Radds
+
 ## Author
 
 DDS-Utils are written by [Daniel Senff][dahie]

@@ -58,8 +58,6 @@ public class ConvertController implements IProgressObserverable {
 		}
 	}
 
-
-
 	/**
 	 * Process a single file
 	 * @param file
@@ -202,13 +200,11 @@ public class ConvertController implements IProgressObserverable {
 		convertListeners.remove(listener);
 	}
 
-	@Override
-	public void addListener(final IProgressListener listener) {
-		progressListeners.add(listener);
-	}
+	// public void addListener(final IProgressListener listener) {
+	// 	progressListeners.add(listener);
+	// }
 
-	@Override
-	public void removeListener(final IProgressListener listener) {
-		progressListeners.remove(listener);
-	}
+	// public void removeListener(final IProgressListener listener) {
+	// 	progressListeners.remove(listener);
+	// }
 }

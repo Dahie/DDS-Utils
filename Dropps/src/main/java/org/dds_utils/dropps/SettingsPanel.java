@@ -89,7 +89,7 @@ public class SettingsPanel extends JPanel {
 	}
 
 	private JCheckBox setupChkWhiteAlpha() {
-		JCheckBox chkWhiteAlpha = new JCheckBox("White_alpha_channel (recommended)");
+		JCheckBox chkWhiteAlpha = new JCheckBox("white_alpha_channel_recommended");
 		chkWhiteAlpha.setToolTipText("If you have a DDSImage with a 8bit alpha and reduce its alpha to 1bit \n" +
 				"it'll make the pixel either white or black with value 128 as threshold. In most cases, if you want \n" +
 				"a DXT1 file, you want a clean white alpha. This function paints the alpha channel white.");
