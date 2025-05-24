@@ -1,4 +1,4 @@
-package org.dds_utils.dropps.models;
+package org.dds_utils.dropps.io;
 
 import org.ddsutil.DDSUtil;
 import org.util.*;
@@ -9,8 +9,15 @@ import java.io.*;
 
 import static org.util.ImageIOUtils.isImageIOSupported;
 
-public class BufferedImageReader {
-    public static BufferedImage read(final File sourceFile) throws IOException {
+public class BufferedImageReader implements ImageReader {
+
+    public File sourceFile;
+
+    public BufferedImageReader(File sourceFile) {
+        this.sourceFile = sourceFile;
+    }
+
+    public BufferedImage read() throws IOException {
         final InputStream fis = new FileInputStream(sourceFile);
         BufferedImage image = null;
 

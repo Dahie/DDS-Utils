@@ -16,21 +16,25 @@
 */
 package org.dds_utils.dropps.models;
 
+import java.io.File;
+
 public class ProgressStatus {
     private boolean error;
+    public File file;
     private String  message;
     private int     processable;
     private int     processed;
 
-    public ProgressStatus(int processed, int processable, String message) {
-        this(processed, processable, message, false);
+    public ProgressStatus(File file, int processed, int processable, String message) {
+        this(file, processed, processable, message, false);
     }
 
-    public ProgressStatus(int processed, int processable, String message, boolean error) {
+    public ProgressStatus(File file, int processed, int processable, String message, boolean error) {
         this.processed   = processed;
         this.processable = processable;
         this.message     = message;
         this.error       = error;
+        this.file        = file;
     }
 
     public boolean isError() {

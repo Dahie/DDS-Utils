@@ -1,22 +1,21 @@
 package org.dds_utils.dropps;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Vector;
-import java.util.logging.Logger;
 
 import javax.swing.*;
 
-import org.dds_utils.dropps.models.IConvertListener;
 
 import static org.httprpc.sierra.UIBuilder.*;
+
+import org.dds_utils.dropps.models.IProgressListener;
+import org.dds_utils.dropps.models.ProgressStatus;
+import org.dds_utils.dropps.ui.DropList;
+import org.dds_utils.dropps.ui.FileDrop;
+import org.dds_utils.dropps.ui.SettingsPanel;
 import org.httprpc.sierra.ActivityIndicator;
 import org.httprpc.sierra.TaskExecutor;
 import java.util.concurrent.Executors;
@@ -101,7 +100,7 @@ public class DroppsView extends JFrame implements Runnable {
         return new FileDrop(null, dropPanel, /*dragBorder,*/ new FileDrop.Listener() {
             @Override
             public void filesDropped(final File[] files) {
-                for (File file : files) {
+                for (final File file : files) {
                     getFileListModel().addElement(file);
                 }
             }
@@ -127,15 +126,28 @@ public class DroppsView extends JFrame implements Runnable {
         pack();
         setVisible(true);
 
-        controller.addListener(new IConvertListener() {
+        controller.addListener(new IProgressListener() {
             @Override
-            public void convertBegin(File originalFile) {
+            public void begin(ProgressStatus status) {
                 activityIndicator.start();
             }
 
             @Override
-            public void convertEnd(File originalFile) {
-                ((DefaultListModel<Object>)dropPanel.getModel()).removeElement(originalFile);;
+            public void update(ProgressStatus status) {
+
+            }
+
+            @Override
+            public void error(ProgressStatus status) {
+
+            }
+
+            @Override
+            public void end(ProgressStatus status) {
+                System.out.println(status.getMessage());
+                ((DefaultListModel<Object>)dropPanel.getModel()).removeElement(status.file);;
+
+                activityIndicator.stop();
             }
         });
     }
@@ -151,37 +163,7 @@ public class DroppsView extends JFrame implements Runnable {
             } else {
                 //label.setText("Task failed");
             }
-
-            if(getFileListModel().getSize() == 0) {
-                activityIndicator.stop();
-            }
         });
-    }
-
-    private class DropList extends JList {
-        private final ResourceMap resourceMap;
-
-        public DropList(DefaultListModel dlm, ResourceMap resourceMap) {
-            super(dlm);
-            this.resourceMap = resourceMap;
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-
-            if(this.getModel().getSize() == 0) {
-                final int fontsize = 24;
-                final Font font = g.getFont();
-                final Font newFont = new Font(font.getFamily(), Font.BOLD, fontsize);
-                g.setFont(newFont);
-                g.setColor(new Color(128, 128, 128));
-                // and if even now to small, then cut
-                g.drawString(resourceMap.getString("DropsPanel.title"), 15, 25);
-                g.setFont(font);
-                g.drawString(resourceMap.getString("DropsPanel.text"), 15, 45);
-            }
-        }
     }
 }
 

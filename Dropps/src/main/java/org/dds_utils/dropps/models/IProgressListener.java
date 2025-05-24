@@ -24,9 +24,12 @@ package org.dds_utils.dropps.models;
  * @history
  */
 public interface IProgressListener {
-    
+
+    public void begin(ProgressStatus status);
+
     public void update(ProgressStatus status);
     
     public void error(ProgressStatus status);
 
+    public void end(ProgressStatus status);
 }

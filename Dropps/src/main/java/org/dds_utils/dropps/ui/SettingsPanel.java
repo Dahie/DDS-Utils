@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.dds_utils.dropps;
+package org.dds_utils.dropps.ui;
 
-import org.dds_utils.dropps.models.ExportOptions;
+import org.dds_utils.dropps.models.ExportConfiguration;
 import org.jogl.DDSImage;
 
 import javax.swing.*;
@@ -18,13 +18,13 @@ public class SettingsPanel extends JPanel {
 
 	private JComboBox comboPixelformat;
 	private JCheckBox chkMipMaps;
-	private final ExportOptions exportOptions;
+	private final ExportConfiguration exportOptions;
 	private JCheckBox chkWhiteAlpha;
 
 	/**
 	 * Panel with the export settings for the dds files
 	 */
-	public SettingsPanel(ExportOptions exportoptions) {
+	public SettingsPanel(ExportConfiguration exportoptions) {
 		this.exportOptions = exportoptions;
 		
 		//this.resourceMap = Application.getInstance().getContext().getResourceMap(getClass(), SettingsPanel.class);

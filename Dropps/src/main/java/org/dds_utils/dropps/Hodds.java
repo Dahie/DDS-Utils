@@ -1,7 +1,7 @@
 package org.dds_utils.dropps;
 
 
-import org.dds_utils.dropps.models.ExportOptions;
+import org.dds_utils.dropps.models.ExportConfiguration;
 import org.jogl.DDSImage;
 
 import java.io.File;
@@ -23,7 +23,7 @@ public class Hodds {
 
             File file = new File(inputFile);
 
-            ExportOptions options = new ExportOptions(2048, 2048, DDSImage.D3DFMT_DXT5, true);
+            ExportConfiguration options = new ExportConfiguration(2048, 2048, DDSImage.D3DFMT_DXT5, true);
 
             ConvertController converter = new ConvertController(options);
             converter.convertFile(file);

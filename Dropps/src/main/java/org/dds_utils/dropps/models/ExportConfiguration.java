@@ -6,7 +6,7 @@ import org.jogl.DDSImage;
  * @author danielsenff
  *
  */
-public class ExportOptions {
+public class ExportConfiguration {
 
 	// DDS Operation settings
 	private int newHeight = 0;
@@ -22,13 +22,13 @@ public class ExportOptions {
 	/**
 	 * 
 	 */
-	public ExportOptions() {}
+	public ExportConfiguration() {}
 	
 	/**
 	 * @param pixelformat
 	 * @param generateMipMaps
 	 */
-	public ExportOptions(final int pixelformat, final boolean generateMipMaps) {
+	public ExportConfiguration(final int pixelformat, final boolean generateMipMaps) {
 		setKeepDimension(true);
 		setKeepPixelformat(false);
 		this.newPixelformat = pixelformat;
@@ -41,10 +41,10 @@ public class ExportOptions {
 	 * @param pixelformat
 	 * @param generateMipMaps
 	 */
-	public ExportOptions(final int width, 
-			final int height, 
-			final int pixelformat, 
-			final boolean generateMipMaps) {
+	public ExportConfiguration(final int width,
+							   final int height,
+							   final int pixelformat,
+							   final boolean generateMipMaps) {
 		this.setKeepDimension(false);
 		this.newWidth = width;
 		this.newHeight = height;

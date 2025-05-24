@@ -1,11 +1,14 @@
 package org.dds_utils.dropps;
 
+import org.dds_utils.dropps.io.ImageReader;
+import org.dds_utils.dropps.io.ImageWriter;
+import org.dds_utils.dropps.io.ImageReaderFactory;
+import org.dds_utils.dropps.io.ImageWriterFactory;
 import org.dds_utils.dropps.models.*;
 import org.ddsutil.MipMapsUtil;
-import org.util.FileUtil;
-import org.util.ImageIOUtils;
 
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,30 +25,17 @@ public class ConvertController implements IProgressObserverable {
 
 	private static final Logger logger = Logger.getLogger(ConvertController.class.getName());
 
-	protected final List<IConvertListener> convertListeners = new ArrayList<IConvertListener>(1);
 	protected final List<IProgressListener> progressListeners = new ArrayList<IProgressListener>(1);
 
 	public static final String ERROR_ORIGINAL_FILE_NOT_EXISTS = "errorOriginalFileNotExists";
 
-	private final ExportOptions options;
+	private final ExportConfiguration options;
 	
 	/**
 	 * @param options
 	 */
-	public ConvertController(final ExportOptions options) {
+	public ConvertController(final ExportConfiguration options) {
 		this.options = options;
-	}
-	
-	/**
-	 * Convert a bunch of files
-	 * @param files
-	 */
-	public void convertFiles(final Collection<File> files) {
-		int i = 0;
-		for (final File sourceFile : files) {
-			convertFile(sourceFile);
-			i++;
-		}
 	}
 
 	/**
@@ -56,16 +46,21 @@ public class ConvertController implements IProgressObserverable {
 		try {
 			notifyConversionBegin(sourceFile);
 
-			if(sourceFile.isDirectory() || !isFiletypeSupported(sourceFile)) {
+			if(sourceFile.isDirectory()) {
 				notifyConversionEnd(sourceFile);
 				return;
 			}
 
-			// if input is DDS
-
 			final File targetFile = getTargetFileFromSourceFile(sourceFile, "dds");
+			ImageReader reader = ImageReaderFactory.build(sourceFile);
+			ImageWriter writer = ImageWriterFactory.build(targetFile, options);
 
-			final ConversionResult result = new DDSConverter(sourceFile, targetFile, options).perform();
+			if(reader == null) {
+				notifyConversionEnd(sourceFile);
+				return;
+			}
+
+			final ConversionResult result = convert(reader, writer);
 
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -81,36 +76,45 @@ public class ConvertController implements IProgressObserverable {
 		notifyConversionEnd(sourceFile);
 	}
 
+	private ConversionResult convert(ImageReader reader, ImageWriter writer) throws IOException {
+		BufferedImage imageToConvert = reader.read();
+
+		if(imageToConvert == null) {
+			return new ConversionResultBuilder().error("Image not loadable").buildConversionResult();
+		}
+
+		if (!MipMapsUtil.isPowerOfTwo(imageToConvert.getWidth())
+				&& !MipMapsUtil.isPowerOfTwo(imageToConvert.getHeight())
+				&& options.hasGeneratedMipMaps()) {
+			return new ConversionResultBuilder().error("Mipmaps generation failed").buildConversionResult(); // todo split to different messages
+		}
+
+		return writer.write(imageToConvert);
+	}
+
 	private File getTargetFileFromSourceFile(File sourceFile, String targetExtension) {
 		final String targetPath = sourceFile.getAbsolutePath().substring(0, sourceFile.getAbsolutePath().lastIndexOf('.'));
 		return new File(targetPath + "." + targetExtension);
 	}
 
-	private boolean isFiletypeSupported(final File file) {
-		if(ImageIOUtils.isImageIOSupported(file)
-				|| FileUtil.getFileSuffix(file).contains("tex")
-				|| FileUtil.getFileSuffix(file).contains("tga")
-				)
-			return true;
-		
-		return false;
-	}
 
-	protected void notifyProgressListeners(final ProgressStatus status) {
+	protected void updateProgressListeners(final ProgressStatus status) {
 		for (final IProgressListener iProgressListener : progressListeners) {
 			iProgressListener.update(status);
 		}
 	}
 
-	protected void notifyConversionBegin(final File originalFile) {
-		for (final IConvertListener iConvertListener : convertListeners) {
-			iConvertListener.convertBegin(originalFile);
+	protected void notifyConversionBegin(final File file) {
+		ProgressStatus status = new ProgressStatus(file, 0, 0, "Started");
+		for (final IProgressListener iProgressListener : progressListeners) {
+			iProgressListener.begin(status);
 		}
 	}
 
-	protected void notifyConversionEnd(final File originalFile) {
-		for (final IConvertListener iConvertListener : convertListeners) {
-			iConvertListener.convertEnd(originalFile);
+	protected void notifyConversionEnd(final File file) {
+		ProgressStatus status = new ProgressStatus(file, 0, 0, "Ended");
+		for (final IProgressListener iProgressListener : progressListeners) {
+			iProgressListener.end(status);
 		}
 	}
 
@@ -118,23 +122,6 @@ public class ConvertController implements IProgressObserverable {
 		for (final IProgressListener iProgressListener : progressListeners) {
 			iProgressListener.error(status);
 		}
-	}
-
-	protected boolean checkConvertFileExists(final File originalFile) { //unused
-		if (!originalFile.exists()) {
-			notifyError(new ProgressStatus(0, 0, ERROR_ORIGINAL_FILE_NOT_EXISTS, true));
-			logger.log(Level.SEVERE, ERROR_ORIGINAL_FILE_NOT_EXISTS);
-			return false;
-		}
-		return true;
-	}
-
-	public void addListener(final IConvertListener listener) {
-		convertListeners.add(listener);
-	}
-
-	public void removeListener(final IConvertListener listener) {
-		convertListeners.remove(listener);
 	}
 
 	@Override
@@ -147,7 +134,7 @@ public class ConvertController implements IProgressObserverable {
 		progressListeners.remove(listener);
 	}
 
-	public ExportOptions getOptions() {
+	public ExportConfiguration getOptions() {
 		return this.options;
 	}
 }

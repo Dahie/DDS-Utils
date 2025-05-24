@@ -1,4 +1,4 @@
-package org.dds_utils.dropps.models;
+package org.dds_utils.dropps.io;
 
 /**
 * Copyright (c) 2007-2009, JAGaToo Project Group all rights reserved.

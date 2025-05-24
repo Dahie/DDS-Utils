@@ -1,4 +1,4 @@
-package org.dds_utils.dropps;
+package org.dds_utils.dropps.ui;
 
 import java.awt.datatransfer.DataFlavor;
 import java.io.BufferedReader;
