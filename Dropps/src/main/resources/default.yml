@@ -1,0 +1,9 @@
+default:
+  source:
+    - tga
+    - png
+    - bmp
+    - tex // Grandprix4 texture
+  target: dds
+  generate_mip_maps: true
+  force_white_alpha: false

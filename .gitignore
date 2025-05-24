@@ -1,9 +1,5 @@
-.gradle
-radds/build/
-dropps/build/
-shared/build/
-badds/build/
-madds/build/
+# Built application files
+/*/build/
 /build/
 /buildSrc/build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -11,24 +7,25 @@ madds/build/
 !**/src/test/**/build/
 !gradle-wrapper.jar
 
+# Gradle generated files
+.gradle/
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
+# Signing files
+.signing/
+
+# User-specific configurations
 .idea/libraries/
-*.iws
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/.name
+.idea/compiler.xml
+.idea/copyright/profiles_settings.xml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/scopes/scope_settings.xml
+.idea/vcs.xml
 *.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-# Cache of project
-.gradletasknamecache
-
-.idea
-
 
 ### Eclipse ###
 .apt_generated
@@ -53,5 +50,11 @@ bin/
 ### VS Code ###
 .vscode/
 
-### Mac OS ###
+# OS-specific files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
