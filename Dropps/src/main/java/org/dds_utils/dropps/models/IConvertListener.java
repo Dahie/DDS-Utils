@@ -24,14 +24,14 @@ public interface IConvertListener {
 
     /**
      * This method will be called <strong>before</strong> the file will be
-     * splitted.
+     * read.
      * 
      * @param originalFile The original (large) file.
      */
     public void convertBegin(File originalFile);
 
     /**
-     * This method will be called <strong>after</strong> the file is splitted.
+     * This method will be called <strong>after</strong> the file is converted.
      * 
      * @param originalFile The original (large) file.
      */

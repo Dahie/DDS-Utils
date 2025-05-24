@@ -45,7 +45,7 @@ public class DroppsView extends JFrame implements Runnable {
     private DefaultListModel<File> fileListModel;
     private JList dropPanel;
 
-    private static TaskExecutor taskExecutor = new TaskExecutor(Executors.newCachedThreadPool(runnable -> {
+    private final static TaskExecutor taskExecutor = new TaskExecutor(Executors.newCachedThreadPool(runnable -> {
         var thread = new Thread(runnable);
 
         thread.setDaemon(true);
@@ -69,14 +69,10 @@ public class DroppsView extends JFrame implements Runnable {
             }
 
             @Override
-            public void intervalRemoved(ListDataEvent e) {
-
-            }
+            public void intervalRemoved(ListDataEvent e) { }
 
             @Override
-            public void contentsChanged(ListDataEvent e) {
-
-            }
+            public void contentsChanged(ListDataEvent e) { }
         });
         dropPanel = new DropList(fileListModel, resourceMap);
         JScrollPane scrollpane = new JScrollPane(dropPanel);
@@ -87,17 +83,17 @@ public class DroppsView extends JFrame implements Runnable {
         activityIndicator = new ActivityIndicator(48);
 
         setContentPane(column(
-                row(4,
-                        stack(
-                                cell(scrollpane),
-                                cell(activityIndicator)
-                        )
-                ),
-                row(
-                        glue(),
-                        cell(new SettingsPanel(this.controller.getOptions())),
-                        glue()
+            row(4,
+                stack(
+                    cell(scrollpane),
+                    cell(activityIndicator)
                 )
+            ),
+            row(
+                glue(),
+                cell(new SettingsPanel(this.controller.getOptions())),
+                glue()
+            )
         ).with(contentPane -> contentPane.setBorder(new EmptyBorder(8, 8, 8, 8))).getComponent());
     }
 

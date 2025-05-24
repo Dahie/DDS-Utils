@@ -26,8 +26,8 @@ public class ResourceMap {
     }
 
     public ImageIcon getIcon(String key) {
-        String iconUrl = this.getClass().getResource(getString(key)).toExternalForm();
-        ImageIcon icon = new ImageIcon(iconUrl);
+        final String iconUrl = this.getClass().getResource(getString(key)).toExternalForm();
+        final ImageIcon icon = new ImageIcon(iconUrl);
         return icon;
     }
 
@@ -35,13 +35,11 @@ public class ResourceMap {
         return Integer.valueOf(getString(key));
     }
 
-
     public ResourceMap(String fileName) {
-        System.out.println(fileName);
-        ClassLoader classLoader = getClass().getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream(fileName);
+        final ClassLoader classLoader = getClass().getClassLoader();
+        final InputStream inputStream = classLoader.getResourceAsStream(fileName);
 
-        InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+        final InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 
         try (BufferedReader reader = new BufferedReader(streamReader)) {
             String line;

@@ -35,6 +35,11 @@ Please see the [wiki][wiki]
 
 ## Usage
 
+Compile & test
+
+    ./gradlew build
+
+
 Project setup based on https://docs.gradle.org/current/samples/sample_building_java_applications.html
 
 
@@ -51,6 +56,5 @@ DDS-Utils are written by [Daniel Senff][dahie]
 Released under a [GNU General Public License v3][license].
 
 [dahie]: http://github.com/Dahie
-[imagej]: http://rsb.info.nih.gov/ij/
 [wiki]: https://github.com/Dahie/DDS-Utils/wiki
 [license]: http://github.com/Dahie/DDS-Utils/blob/master/LICENSE.md

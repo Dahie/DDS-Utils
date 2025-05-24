@@ -30,7 +30,6 @@ import org.compression.DXTBufferDecompressor;
  */
 public class DDSUtil {
 
-	
 	/**
 	 * Topmost MipMap Index 
 	 */
@@ -95,7 +94,7 @@ public class DDSUtil {
 			ByteBufferedImage bi = new ByteBufferedImage(width, height, data);
 			
 		} else if(ddsimage.getPixelFormat() == DDSImage.D3DFMT_A8R8G8B8) {
-			
+			// TODO tbd
 			
 		}
 		
@@ -177,15 +176,15 @@ public class DDSUtil {
 	 * @param textureBuffer
 	 * @param width
 	 * @param height
-	 * @param pixelformat
+	 * @param pixelFormat
 	 * @return
 	 * @throws UnsupportedDataTypeException 
 	 */
 	public static BufferedImage decompressTexture(final ByteBuffer textureBuffer, 
 			final int width, 
 			final int height, 
-			final int pixelformat) throws UnsupportedDataTypeException {
-		Squish.CompressionType compressionType = PixelFormats.getSquishCompressionFormat(pixelformat); 
+			final int pixelFormat) throws UnsupportedDataTypeException {
+		Squish.CompressionType compressionType = PixelFormats.getSquishCompressionFormat(pixelFormat);
 		return new DXTBufferDecompressor(textureBuffer, width, height, compressionType).getImage();
 	}
 	
@@ -214,14 +213,14 @@ public class DDSUtil {
 	 * Writes a DDS-Image file to disk.
 	 * @param destinationfile 
 	 * @param sourceImage 
-	 * @param pixelformat 
+	 * @param pixelFormat
 	 * @param generateMipMaps 
 	 * @throws IOException 
 	 * 
 	 */
 	public static void write(final File destinationfile, 
 			BufferedImage sourceImage, 
-			final int pixelformat,
+			final int pixelFormat,
 			boolean generateMipMaps) throws IOException {
 		
 		int width = sourceImage.getWidth();
@@ -235,29 +234,29 @@ public class DDSUtil {
 		
 		ByteBuffer[] mipmapBuffer = null;
 		
-		if (PixelFormats.isDXTCompressed(pixelformat)) {
-			mipmapBuffer = maps.getDXTCompressedBuffer(pixelformat);
+		if (PixelFormats.isDXTCompressed(pixelFormat)) {
+			mipmapBuffer = maps.getDXTCompressedBuffer(pixelFormat);
 		} else 
 			mipmapBuffer = maps.getUncompressedBuffer();
 		
-		writeDDSImage(destinationfile, mipmapBuffer, width, height, pixelformat);
+		writeDDSImage(destinationfile, mipmapBuffer, width, height, pixelFormat);
 	}
 	
 	/**
 	 * TODO: what about DXT1?
 	 * @param file 
 	 * @param map 
-	 * @param pixelformat 
+	 * @param pixelFormat
 	 * @throws IOException 
 	 * 
 	 */
 	public void write(final File file, 
 			final TextureMap map, 
-			final int pixelformat) throws IOException {
-		writeDDSImage(file, map.getDXTCompressedBuffer(pixelformat), 
+			final int pixelFormat) throws IOException {
+		writeDDSImage(file, map.getDXTCompressedBuffer(pixelFormat),
 				map.getWidth(), 
 				map.getHeight(), 
-				pixelformat);
+				pixelFormat);
 	}
 
 	private static DDSImage writeDDSImage(final File file,
@@ -266,10 +265,10 @@ public class DDSUtil {
 			final int height,
 			final int pixelformat) throws IllegalArgumentException, IOException {
 		
-		DDSImage writedds = DDSImage.createFromData(pixelformat, width, height, mipmapBuffer);
-//		writedds.debugPrint();
-		writedds.write(file);
-		return writedds;
+		DDSImage outputImage = DDSImage.createFromData(pixelformat, width, height, mipmapBuffer);
+//		outputImage.debugPrint();
+		outputImage.write(file);
+		return outputImage;
 	}
 	
 	/**
@@ -296,7 +295,6 @@ public class DDSUtil {
 	 */
 	public static boolean isReadSupported(final File file) {
 		String fileSuffix = FileUtil.getFileSuffix(file);
-		return fileSuffix.endsWith("dds")
-			|| fileSuffix.endsWith("tex");
+		return fileSuffix.endsWith("dds") || fileSuffix.endsWith("tex");
 	}
 }

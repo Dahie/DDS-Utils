@@ -1,14 +1,11 @@
 package org.dds_utils.dropps;
 
 import org.dds_utils.dropps.models.*;
-import org.ddsutil.DDSUtil;
 import org.ddsutil.MipMapsUtil;
 import org.util.FileUtil;
 import org.util.ImageIOUtils;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,41 +42,31 @@ public class ConvertController implements IProgressObserverable {
 	 */
 	public void convertFiles(final Collection<File> files) {
 		int i = 0;
-		for (final File file : files) {
-			convertFile(file);
+		for (final File sourceFile : files) {
+			convertFile(sourceFile);
 			i++;
 		}
 	}
 
 	/**
 	 * Process a single file
-	 * @param file
+	 * @param sourceFile
 	 */
-	public void convertFile(final File file) {
-		notifyConversionBegin(file);
-
-		BufferedImage imageToConvert = null;
+	public void convertFile(final File sourceFile) {
 		try {
-			if(file.isDirectory() || !isFiletypeSupported(file)) {
-				notifyConversionEnd(file);
+			notifyConversionBegin(sourceFile);
+
+			if(sourceFile.isDirectory() || !isFiletypeSupported(sourceFile)) {
+				notifyConversionEnd(sourceFile);
 				return;
 			}
 
-			imageToConvert = getBufferedImage(file);
+			// if input is DDS
 
-			if(imageToConvert != null) {
-				final String convertedFile = file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf('.'));
-				final File newFile = new File(convertedFile+".dds");
+			final File targetFile = getTargetFileFromSourceFile(sourceFile, "dds");
 
-				if (!MipMapsUtil.isPowerOfTwo(imageToConvert.getWidth())
-						&& !MipMapsUtil.isPowerOfTwo(imageToConvert.getHeight())
-						&& options.hasGeneratedMipMaps()) {
-					notifyConversionEnd(file);
-					return;
-				}
+			final ConversionResult result = new DDSConverter(sourceFile, targetFile, options).perform();
 
-				DDSUtil.write(newFile, imageToConvert, options.getNewPixelformat(), options.hasGeneratedMipMaps());
-			}
 		} catch (final IOException e) {
 			e.printStackTrace();
 		} catch (final OutOfMemoryError e) {
@@ -89,35 +76,14 @@ public class ConvertController implements IProgressObserverable {
 					"<html>Error: Out of memory: " + mem0 +
 					"<br>The operation is aborted. </html>",	"Error",
 					JOptionPane.ERROR_MESSAGE);
-
 		}
-		notifyConversionEnd(file);
+
+		notifyConversionEnd(sourceFile);
 	}
 
-	private static BufferedImage getBufferedImage(File file) throws IOException {
-		BufferedImage imageToConvert = null;
-		final InputStream fis = new FileInputStream(file);
-
-		if(ImageIOUtils.isImageIOSupported(file)) {
-			imageToConvert = ImageIO.read(fis);
-		} else if (FileUtil.getFileSuffix(file).contains("tex")) {
-			imageToConvert = DDSUtil.decompressTexture(file);
-		} else if (FileUtil.getFileSuffix(file).contains("tga")) {
-			try {
-				final TextureImageFormatLoaderTGA loader = new TextureImageFormatLoaderTGA();
-
-				final BufferedInputStream in = new BufferedInputStream(fis);
-				imageToConvert = loader.loadTextureImage(in , true, false);
-			} catch (final Exception ex) {
-				ex.printStackTrace();
-//					JOptionPane.showMessageDialog(Dropps.getApplication().getMainFrame(),
-//							"<html>Error: The TGA-file could not be loaded. Only 32bit TGA are supported." +
-//							"<br>The operation is aborted. </html>",	"Error",
-//							JOptionPane.ERROR_MESSAGE);
-			}
-		}
-		fis.close();
-		return imageToConvert;
+	private File getTargetFileFromSourceFile(File sourceFile, String targetExtension) {
+		final String targetPath = sourceFile.getAbsolutePath().substring(0, sourceFile.getAbsolutePath().lastIndexOf('.'));
+		return new File(targetPath + "." + targetExtension);
 	}
 
 	private boolean isFiletypeSupported(final File file) {
@@ -154,8 +120,7 @@ public class ConvertController implements IProgressObserverable {
 		}
 	}
 
-
-	protected boolean checkConvertFileExists(final File originalFile) {
+	protected boolean checkConvertFileExists(final File originalFile) { //unused
 		if (!originalFile.exists()) {
 			notifyError(new ProgressStatus(0, 0, ERROR_ORIGINAL_FILE_NOT_EXISTS, true));
 			logger.log(Level.SEVERE, ERROR_ORIGINAL_FILE_NOT_EXISTS);

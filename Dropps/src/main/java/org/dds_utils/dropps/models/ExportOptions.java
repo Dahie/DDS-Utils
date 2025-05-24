@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.dds_utils.dropps.models;
 
 import org.jogl.DDSImage;
