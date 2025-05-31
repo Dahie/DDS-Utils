@@ -12,7 +12,7 @@ public class ExecutionListItem extends DefaultListCellRenderer implements ListCe
 
     @Override
     public Component getListCellRendererComponent(JList list, Object conversionExecution, int index, boolean isSelected, boolean cellHasFocus) {
-        super.getListCellRendererComponent(list, conversionExecution, index, isSelected, cellHasFocus);
+        //super.getListCellRendererComponent(list, conversionExecution, index, isSelected, cellHasFocus);
 
         ConversionExecution conversion = (ConversionExecution) conversionExecution;
         setText(conversion.getSourceFile().getName());

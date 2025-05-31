@@ -1,4 +1,4 @@
-package org.dds_utils.radds.models;
+package org.dds_utils.dropps.models;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;

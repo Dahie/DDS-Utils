@@ -53,7 +53,6 @@ public class DroppsView extends JFrame implements Runnable {
 
         return thread;
     }));
-    private ImageInfoPanel imageInfoPanel;
 
 
     public DroppsView(final ConvertController controller) {

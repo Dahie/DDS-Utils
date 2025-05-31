@@ -9,10 +9,9 @@
         </scroll-pane>
     </row-panel>
 
-    <row-panel spacing="8">
+    <row-panel padding="0" spacing="8">
         <button name="button" text="executeTask"/>
-        <label name="label" foreground="gray"/>
         <spacer weight="1"/>
-        <activity-indicator name="activityIndicator" indicatorSize="18"/>
+        <label name="lblFile" foreground="gray"/>
     </row-panel>
 </column-panel>

@@ -1,36 +1,32 @@
 package org.dds_utils.dropps.view;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import org.dds_utils.dropps.models.ClipImage;
 import org.dds_utils.dropps.view.canvas.BICanvas;
 import org.ddsutil.UnsupportedCompressionFormatException;
 import org.httprpc.sierra.ActivityIndicator;
-import org.httprpc.sierra.TaskExecutor;
 import org.httprpc.sierra.UILoader;
 import org.model.DDSFile;
 import org.model.TextureImage;
+import org.util.FileUtil;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
 
 public class PreviewView extends JFrame implements Runnable {
 
     private TextureImage image;
     BICanvas bufferedImageCanvas;
     private JButton button = null;
-    private JLabel label = null;
+    private JLabel lblFile = null;
     private ActivityIndicator activityIndicator = null;
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle(PreviewView.class.getName());
-
-    private static final TaskExecutor taskExecutor = new TaskExecutor(Executors.newCachedThreadPool(runnable -> {
-        var thread = new Thread(runnable);
-
-        thread.setDaemon(true);
-
-        return thread;
-    }));
 
     public static void main(String[] args) {
         FlatLightLaf.setup();
@@ -55,43 +51,31 @@ public class PreviewView extends JFrame implements Runnable {
 
         setSize(680, 350);
 
-        button.addActionListener(event -> executeTask());
+        button.addActionListener(event -> copy());
 
         setLocationByPlatform(true);
         setResizable(true);
         setVisible(true);
 
         bufferedImageCanvas.setSourceImage(image.getBufferedImage());
+        lblFile.setText(String.format(resourceBundle.getString("lblFile.text"), (String) image.getFile().getName(), (String)image.getPixelformatVerbose()));
     }
 
-
-    private void executeTask() {
+    private void copy() {
         button.setEnabled(false);
-
-        label.setText(resourceBundle.getString("executingTask"));
-
         activityIndicator.start();
-
-        taskExecutor.execute(() -> {
-            var value = Math.random();
-
-            Thread.sleep((long)(5000 * value));
-
-            if (value < 0.5) {
-                throw new Exception();
-            }
-
-            return 100.0;
-        }, (result, exception) -> {
-            button.setEnabled(true);
-
-            if (exception == null) {
-                label.setText(String.format(resourceBundle.getString("taskCompleteFormat"), result));
-            } else {
-                label.setText(resourceBundle.getString("taskFailed:") + exception.getMessage());
-            }
-
-            activityIndicator.stop();
+        /* Returns the currently loaded {@link BufferedImage} shown on the canvas.
+         * This may be different from the origin Image, as the canvas
+         * may be only displaying certain channels.
+         */
+        BufferedImage bi = bufferedImageCanvas.getCanvas();
+        Clipboard myClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        ClipImage ci = new ClipImage(bi);
+        myClipboard.setContents(ci, new ClipboardOwner() {
+            public void lostOwnership(Clipboard clipboard, Transferable contents) {	}
         });
+        activityIndicator.stop();
+        button.setEnabled(true);
     }
+
 }
