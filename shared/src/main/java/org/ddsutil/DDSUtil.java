@@ -7,12 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileLockInterruptionException;
 
-import javax.activation.UnsupportedDataTypeException;
 
 import org.jogl.DDSImage;
-import org.jogl.TEXImage;
 import org.model.TextureMap;
 import org.util.FileUtil;
 import org.util.ImageUtils;
@@ -37,110 +34,6 @@ public class DDSUtil {
 
 	private DDSUtil() {	}
 
-	@Deprecated
-	public static BufferedImage decompressTexture(final File file) throws IOException {
-		return read(file);
-	}
-	
-	/**
-	 * Create a {@link BufferedImage} from a DXT-compressed 
-	 * dds-texture {@link FileLockInterruptionException}.
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 */
-	public static BufferedImage read(final File file) throws IOException {
-		if(file.getName().endsWith(".dds"))
-			return loadBufferedImage(DDSImage.read(file));
-		else
-			return loadBufferedImage(TEXImage.read(file));
-	}
-	
-	/**
-	 * Create a {@link BufferedImage} from a DXT-compressed {@link DDSImage}
-	 * @param image
-	 * @return
-	 * @throws UnsupportedDataTypeException 
-	 */
-	public static BufferedImage loadBufferedImage (final DDSImage image) throws UnsupportedDataTypeException {
-		if (image.isCompressed())
-			return decompressTexture(
-				image.getMipMap(0).getData(), 
-				image.getWidth(), 
-				image.getHeight(), 
-				findCompressionFormat(image));
-		else
-			return loadBufferedImageFromByteBuffer(
-				image.getMipMap(0).getData(), 
-				image.getWidth(), 
-				image.getHeight(), 
-				image);
-	}
-	
-	/**
-	 * @param data
-	 * @param width
-	 * @param height
-	 * @param ddsimage
-	 * @return
-	 */
-	public static BufferedImage loadBufferedImageFromByteBuffer(
-			ByteBuffer data, int width, int height,
-			DDSImage ddsimage) {
-		
-		// check pixelformat
-		if(ddsimage.getPixelFormat() == DDSImage.D3DFMT_A8R8G8B8) {
-			// data in buffer in 4 byte chunks ordered ARGB
-			ByteBufferedImage bi = new ByteBufferedImage(width, height, data);
-			
-		} else if(ddsimage.getPixelFormat() == DDSImage.D3DFMT_A8R8G8B8) {
-			// TODO tbd
-			
-		}
-		
-		
-		// if weird or unknown check RGB-offsets
-		
-		
-		return null;
-	}
-
-	/**
-	 * Create a {@link BufferedImage} from a DXT-compressed {@link DDSImage}
-	 * @param image
-	 * @return
-	 * @throws UnsupportedDataTypeException 
-	 */
-	@Deprecated
-	public static BufferedImage decompressTexture (final DDSImage image) throws UnsupportedDataTypeException {
-		return loadBufferedImage(image);
-	}
-	
-	/**
-	 * Create a {@link BufferedImage} from a DXT-compressed {@link TEXImage}
-	 * @param image
-	 * @return
-	 * @throws UnsupportedDataTypeException 
-	 */
-	public static BufferedImage loadBufferedImage(final TEXImage image) throws UnsupportedDataTypeException {
-		return decompressTexture(
-				image.getEmbeddedMaps(0).getMipMap(0).getData(), 
-				image.getWidth(), 
-				image.getHeight(), 
-				findCompressionFormat(image.getEmbeddedMaps(0)));
-	}
-	
-	/**
-	 * Create a {@link BufferedImage} from a DXT-compressed {@link TEXImage}
-	 * @param image
-	 * @return
-	 * @throws UnsupportedDataTypeException 
-	 */
-	@Deprecated
-	public static BufferedImage decompressTexture (final TEXImage image) throws UnsupportedDataTypeException {
-		return loadBufferedImage(image);
-	}
-	
 	/**
 	 * Create a {@link BufferedImage} from a DXT-compressed Byte-array.
 	 * @param compressedData
@@ -156,38 +49,8 @@ public class DDSUtil {
 		return new DXTBufferDecompressor(compressedData, width, height, compressionType).getImage();
 	}
 
-	/**
-	 * Create a {@link BufferedImage} from a DXT-compressed ByteBuffer.
-	 * @param textureBuffer
-	 * @param width
-	 * @param height
-	 * @param compressionType
-	 * @return
-	 */
-	public static BufferedImage decompressTexture(final ByteBuffer textureBuffer, 
-			final int width, 
-			final int height, 
-			final Squish.CompressionType compressionType) {
-		return new DXTBufferDecompressor(textureBuffer, width, height, compressionType).getImage();
-	}
-	
-	/**
-	 * Create a {@link BufferedImage} from a DXT-compressed ByteBuffer.
-	 * @param textureBuffer
-	 * @param width
-	 * @param height
-	 * @param pixelFormat
-	 * @return
-	 * @throws UnsupportedDataTypeException 
-	 */
-	public static BufferedImage decompressTexture(final ByteBuffer textureBuffer, 
-			final int width, 
-			final int height, 
-			final int pixelFormat) throws UnsupportedDataTypeException {
-		Squish.CompressionType compressionType = PixelFormats.getSquishCompressionFormat(pixelFormat);
-		return new DXTBufferDecompressor(textureBuffer, width, height, compressionType).getImage();
-	}
-	
+
+
 	/**
 	 * Compresses a {@link BufferedImage} into a {@link ByteBuffer}
 	 * @param image
@@ -218,28 +81,13 @@ public class DDSUtil {
 	 * @throws IOException 
 	 * 
 	 */
+	@Deprecated
 	public static void write(final File destinationfile, 
 			BufferedImage sourceImage, 
 			final int pixelFormat,
 			boolean generateMipMaps) throws IOException {
-		
-		int width = sourceImage.getWidth();
-		int height = sourceImage.getHeight();
-		
-		//convert RGB to RGBA image
-		if(!sourceImage.getColorModel().hasAlpha()) 
-			sourceImage = ImageUtils.convert(sourceImage, BufferedImage.TYPE_4BYTE_ABGR);
-		
-		TextureMap maps = TextureFactory.createTextureMap(generateMipMaps, sourceImage);
-		
-		ByteBuffer[] mipmapBuffer = null;
-		
-		if (PixelFormats.isDXTCompressed(pixelFormat)) {
-			mipmapBuffer = maps.getDXTCompressedBuffer(pixelFormat);
-		} else 
-			mipmapBuffer = maps.getUncompressedBuffer();
-		
-		writeDDSImage(destinationfile, mipmapBuffer, width, height, pixelFormat);
+
+		//writeDDSImage(destinationfile, mipmapBuffer, width, height, pixelFormat);
 	}
 	
 	/**
@@ -253,39 +101,27 @@ public class DDSUtil {
 	public void write(final File file, 
 			final TextureMap map, 
 			final int pixelFormat) throws IOException {
-		writeDDSImage(file, map.getDXTCompressedBuffer(pixelFormat),
-				map.getWidth(), 
-				map.getHeight(), 
-				pixelFormat);
-	}
+        try {
+            writeDDSImage(file, map.getDXTCompressedBuffer(pixelFormat),
+                    map.getWidth(),
+                    map.getHeight(),
+                    pixelFormat);
+        } catch (UnsupportedCompressionFormatException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+	@Deprecated
 	private static DDSImage writeDDSImage(final File file,
 			final ByteBuffer[] mipmapBuffer, 
 			final int width, 
 			final int height,
-			final int pixelformat) throws IllegalArgumentException, IOException {
-		
-		DDSImage outputImage = DDSImage.createFromData(pixelformat, width, height, mipmapBuffer);
-//		outputImage.debugPrint();
-		outputImage.write(file);
-		return outputImage;
+			final int pixelFormat) throws IllegalArgumentException, IOException {
+
+		return null;
 	}
 	
-	/**
-	 * Returns the PixelFormat of a {@link File}
-	 * This makes file-IO, therefor handle with caution!
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 */
-	public static int getCompressionType(final File file) throws IOException {
-		return DDSImage.read(file).getPixelFormat();	
-	}
-	
-	private static Squish.CompressionType findCompressionFormat(DDSImage ddsimage) throws UnsupportedDataTypeException {
-		int pixelFormat = ddsimage.getPixelFormat();
-		return PixelFormats.getSquishCompressionFormat(pixelFormat);
-	}
+
 
 	/**
 	 * Returns true for file formats supported by this library.

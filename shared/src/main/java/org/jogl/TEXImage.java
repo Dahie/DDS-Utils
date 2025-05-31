@@ -63,15 +63,11 @@ import org.jogl.TEXImage.Header.EmbeddedBuffer;
 
 public class TEXImage {
 
-
-
 	private FileInputStream fis;
 	private FileChannel     chan;
 	private ByteBuffer buf;
 	private Header header;
 	private Vector<DDSImage> embeddedMap;
-
-
 
 	// Known pixel formats
 	public static final int D3DFMT_UNKNOWN   =  0;
@@ -123,7 +119,7 @@ public class TEXImage {
 	}
 
 	/** Closes open files and resources associated with the open
-      DDSImage. No other methods may be called on this object once
+      TexImage. No other methods may be called on this object once
       this is called. */
 	public void close() {
 		try {

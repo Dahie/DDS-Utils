@@ -1,4 +1,4 @@
-package org.dds_utils.dropps.io;
+package org.jogl;
 
 /**
 * Copyright (c) 2007-2009, JAGaToo Project Group all rights reserved.

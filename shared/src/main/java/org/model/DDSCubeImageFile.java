@@ -34,14 +34,6 @@ public class DDSCubeImageFile extends DDSFile {
 		top, bottom, front, back, left, right
 	}
 	
-	/**
-	 * @param filename
-	 * @throws IOException
-	 */
-	public DDSCubeImageFile(String filename) throws IOException {
-		super(filename);
-		this.cubeFaces = new BufferedImage[6];
-	}
 
 	/**
 	 * @param file
@@ -54,33 +46,23 @@ public class DDSCubeImageFile extends DDSFile {
 	}
 
 	/**
-	 * @param filename
-	 * @param bi
-	 * @param pixelformat
-	 * @param hasmipmaps
+	 * @param file
+	 * @param bufferedImage
+	 * @param pixelFormat
+	 * @param hasMipMaps
 	 * @throws IOException
 	 */
-	public DDSCubeImageFile(File file, BufferedImage bi, int pixelformat,
-			boolean hasmipmaps) {
-		super(file, bi, pixelformat, hasmipmaps);
+	public DDSCubeImageFile(File file, BufferedImage bufferedImage, int pixelFormat,
+			boolean hasMipMaps) {
+		super(file, bufferedImage, pixelFormat, hasMipMaps);
 	}
 
 	/**
 	 * @param file
-	 * @param ddsimage
+	 * @param ddsImage
 	 */
-	public DDSCubeImageFile(File file, DDSImage ddsimage) {
-		super(file, ddsimage);
+	public DDSCubeImageFile(File file, DDSImage ddsImage) {
+		super(file, ddsImage);
 		// TODO Auto-generated constructor stub
 	}
-
-	/**
-	 * @param filename
-	 * @param ddsimage
-	 */
-	public DDSCubeImageFile(String filename, DDSImage ddsimage) {
-		super(filename, ddsimage);
-	}
-	
-	
 }

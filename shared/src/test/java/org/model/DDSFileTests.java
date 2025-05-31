@@ -31,7 +31,7 @@ public class DDSFileTests extends DDSTestCase {
 	@Test
 	public void testIsDXT5() {
 		DDSFile ddsimage = loadDDSFile(textureDDS1024);
-		assertEquals(DDSImage.D3DFMT_DXT5, ddsimage.getPixelformat());
+		assertEquals(DDSImage.D3DFMT_DXT5, ddsimage.getPixelFormat());
 	}
 	
 	@Test

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.dds_utils.radds.view.canvas;
+package org.dds_utils.dropps.view.canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

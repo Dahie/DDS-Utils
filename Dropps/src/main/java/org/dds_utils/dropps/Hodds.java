@@ -1,7 +1,7 @@
 package org.dds_utils.dropps;
 
 
-import org.dds_utils.dropps.models.ExportConfiguration;
+import org.model.ExportConfiguration;
 import org.jogl.DDSImage;
 
 import java.io.File;

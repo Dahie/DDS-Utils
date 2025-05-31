@@ -6,8 +6,7 @@ package org.test;
 import java.io.File;
 import java.io.IOException;
 
-import javax.activation.UnsupportedDataTypeException;
-
+import org.ddsutil.UnsupportedCompressionFormatException;
 import org.jogl.DDSImage;
 
 import org.model.DDSFile;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DDSTestCase {
 
 	String outputDirectory = "/output/";
-	String inputDirectory = "";
+	String inputDirectory = "src/test/resources/";
 	
 	protected File texturePNG2048 = new File(inputDirectory +"STRBahrain.png");
 	protected File textureDDS1024 = new File(inputDirectory +"RAIKKONENEXTRA0.dds");
@@ -43,8 +42,7 @@ public class DDSTestCase {
 		try {
 			ddsimage = new DDSFile(file);
 			ddsimage.loadImageData();
-		} catch (UnsupportedDataTypeException e) {
-			// TODO Auto-generated catch block
+		} catch (UnsupportedCompressionFormatException e) {
 			e.printStackTrace();
 		}
 		return ddsimage;
@@ -64,7 +62,7 @@ public class DDSTestCase {
 		assertEquals(ddsimage.getHeight(), newddsimage.getHeight());
 		assertEquals(ddsimage.getWidth(), newddsimage.getWidth());
 		assertEquals(ddsimage.isCompressed(), newddsimage.isCompressed());
-		assertEquals(ddsimage.getPixelformat(), newddsimage.getPixelformat());
+		assertEquals(ddsimage.getPixelFormat(), newddsimage.getPixelFormat());
 		assertEquals(ddsimage.hasMipMaps(), newddsimage.hasMipMaps());
 		if (ddsimage.hasMipMaps() && newddsimage.hasMipMaps()) {
 			assertEquals(ddsimage.getNumMipMaps(), newddsimage.getNumMipMaps());

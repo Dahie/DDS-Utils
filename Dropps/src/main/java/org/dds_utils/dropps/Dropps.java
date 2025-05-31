@@ -2,7 +2,7 @@ package org.dds_utils.dropps;
 
 
 import com.formdev.flatlaf.FlatLightLaf;
-import org.dds_utils.dropps.models.ExportConfiguration;
+import org.model.ExportConfiguration;
 import org.jogl.DDSImage;
 
 import javax.swing.*;

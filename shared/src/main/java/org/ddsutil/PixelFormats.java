@@ -1,12 +1,10 @@
 package org.ddsutil;
 
 import io.github.memo33.jsquish.Squish;
-
-import javax.activation.UnsupportedDataTypeException;
-
 import org.model.TextureImage.PixelFormat;
 
 import org.jogl.DDSImage;
+
 
 /**
  * Collects pixelformat conversions and interfaces.
@@ -18,22 +16,18 @@ public class PixelFormats {
 
 	/**
 	 * 
-	 * @param pixelFormat DDSImage pixelformat
+	 * @param pixelFormat DDSImage pixelFormat
 	 * @return
-	 * @throws UnsupportedDataTypeException 
+	 * @throws UnsupportedCompressionFormatException
 	 */
 	public static Squish.CompressionType getSquishCompressionFormat(final int pixelFormat) 
-			throws UnsupportedDataTypeException {
-		switch(pixelFormat) { 
-		case DDSImage.D3DFMT_DXT1: 
-			return Squish.CompressionType.DXT1;
-		case DDSImage.D3DFMT_DXT3: 
-			return Squish.CompressionType.DXT3;
-		case DDSImage.D3DFMT_DXT5: 
-			return Squish.CompressionType.DXT5;
-		default:
-			throw new UnsupportedDataTypeException("given pixel format not supported compression format");
-		}
+			throws UnsupportedCompressionFormatException {
+        return switch (pixelFormat) {
+            case DDSImage.D3DFMT_DXT1 -> Squish.CompressionType.DXT1;
+            case DDSImage.D3DFMT_DXT3 -> Squish.CompressionType.DXT3;
+            case DDSImage.D3DFMT_DXT5 -> Squish.CompressionType.DXT5;
+            default -> throw new UnsupportedCompressionFormatException("given pixel format not supported compression format");
+        };
 	}
 	
 	/**
@@ -124,41 +118,22 @@ public class PixelFormats {
 	
 	/**
 	 * TODO get rid of such constructs
-	 * @param pixelformat
+	 * @param pixelFormat
 	 * @return
 	 */
-	public static int convertPixelformat(final PixelFormat pixelformat) {
+	public static int convertPixelFormat(final PixelFormat pixelFormat) {
 		int format;
-		switch(pixelformat) {
-			default:
-			case Unknown:
-				format = DDSImage.D3DFMT_UNKNOWN;
-				break;
-			case DXT5:
-				format = DDSImage.D3DFMT_DXT5;
-				break;
-			case DXT4:
-				format = DDSImage.D3DFMT_DXT4;
-				break;
-			case DXT3:
-				format = DDSImage.D3DFMT_DXT3;
-				break;
-			case DXT2:
-				format = DDSImage.D3DFMT_DXT2;
-				break;
-			case DXT1:
-				format = DDSImage.D3DFMT_DXT1;
-				break;
-			case A8R8G8B8:
-				format = DDSImage.D3DFMT_A8R8G8B8;
-				break;
-			case X8R8G8B8:
-				format = DDSImage.D3DFMT_X8R8G8B8;
-				break;
-			case R8G8B8:
-				format = DDSImage.D3DFMT_R8G8B8;
-				break;
-		}
+        switch (pixelFormat) {
+            default -> format = DDSImage.D3DFMT_UNKNOWN;
+            case DXT5 -> format = DDSImage.D3DFMT_DXT5;
+            case DXT4 -> format = DDSImage.D3DFMT_DXT4;
+            case DXT3 -> format = DDSImage.D3DFMT_DXT3;
+            case DXT2 -> format = DDSImage.D3DFMT_DXT2;
+            case DXT1 -> format = DDSImage.D3DFMT_DXT1;
+            case A8R8G8B8 -> format = DDSImage.D3DFMT_A8R8G8B8;
+            case X8R8G8B8 -> format = DDSImage.D3DFMT_X8R8G8B8;
+            case R8G8B8 -> format = DDSImage.D3DFMT_R8G8B8;
+        }
 		return format;
 	}
 	
@@ -170,18 +145,14 @@ public class PixelFormats {
 	 * @return boolean is compressed
 	 */
 	public static boolean isDXTCompressed(final int pixelformat) {
-		switch(pixelformat) {
-			default:
-			case DDSImage.D3DFMT_A8R8G8B8:
-			case DDSImage.D3DFMT_R8G8B8:
-			case DDSImage.D3DFMT_X8R8G8B8:
-				return false;
-			case DDSImage.D3DFMT_DXT1:
-			case DDSImage.D3DFMT_DXT2:
-			case DDSImage.D3DFMT_DXT3:
-			case DDSImage.D3DFMT_DXT4:
-			case DDSImage.D3DFMT_DXT5:
-				return true;			
-		}
+        switch (pixelformat) {
+            case DDSImage.D3DFMT_DXT1, DDSImage.D3DFMT_DXT2, DDSImage.D3DFMT_DXT3, DDSImage.D3DFMT_DXT4,
+                 DDSImage.D3DFMT_DXT5 -> {
+                return true;
+            }
+            default -> {
+                return false;
+            }
+        }
 	}
 }

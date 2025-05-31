@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.dds_utils.dropps.ui;
+package org.dds_utils.dropps.view;
 
-import org.dds_utils.dropps.models.ExportConfiguration;
+import org.model.ExportConfiguration;
 import org.jogl.DDSImage;
 
 import javax.swing.*;

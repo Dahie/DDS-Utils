@@ -27,6 +27,8 @@ public interface IProgressListener {
 
     public void begin(ProgressStatus status);
 
+    public void imageLoaded(ProgressStatus status);
+
     public void update(ProgressStatus status);
     
     public void error(ProgressStatus status);

@@ -18,13 +18,13 @@ public class TextureFactory {
 	 * @return
 	 */
 	public static TextureMap createTextureMap(final boolean generateMipMaps, final BufferedImage sourceImage) {
-		TextureMap maps;
+		TextureMap map;
 		if (generateMipMaps) {
-			maps = new MipMaps();
-			((MipMaps)maps).generateMipMaps(sourceImage);
+			map = new MipMaps();
+			((MipMaps)map).generateMipMaps(sourceImage);
 		} else
-			maps = new SingleTextureMap(sourceImage);
+			map = new SingleTextureMap(sourceImage);
 		
-		return maps;
+		return map;
 	}
 }

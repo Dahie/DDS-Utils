@@ -1,4 +1,4 @@
-package org.dds_utils.dropps.models;
+package org.model;
 
 import org.jogl.DDSImage;
 

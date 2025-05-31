@@ -18,21 +18,21 @@ import org.ddsutil.ByteBufferedImage;
  */
 public class SingleTextureMap extends AbstractTextureMap {
 
-	BufferedImage bi;
+	BufferedImage bufferedImage;
 	
 	/**
 	 * @param bi
 	 */
 	public SingleTextureMap(final BufferedImage bi) {
 		super();
-		this.bi = bi;
+		this.bufferedImage = bi;
 	}
 	
 	/**
 	 * @return 
 	 */
 	public BufferedImage getData() {
-		return this.bi;
+		return this.bufferedImage;
 	}
 	
 	/* (non-Javadoc)
@@ -41,7 +41,7 @@ public class SingleTextureMap extends AbstractTextureMap {
 	@Override
 	public ByteBuffer[] getDXTCompressedBuffer(final CompressionType compressionType) {
 		ByteBuffer[] buffer = new ByteBuffer[1];
-		buffer[0] = super.compress(bi, compressionType);
+		buffer[0] = super.compress(bufferedImage, compressionType);
 		return buffer;
 	}
 
@@ -52,7 +52,7 @@ public class SingleTextureMap extends AbstractTextureMap {
 	 */
 	@Override
 	public int getHeight() {
-		return this.bi.getHeight();
+		return this.bufferedImage.getHeight();
 	}
 
 	/* (non-Javadoc)
@@ -60,7 +60,7 @@ public class SingleTextureMap extends AbstractTextureMap {
 	 */
 	@Override
 	public int getWidth() {
-		return this.bi.getWidth();
+		return this.bufferedImage.getWidth();
 	}
 
 	/* (non-Javadoc)
@@ -69,7 +69,7 @@ public class SingleTextureMap extends AbstractTextureMap {
 	@Override
 	public ByteBuffer[] getUncompressedBuffer() {
 		ByteBuffer[] mipmapBuffer = new ByteBuffer[1];
-		mipmapBuffer[0] = ByteBuffer.wrap(ByteBufferedImage.convertBIintoARGBArray(this.bi));
+		mipmapBuffer[0] = ByteBuffer.wrap(ByteBufferedImage.convertBIintoARGBArray(this.bufferedImage));
 		return mipmapBuffer;
 	}
 

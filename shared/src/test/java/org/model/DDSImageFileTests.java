@@ -14,8 +14,6 @@ import java.nio.ByteBuffer;
 
 import org.jogl.DDSImage;
 
-import org.model.DDSFile;
-
 import org.junit.Test;
 
 import org.ddsutil.MipMapsUtil;
@@ -44,7 +42,7 @@ public class DDSImageFileTests extends DDSTestCase {
 	@Test
 	public void testIsDXT5() {
 		DDSFile ddsimage = loadDDSFile(textureDDS1024);
-		assertEquals(DDSImage.D3DFMT_DXT5, ddsimage.getPixelformat());
+		assertEquals(DDSImage.D3DFMT_DXT5, ddsimage.getPixelFormat());
 	}
 	
 	@Test
@@ -88,7 +86,7 @@ public class DDSImageFileTests extends DDSTestCase {
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.start();
 		DDSFile ddsimage = loadDDSFile(textureDDS1024);
-		BufferedImage originalImage = ddsimage.getData();
+		BufferedImage originalImage = ddsimage.getBufferedImage();
 		
 		stopwatch.stop();
 		stopwatch.printMilliseconds("Time fo producing BufferedImage: ");
@@ -104,7 +102,7 @@ public class DDSImageFileTests extends DDSTestCase {
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.start();
 		DDSFile ddsimage = loadDDSFile(textureDDS1024);
-		BufferedImage originalImage = ddsimage.getData();
+		BufferedImage originalImage = ddsimage.getBufferedImage();
 		
 		stopwatch.stop();
 		stopwatch.printMilliseconds("Time fo producing BufferedImage: ");

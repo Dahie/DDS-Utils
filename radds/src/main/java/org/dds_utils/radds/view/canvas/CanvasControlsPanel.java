@@ -1,4 +1,4 @@
-package org.dds_utils.radds.view.canvas;
+package org.dds_utils.dropps.view.canvas;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

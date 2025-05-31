@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jogl.DDSImage;
-import org.ddsutil.DDSUtil;
 import org.ddsutil.NonCubicDimensionException;
 import org.ddsutil.PixelFormats;
 
@@ -14,7 +13,7 @@ public abstract class AbstractTextureImage implements TextureImage {
 
 	protected int height;
 	protected int width;
-	protected int pixelformat;
+	protected int pixelFormat;
 	protected File file = null;
 	protected boolean hasMipMaps = false;
 	protected int numMipMaps = 0;
@@ -24,7 +23,11 @@ public abstract class AbstractTextureImage implements TextureImage {
 	 * MipMap at the highest Level, ie the original 
 	 */
 	protected MipMaps mipMaps = new MipMaps();
-	
+
+	public AbstractTextureImage(final File file) {
+		this.file = file;
+	}
+
 	/**
 	 * Depth of color for all channels
 	 * @return int
@@ -40,7 +43,7 @@ public abstract class AbstractTextureImage implements TextureImage {
 	 */
 	@Override
 	public int getChannelDepth() {
-		switch(this.pixelformat){
+		switch(this.pixelFormat){
 			case DDSImage.D3DFMT_A8R8G8B8:
 			case DDSImage.D3DFMT_X8R8G8B8:
 			case DDSImage.D3DFMT_DXT5:
@@ -104,26 +107,26 @@ public abstract class AbstractTextureImage implements TextureImage {
 	 * @return in
 	 */
 	@Override
-	public int getPixelformat() {
-		return this.pixelformat;
+	public int getPixelFormat() {
+		return this.pixelFormat;
 	}
 	
 	/**
 	 * Sets the format in which pixel are stored in the file.
-	 * @param pixelformat
+	 * @param pixelFormat
 	 */
 	@Override
-	public void setPixelformat(final int pixelformat) {
-		this.pixelformat = pixelformat;
+	public void setPixelFormat(final int pixelFormat) {
+		this.pixelFormat = pixelFormat;
 	}
 	
 	/**
 	 * Sets the format in which pixel are stored in the file.
-	 * @param pixelformat
+	 * @param pixelFormat
 	 */
 	@Override
-	public void setPixelformat(final PixelFormat pixelformat) {
-		this.setPixelformat(PixelFormats.convertPixelformat(pixelformat));
+	public void setPixelFormat(final PixelFormat pixelFormat) {
+		this.setPixelFormat(PixelFormats.convertPixelFormat(pixelFormat));
 	}
 
 	
@@ -147,18 +150,14 @@ public abstract class AbstractTextureImage implements TextureImage {
 	}
 	
 	
-	@Override
-	public void write() throws IOException {
-		this.write(this.file);
-	}
-	
+
 	/**
 	 * Returns true if the dds-file is compressed as DXT1-5
 	 * @return boolean
 	 */
 	@Override
 	public boolean isCompressed() {
-		return PixelFormats.isDXTCompressed(pixelformat);
+		return PixelFormats.isDXTCompressed(pixelFormat);
 	}
 	
 	/**
@@ -167,7 +166,7 @@ public abstract class AbstractTextureImage implements TextureImage {
 	 */
 	@Override
 	public String getPixelformatVerbose() {
-		return PixelFormats.verbosePixelformat(this.pixelformat);
+		return PixelFormats.verbosePixelformat(this.pixelFormat);
 	}
 	
 	/**
@@ -184,13 +183,13 @@ public abstract class AbstractTextureImage implements TextureImage {
 	
 	/**
 	 * Sets a new {@link BufferedImage} as the Topmost MipMap and generates new MipMaps accordingly.
-	 * @param bi
+	 * @param bufferedImage
 	 */
 	@Override
-	public void setData(final BufferedImage bi) {
-		this.width = bi.getWidth();
-		this.height = bi.getHeight();
-		this.setTopMipMap(bi);
+	public void setData(final BufferedImage bufferedImage) {
+		this.width = bufferedImage.getWidth();
+		this.height = bufferedImage.getHeight();
+		this.setTopMipMap(bufferedImage);
 	}
 
 	/**
@@ -214,7 +213,7 @@ public abstract class AbstractTextureImage implements TextureImage {
 	 * @return {@link BufferedImage}
 	 */
 	@Override
-	public BufferedImage getData() {
+	public BufferedImage getBufferedImage() {
 		// FIXME shouldn't this be getImage?
 		return this.getTopMipMap();
 	}

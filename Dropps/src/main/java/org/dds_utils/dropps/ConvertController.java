@@ -1,19 +1,18 @@
 package org.dds_utils.dropps;
 
-import org.dds_utils.dropps.io.ImageReader;
-import org.dds_utils.dropps.io.ImageWriter;
-import org.dds_utils.dropps.io.ImageReaderFactory;
-import org.dds_utils.dropps.io.ImageWriterFactory;
+import org.io.ImageReader;
+import org.io.ImageWriter;
+import org.io.ImageReaderFactory;
+import org.io.ImageWriterFactory;
 import org.dds_utils.dropps.models.*;
 import org.ddsutil.MipMapsUtil;
+import org.model.ExportConfiguration;
+import org.model.TextureImage;
 
 import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -51,16 +50,15 @@ public class ConvertController implements IProgressObserverable {
 				return;
 			}
 
-			final File targetFile = getTargetFileFromSourceFile(sourceFile, "dds");
 			ImageReader reader = ImageReaderFactory.build(sourceFile);
-			ImageWriter writer = ImageWriterFactory.build(targetFile, options);
+			ImageWriter writer = ImageWriterFactory.build(sourceFile, options);
 
 			if(reader == null) {
 				notifyConversionEnd(sourceFile);
 				return;
 			}
 
-			final ConversionResult result = convert(reader, writer);
+			final ConversionResult result = convert(sourceFile, reader, writer);
 
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -76,25 +74,43 @@ public class ConvertController implements IProgressObserverable {
 		notifyConversionEnd(sourceFile);
 	}
 
-	private ConversionResult convert(ImageReader reader, ImageWriter writer) throws IOException {
-		BufferedImage imageToConvert = reader.read();
+	private ConversionResult convert(File sourceFile, ImageReader reader, ImageWriter writer) throws IOException {
+		TextureImage textureImage = reader.read();
 
-		if(imageToConvert == null) {
-			return new ConversionResultBuilder().error("Image not loadable").buildConversionResult();
+		System.out.println("read");
+		//notifyImageLoaded(sourceFile, textureImage);
+
+		if(textureImage == null) {
+			return newImageNotLoadableException("Image not loadable");
 		}
 
-		if (!MipMapsUtil.isPowerOfTwo(imageToConvert.getWidth())
-				&& !MipMapsUtil.isPowerOfTwo(imageToConvert.getHeight())
-				&& options.hasGeneratedMipMaps()) {
-			return new ConversionResultBuilder().error("Mipmaps generation failed").buildConversionResult(); // todo split to different messages
+		if (options.hasGeneratedMipMaps() && !MipMapsUtil.isPowerOfTwo(textureImage.getWidth())
+				&& !MipMapsUtil.isPowerOfTwo(textureImage.getHeight())) {
+			return newImageNotLoadableException("Mipmaps generation failed, width or height not power of two");
 		}
 
-		return writer.write(imageToConvert);
+		System.out.println("write");
+		System.out.println(writer);
+		writer.write(textureImage);
+		System.out.println("written" + writer.getTargetFile());
+		return newConversionResult(writer.getTargetFile(), textureImage);
 	}
 
-	private File getTargetFileFromSourceFile(File sourceFile, String targetExtension) {
-		final String targetPath = sourceFile.getAbsolutePath().substring(0, sourceFile.getAbsolutePath().lastIndexOf('.'));
-		return new File(targetPath + "." + targetExtension);
+	private static ConversionResult newImageNotLoadableException(String message) {
+		return new ConversionResultBuilder().error(message).buildConversionResult();
+	}
+
+
+	private ConversionResult newConversionResult(File targetFile, TextureImage textureImage) {
+		return new ConversionResultBuilder().textureImage(textureImage).targetFile(targetFile).buildConversionResult();
+	}
+
+
+	private void notifyImageLoaded(File sourceFile, TextureImage imageToConvert) {
+		ProgressStatus status = new ProgressStatus(sourceFile, imageToConvert, 0, 0, "Loaded");
+		for (final IProgressListener iProgressListener : progressListeners) {
+			iProgressListener.imageLoaded(status);
+		}
 	}
 
 
@@ -105,14 +121,14 @@ public class ConvertController implements IProgressObserverable {
 	}
 
 	protected void notifyConversionBegin(final File file) {
-		ProgressStatus status = new ProgressStatus(file, 0, 0, "Started");
+		ProgressStatus status = new ProgressStatus(file, null, 0, 0, "Started");
 		for (final IProgressListener iProgressListener : progressListeners) {
 			iProgressListener.begin(status);
 		}
 	}
 
 	protected void notifyConversionEnd(final File file) {
-		ProgressStatus status = new ProgressStatus(file, 0, 0, "Ended");
+		ProgressStatus status = new ProgressStatus(file, null, 0, 0, "Ended");
 		for (final IProgressListener iProgressListener : progressListeners) {
 			iProgressListener.end(status);
 		}

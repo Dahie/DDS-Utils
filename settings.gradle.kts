@@ -5,5 +5,5 @@ plugins {
 }
 
 rootProject.name = "DDS-Utils"
-include("dropps", "radds", "shared")
-//include("radds", "shared")
+//include("dropps", "radds", "shared")
+include("dropps", "shared")

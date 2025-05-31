@@ -1,16 +1,16 @@
-package org.dds_utils.dropps.ui;
-
-import org.dds_utils.dropps.models.ResourceMap;
+package org.dds_utils.dropps.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.util.ResourceBundle;
 
-public class DropList extends JList {
-    private final ResourceMap resourceMap;
+public class DropList extends JList<File> {
+    private final ResourceBundle resourceMap;
 
-    public DropList(DefaultListModel dlm, ResourceMap resourceMap) {
+    public DropList(DefaultListModel dlm, ResourceBundle resourceBundle) {
         super(dlm);
-        this.resourceMap = resourceMap;
+        this.resourceMap = resourceBundle;
     }
 
     @Override

@@ -5,8 +5,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.awt.image.BufferedImage;
 
-import javax.activation.UnsupportedDataTypeException;
-
+import org.ddsutil.UnsupportedCompressionFormatException;
 import org.jogl.DDSImage;
 import org.model.DDSFile;
 
@@ -47,13 +46,12 @@ public class DDSFileReaderTests extends DDSTestCase{
 		
 		try {
 			dds.loadImageData();
-			BufferedImage bi = dds.getMipMap(0);
+			BufferedImage bufferedImage = dds.getMipMap(0);
 			
-			assertEquals(ddsimage.getWidth(), bi.getHeight());
-			assertEquals(ddsimage.getHeight(), bi.getWidth());
+			assertEquals(ddsimage.getWidth(), bufferedImage.getHeight());
+			assertEquals(ddsimage.getHeight(), bufferedImage.getWidth());
 			
-			
-		} catch (UnsupportedDataTypeException e) {
+		} catch (UnsupportedCompressionFormatException e) {
 			assertFalse(true);
 			e.printStackTrace();
 		}
@@ -67,13 +65,13 @@ public class DDSFileReaderTests extends DDSTestCase{
 		try {
 			dds.loadImageData();
 			
-			BufferedImage bi = dds.getTopMipMap();
+			BufferedImage bufferedImage = dds.getTopMipMap();
 			
-			assertEquals(ddsimage.getWidth(), bi.getHeight());
-			assertEquals(ddsimage.getHeight(), bi.getWidth());
+			assertEquals(ddsimage.getWidth(), bufferedImage.getHeight());
+			assertEquals(ddsimage.getHeight(), bufferedImage.getWidth());
 			
 			
-		} catch (UnsupportedDataTypeException e) {
+		} catch (UnsupportedCompressionFormatException e) {
 			assertFalse(true);
 			e.printStackTrace();
 		}

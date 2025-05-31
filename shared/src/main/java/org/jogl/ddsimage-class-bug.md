@@ -1,4 +1,4 @@
-DDSImage-Class - Bug with compressed mipmaps
+# DDSImage-Class - Bug with compressed mipmaps
 
 Hello everybody!
 
@@ -18,7 +18,7 @@ This is even hinted at the official DDS-Specification at MSDN
 
 So now what is the problem. The current implementation of the expected mipmap data size:
 
-
+```java
 // Now check the mipmaps against this size
 int curSize = topmostMipmapSize;
 int totalSize = 0;
@@ -31,11 +31,12 @@ for (int i = 0; i < mipmapData.length; i++) {
   curSize /= 4;
   totalSize += mipmapData[i].remaining();
 }
+```
 
 This always expects the datasize is 1/4 the size of the mipmap before. Works as far as MipMaps are bigger or equal 8x8 pixels. In that case it throughs my mentioned exception, as it expects the size to be smaller than it actually is.
 
 I did some patch job to fix this.
-
+```java
 // Now check the mipmaps against this size
 int curSize = topmostMipmapSize;
 int mipmapWidth = width;
@@ -62,7 +63,7 @@ for (int i = 0; i < mipmapData.length; i++) {
   /* changes end */
   totalSize += mipmapData[i].remaining();
 }
-
+```
 
 
 This patchjob is tested for saving DXT1-5 compressed files.

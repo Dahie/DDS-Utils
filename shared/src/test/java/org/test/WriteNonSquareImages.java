@@ -86,10 +86,10 @@ public class WriteNonSquareImages extends DDSTestCase {
 			
 			assertEquals(canCreateMipmaps, newddsimage.hasMipMaps());
 			if(format != -1) // original or not?
-				assertEquals(format, newddsimage.getPixelformat());
+				assertEquals(format, newddsimage.getPixelFormat());
 			assertEquals(bi.getHeight(), newddsimage.getHeight());
 			assertEquals(bi.getWidth(), newddsimage.getWidth());
-			assertEquals(format, newddsimage.getPixelformat());
+			assertEquals(format, newddsimage.getPixelFormat());
 			assertEquals(canCreateMipmaps, newddsimage.hasMipMaps());
 			if (canCreateMipmaps) {
 				assertEquals(MipMapsUtil.calculateMaxNumberOfMipMaps(bi.getWidth(), bi.getHeight()), newddsimage.getNumMipMaps());

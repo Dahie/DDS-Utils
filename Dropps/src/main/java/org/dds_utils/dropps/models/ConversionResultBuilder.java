@@ -1,6 +1,7 @@
 package org.dds_utils.dropps.models;
 
-import java.awt.image.BufferedImage;
+import org.model.TextureImage;
+
 import java.io.*;
 
 
@@ -8,12 +9,12 @@ public class ConversionResultBuilder {
 
     private String _error = null;
     private File _targetFile = null;
-    private BufferedImage _image = null;
+    private TextureImage _textureImage = null;
 
     public ConversionResultBuilder() { }
 
     public ConversionResult buildConversionResult() {
-        return new ConversionResult(_error, _image, _targetFile);
+        return new ConversionResult(_error, _textureImage, _targetFile);
     }
 
     public ConversionResultBuilder error(final String _error) {
@@ -21,8 +22,8 @@ public class ConversionResultBuilder {
         return this;
     }
 
-    public ConversionResultBuilder image(final BufferedImage _image) {
-        this._image = _image;
+    public ConversionResultBuilder textureImage(final TextureImage _image) {
+        this._textureImage = _image;
         return this;
     }
 

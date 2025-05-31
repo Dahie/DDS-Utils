@@ -1,12 +1,12 @@
 package org.model;
 
+import org.ddsutil.UnsupportedCompressionFormatException;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-import javax.activation.UnsupportedDataTypeException;
 
 public interface TextureImage {
 
@@ -61,19 +61,19 @@ public interface TextureImage {
 	 * Get the Format in which pixel are stored in the file as internal stored Integer-value.
 	 * @return in
 	 */
-	public int getPixelformat();
+	public int getPixelFormat();
+	
+	/**
+	 * Sets the format in which pixel are stored in the file.
+	 * @param pixelFormat
+	 */
+	public void setPixelFormat(final int pixelFormat);
 	
 	/**
 	 * Sets the format in which pixel are stored in the file.
 	 * @param pixelformat
 	 */
-	public void setPixelformat(final int pixelformat);
-	
-	/**
-	 * Sets the format in which pixel are stored in the file.
-	 * @param pixelformat
-	 */
-	public void setPixelformat(final PixelFormat pixelformat);
+	public void setPixelFormat(final PixelFormat pixelformat);
 
 	/**
 	 * Gets the format in which pixels are stored as a verbose {@link String}.
@@ -138,26 +138,13 @@ public interface TextureImage {
 	 * @return TextureType Type of Texture
 	 */
 	public TextureType getTextureType();
-	
-	/**
-	 * Write to disc
-	 * @throws IOException
-	 */
-	public void write() throws IOException;
-	
-	/**
-	 * Write this Image to disk.
-	 * @param file
-	 * @throws IOException
-	 */
-	public void write(final File file) throws IOException;
-	
+
 	
 	/**
 	 * Returns the topmost MipMap
 	 * @return {@link BufferedImage}
 	 */
-	public BufferedImage getData();
+	public BufferedImage getBufferedImage();
 	
 	/**
 	 * Returns the MipMap at the specified index.
@@ -168,9 +155,9 @@ public interface TextureImage {
 	
 	/**
 	 * Load the data from file into memory.
-	 * @throws UnsupportedDataTypeException 
+	 * @throws UnsupportedCompressionFormatException
 	 */
-	public void loadImageData() throws UnsupportedDataTypeException;
+	public void loadImageData() throws UnsupportedCompressionFormatException;
 	
 	/**
 	 * Returns the stored MipMaps as a {@link BufferedImage}-Array
@@ -186,7 +173,7 @@ public interface TextureImage {
 	
 	/**
 	 * Sets a new {@link BufferedImage} as the Topmost MipMap and generates new MipMaps accordingly.
-	 * @param bi
+	 * @param bufferedImage
 	 */
-	public void setData(final BufferedImage bi);
+	public void setData(final BufferedImage bufferedImage);
 }

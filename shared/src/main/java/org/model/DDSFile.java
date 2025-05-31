@@ -10,8 +10,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-import javax.activation.UnsupportedDataTypeException;
 
+import org.ddsutil.UnsupportedCompressionFormatException;
 import org.jogl.DDSImage;
 
 import org.compression.ARGBBufferDecompressor;
@@ -28,14 +28,7 @@ import org.ddsutil.PixelFormats;
 public class DDSFile extends AbstractTextureImage {
 
     protected TextureType textureType;
-    private DDSImage ddsimage;
-
-    /**
-     * @param filename
-     */
-    public DDSFile(final String filename) {
-        this(new File(filename));
-    }
+    private DDSImage ddsImage;
 
     /**
      * Constructs a DDSFile from a {@link File}
@@ -43,7 +36,7 @@ public class DDSFile extends AbstractTextureImage {
      * @param file
      */
     public DDSFile(final File file) {
-        this.file = file;
+        super(file);
         try {
             initFromDDSImage(DDSImage.read(file));
         } catch (IOException e) {
@@ -55,37 +48,27 @@ public class DDSFile extends AbstractTextureImage {
      * Constructs a DDSFile from a {@link File} and a {@link DDSImage}
      *
      * @param file
-     * @param ddsimage
+     * @param ddsImage
      */
-    public DDSFile(final File file, final DDSImage ddsimage) {
-        this.file = file;
-        initFromDDSImage(ddsimage);
+    public DDSFile(final File file, final DDSImage ddsImage) {
+        super(file);
+        initFromDDSImage(ddsImage);
     }
 
     /**
-     * Constructs a DDSFile from a file path and a {@link DDSImage}
-     *
-     * @param filename
-     * @param ddsimage
-     */
-    public DDSFile(final String filename, final DDSImage ddsimage) {
-        this(new File(filename), ddsimage);
-    }
-
-    /**
-     * @param filename
-     * @param bi
-     * @param pixelformat
+     * @param file
+     * @param bufferedImage
+     * @param pixelFormat
      * @param hasMipMaps
      */
-    public DDSFile(final File filename,
-                   final BufferedImage bi,
-                   final int pixelformat,
+    public DDSFile(final File file,
+                   final BufferedImage bufferedImage,
+                   final int pixelFormat,
                    final boolean hasMipMaps) {
-        this.file = filename;
-        this.width = bi.getWidth();
-        this.height = bi.getHeight();
-        this.pixelformat = pixelformat;
+        super(file);
+        this.width = bufferedImage.getWidth();
+        this.height = bufferedImage.getHeight();
+        this.pixelFormat = pixelFormat;
         this.hasMipMaps = hasMipMaps;
         if (hasMipMaps) {
             this.numMipMaps = MipMapsUtil.calculateMaxNumberOfMipMaps(width, height);
@@ -93,18 +76,18 @@ public class DDSFile extends AbstractTextureImage {
             this.numMipMaps = 1;
         }
         this.mipMaps = new MipMaps(this.numMipMaps);
-        this.mipMaps.setMipMap(0, bi);
+        this.mipMaps.setMipMap(0, bufferedImage);
     }
 
     /**
      * @param ddsimage
      */
     protected void initFromDDSImage(final DDSImage ddsimage) {
-        this.ddsimage = ddsimage;
+        this.ddsImage = ddsimage;
         this.width = ddsimage.getWidth();
         this.height = ddsimage.getHeight();
         this.depth = ddsimage.getDepth();
-        this.pixelformat = ddsimage.getPixelFormat();
+        this.pixelFormat = ddsimage.getPixelFormat();
         this.textureType = getTextureType(ddsimage);
         this.numMipMaps = ddsimage.getNumMipMaps();
         this.mipMaps = new MipMaps(this.numMipMaps);
@@ -116,22 +99,22 @@ public class DDSFile extends AbstractTextureImage {
      *
      * @param mipmap
      */
-    public void loadImageData(int mipmap) throws UnsupportedDataTypeException {
+    public void loadImageData(int mipmap) throws UnsupportedCompressionFormatException {
         if (mipmap <= this.numMipMaps) {
-            int width = MipMaps.getMipMapSizeAtIndex(mipmap, ddsimage.getWidth());
-            int height = MipMaps.getMipMapSizeAtIndex(mipmap, ddsimage.getHeight());
-            ByteBuffer data = ddsimage.getMipMap(mipmap).getData();
+            int width = MipMaps.getMipMapSizeAtIndex(mipmap, ddsImage.getWidth());
+            int height = MipMaps.getMipMapSizeAtIndex(mipmap, ddsImage.getHeight());
+            ByteBuffer data = ddsImage.getMipMap(mipmap).getData();
 
             BufferDecompressor bufferDecompressor = getBufferDecompressor(width, height, data);
             this.mipMaps.addMipMap(bufferDecompressor.getImage());
         }
     }
 
-    private BufferDecompressor getBufferDecompressor(int width, int height, ByteBuffer data) throws UnsupportedDataTypeException {
+    private BufferDecompressor getBufferDecompressor(int width, int height, ByteBuffer data) throws UnsupportedCompressionFormatException {
         BufferDecompressor bufferDecompressor;
         if (isCompressed()) {
             CompressionType compressionType =
-                    PixelFormats.getSquishCompressionFormat(ddsimage.getPixelFormat());
+                    PixelFormats.getSquishCompressionFormat(ddsImage.getPixelFormat());
             bufferDecompressor = new DXTBufferDecompressor(
                     data,
                     width,
@@ -142,13 +125,13 @@ public class DDSFile extends AbstractTextureImage {
                     data,
                     width,
                     height,
-                    this.pixelformat);
+                    this.pixelFormat);
         }
         return bufferDecompressor;
     }
 
     @Override
-    public void loadImageData() throws UnsupportedDataTypeException {
+    public void loadImageData() throws UnsupportedCompressionFormatException {
         for (int i = 0; i < this.numMipMaps; i++) {
             loadImageData(i);
         }
@@ -156,16 +139,15 @@ public class DDSFile extends AbstractTextureImage {
 
     @Override
     public String toString() {
-        return this.file.getAbsolutePath() + PixelFormats.verbosePixelformat(this.pixelformat);
+        return this.file.getAbsolutePath() + PixelFormats.verbosePixelformat(this.pixelFormat);
     }
 
     @Override
     public boolean equals(Object second) {
-        if (second != null && second instanceof DDSFile) {
-            DDSFile secondFile = (DDSFile) second;
+        if (second instanceof DDSFile secondFile) {
             return (this.getFile().getAbsoluteFile().equals(secondFile.getFile().getAbsoluteFile()) &&
                     this.hasMipMaps() == secondFile.hasMipMaps() &&
-                    this.getPixelformat() == secondFile.getPixelformat() &&
+                    this.getPixelFormat() == secondFile.getPixelFormat() &&
                     this.getHeight() == secondFile.getHeight() &&
                     this.getWidth() == secondFile.getWidth());
         }
@@ -208,16 +190,7 @@ public class DDSFile extends AbstractTextureImage {
         }
     }
 
-    public void write(final File targetFile) throws IOException {
-        ByteBuffer[] mipmaps = new ByteBuffer[getNumMipMaps()];
-        for (int i = 0; i < mipmaps.length; i++) {
-            mipmaps[i] = DDSImage.read(this.file).getMipMap(i).getData();
-        }
 
-        DDSImage outputDDS = DDSImage.createFromData(this.pixelformat, width, height, mipmaps);
-        outputDDS.write(file);
-        outputDDS.close();
-    }
 
     /**
      * Checks if the {@link File} is a valid DDS-Image

@@ -22,10 +22,13 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/dropps" />
-            <option value="$PROJECT_DIR$/radds" />
             <option value="$PROJECT_DIR$/shared" />
           </set>
         </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/radds" />
+        <option name="gradleJvm" value="openjdk-22" />
       </GradleProjectSettings>
     </option>
   </component>

@@ -1,27 +1,22 @@
 package org.dds_utils.dropps;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.io.File;
 
 import javax.swing.*;
 
-
-import static org.httprpc.sierra.UIBuilder.*;
-
 import org.dds_utils.dropps.models.IProgressListener;
 import org.dds_utils.dropps.models.ProgressStatus;
-import org.dds_utils.dropps.ui.DropList;
-import org.dds_utils.dropps.ui.FileDrop;
-import org.dds_utils.dropps.ui.SettingsPanel;
+import org.dds_utils.dropps.view.DropList;
+import org.dds_utils.dropps.view.FileDrop;
+import org.dds_utils.dropps.view.ImageInfoPanel;
 import org.httprpc.sierra.ActivityIndicator;
 import org.httprpc.sierra.TaskExecutor;
-import java.util.concurrent.Executors;
-import org.dds_utils.dropps.models.ResourceMap;
+import org.httprpc.sierra.UILoader;
 
-import javax.swing.border.EmptyBorder;
+import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
@@ -44,6 +39,8 @@ public class DroppsView extends JFrame implements Runnable {
     private DefaultListModel<File> fileListModel;
     private JList dropPanel;
 
+    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle(DroppsView.class.getName());
+
     private final static TaskExecutor taskExecutor = new TaskExecutor(Executors.newCachedThreadPool(runnable -> {
         var thread = new Thread(runnable);
 
@@ -51,15 +48,16 @@ public class DroppsView extends JFrame implements Runnable {
 
         return thread;
     }));
+    private ImageInfoPanel imageInfoPanel;
 
 
     public DroppsView(final ConvertController controller) {
-        super("Dropps");
+        super(resourceBundle.getString("Application.title"));
         this.controller = controller;
 	}
 
 
-	private void initComponents(ResourceMap resourceMap) {
+	private void initComponents() {
         fileListModel = new DefaultListModel<File>();
         fileListModel.addListDataListener(new ListDataListener() {
             @Override
@@ -73,7 +71,7 @@ public class DroppsView extends JFrame implements Runnable {
             @Override
             public void contentsChanged(ListDataEvent e) { }
         });
-        dropPanel = new DropList(fileListModel, resourceMap);
+        dropPanel = new DropList(fileListModel, resourceBundle);
         JScrollPane scrollpane = new JScrollPane(dropPanel);
         scrollpane.setPreferredSize(new Dimension(450, 190));
 
@@ -81,19 +79,21 @@ public class DroppsView extends JFrame implements Runnable {
 
         activityIndicator = new ActivityIndicator(48);
 
-        setContentPane(column(
-            row(4,
-                stack(
-                    cell(scrollpane),
-                    cell(activityIndicator)
-                )
-            ),
-            row(
-                glue(),
-                cell(new SettingsPanel(this.controller.getOptions())),
-                glue()
-            )
-        ).with(contentPane -> contentPane.setBorder(new EmptyBorder(8, 8, 8, 8))).getComponent());
+        imageInfoPanel = new ImageInfoPanel();
+//        setContentPane(column(
+//            row(4,
+//                stack(
+//                    cell(scrollpane),
+//                    cell(activityIndicator)
+//                )
+//            ),
+//            row(
+//                glue(),
+//                cell(new SettingsPanel(this.controller.getOptions())),
+//                glue(),
+//                    cell(imageInfoPanel)
+//            )
+//        ).with(contentPane -> contentPane.setBorder(new EmptyBorder(8, 8, 8, 8))).getComponent());
     }
 
     private FileDrop setupFileDrop() {
@@ -113,43 +113,21 @@ public class DroppsView extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        final ResourceMap resourceMap = new ResourceMap("DroppsView.properties");
+        setContentPane(UILoader.load(this, "DroppsView.xml", resourceBundle));
+
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         setSize(680, 350);
 
-        initComponents(resourceMap);
+        initComponents();
 
         setLocationByPlatform(true);
         setResizable(false);
         pack();
         setVisible(true);
 
-        controller.addListener(new IProgressListener() {
-            @Override
-            public void begin(ProgressStatus status) {
-                activityIndicator.start();
-            }
-
-            @Override
-            public void update(ProgressStatus status) {
-
-            }
-
-            @Override
-            public void error(ProgressStatus status) {
-
-            }
-
-            @Override
-            public void end(ProgressStatus status) {
-                System.out.println(status.getMessage());
-                ((DefaultListModel<Object>)dropPanel.getModel()).removeElement(status.file);;
-
-                activityIndicator.stop();
-            }
-        });
+        controller.addListener(new ConversionProgressListener());
     }
 
     private void executeConversions(final File file) {
@@ -161,9 +139,39 @@ public class DroppsView extends JFrame implements Runnable {
             if (exception == null) {
                 //label.setText(String.format("Task %.1f%% complete", result));
             } else {
-                //label.setText("Task failed");
+                exception.printStackTrace();
+                //label.setText("Task failed", exception.getMessage());
             }
         });
+    }
+
+    private class ConversionProgressListener implements IProgressListener {
+        @Override
+        public void begin(ProgressStatus status) {
+            activityIndicator.start();
+        }
+
+        @Override
+        public void imageLoaded(ProgressStatus status) {
+            imageInfoPanel.setTextureFile(status.textureImage);
+        }
+
+        @Override
+        public void update(ProgressStatus status) {
+
+        }
+
+        @Override
+        public void error(ProgressStatus status) {
+
+        }
+
+        @Override
+        public void end(ProgressStatus status) {
+            ((DefaultListModel<Object>)dropPanel.getModel()).removeElement(status.file);;
+
+            activityIndicator.stop();
+        }
     }
 }
 
