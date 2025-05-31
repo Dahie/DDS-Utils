@@ -42,7 +42,7 @@ public class ConvertController implements IProgressObserverable {
 	 * @param conversionExecution
 	 */
 	public void convertFile(final ConversionExecution conversionExecution) {
-		File sourceFile = conversionExecution.getSourceFile();
+		File sourceFile = conversionExecution.sourceFile;
 		try {
 			notifyConversionBegin(sourceFile);
 
@@ -76,9 +76,9 @@ public class ConvertController implements IProgressObserverable {
 	}
 
 	private ConversionResult convert(ConversionExecution conversionExecution, ImageReader reader, ImageWriter writer) throws IOException {
-		File sourceFile = conversionExecution.getSourceFile();
+		File sourceFile = conversionExecution.sourceFile;
 		TextureImage textureImage = reader.read();
-		conversionExecution.setTextureImage(textureImage);
+		conversionExecution.textureImage = textureImage;
 
 		notifyImageLoaded(sourceFile, textureImage);
 

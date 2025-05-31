@@ -12,6 +12,6 @@
     <row-panel padding="0" spacing="8">
         <button name="button" text="executeTask"/>
         <spacer weight="1"/>
-        <label name="lblFile" foreground="gray"/>
+        <label name="fileLabel" foreground="gray"/>
     </row-panel>
 </column-panel>

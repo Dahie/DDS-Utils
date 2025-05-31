@@ -8,7 +8,6 @@ import org.httprpc.sierra.ActivityIndicator;
 import org.httprpc.sierra.UILoader;
 import org.model.DDSFile;
 import org.model.TextureImage;
-import org.util.FileUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +23,7 @@ public class PreviewView extends JFrame implements Runnable {
     private TextureImage image;
     BICanvas bufferedImageCanvas;
     private JButton button = null;
-    private JLabel lblFile = null;
+    private JLabel fileLabel = null;
     private ActivityIndicator activityIndicator = null;
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle(PreviewView.class.getName());
 
@@ -58,7 +57,7 @@ public class PreviewView extends JFrame implements Runnable {
         setVisible(true);
 
         bufferedImageCanvas.setSourceImage(image.getBufferedImage());
-        lblFile.setText(String.format(resourceBundle.getString("lblFile.text"), (String) image.getFile().getName(), (String)image.getPixelformatVerbose()));
+        fileLabel.setText(String.format(resourceBundle.getString("fileLabel.text"), (String) image.getFile().getName(), (String)image.getPixelformatVerbose()));
     }
 
     private void copy() {

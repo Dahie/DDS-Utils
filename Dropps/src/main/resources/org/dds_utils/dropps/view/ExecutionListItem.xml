@@ -1,7 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
-<!DOCTYPE column-panel SYSTEM "sierra.dtd">
+<!DOCTYPE row-panel SYSTEM "sierra.dtd">
 
-<column-panel padding="0" opaque="true" background="white">
-    <label text="title" />
-</column-panel>
+<row-panel spacing="4" padding="4" opaque="true">
+    <activity-indicator name="activityIndicator" indicatorSize="90" visible="true"/>
+    <image-pane name="imagePane" visible="false" size="90, 90" scaleMode="fill-width"/>
+
+    <column-panel padding="4" weight="1">
+        <label name="nameLabel" styleClass="h4"/>
+        <row-panel>
+            <label name="descriptionLabel"/>
+            <progress-bar name="progressBar" />
+        </row-panel>
+    </column-panel>
+    <menu-button name="menuButton" text="showMenu" />
+</row-panel>
