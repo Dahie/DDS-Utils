@@ -6,11 +6,14 @@ import java.io.File;
 import java.util.ResourceBundle;
 
 public class DropList extends JList<File> {
-    private final ResourceBundle resourceMap;
+    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle(DropList.class.getName());
 
-    public DropList(DefaultListModel dlm, ResourceBundle resourceBundle) {
+    public DropList() {
+        super();
+    }
+
+    public DropList(DefaultListModel dlm) {
         super(dlm);
-        this.resourceMap = resourceBundle;
     }
 
     @Override
@@ -24,9 +27,9 @@ public class DropList extends JList<File> {
             g.setFont(newFont);
             g.setColor(new Color(128, 128, 128));
             // and if even now to small, then cut
-            g.drawString(resourceMap.getString("DropsPanel.title"), 15, 25);
+            g.drawString(resourceBundle.getString("title"), 15, 25);
             g.setFont(font);
-            g.drawString(resourceMap.getString("DropsPanel.text"), 15, 45);
+            g.drawString(resourceBundle.getString("text"), 15, 45);
         }
     }
 }

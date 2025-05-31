@@ -8,12 +8,12 @@ import java.io.*;
 
 public class ConversionResult {
     public String error;
-    public File targetFile;
+    public ConversionExecution conversionExecution;
     public TextureImage textureImage;
 
-    public ConversionResult(final String error, TextureImage textureImage, File targetFile) {
+    public ConversionResult(final String error, TextureImage textureImage, ConversionExecution conversionExecution) {
         this.error = error;
-        this.targetFile = targetFile;
+        this.conversionExecution = conversionExecution;
         this.textureImage = textureImage;
     }
 }

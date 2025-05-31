@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE column-panel SYSTEM "sierra.dtd">
+
+<column-panel padding="0" opaque="true" background="white">
+    <row-panel spacing="8" weight="1">
+        <scroll-pane weight="1">
+            <buffered-image-canvas name="bufferedImageCanvas" />
+        </scroll-pane>
+    </row-panel>
+
+    <row-panel spacing="8">
+        <button name="button" text="executeTask"/>
+        <label name="label" foreground="gray"/>
+        <spacer weight="1"/>
+        <activity-indicator name="activityIndicator" indicatorSize="18"/>
+    </row-panel>
+</column-panel>

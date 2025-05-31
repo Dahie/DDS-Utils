@@ -39,9 +39,10 @@ public class ConvertController implements IProgressObserverable {
 
 	/**
 	 * Process a single file
-	 * @param sourceFile
+	 * @param conversionExecution
 	 */
-	public void convertFile(final File sourceFile) {
+	public void convertFile(final ConversionExecution conversionExecution) {
+		File sourceFile = conversionExecution.getSourceFile();
 		try {
 			notifyConversionBegin(sourceFile);
 

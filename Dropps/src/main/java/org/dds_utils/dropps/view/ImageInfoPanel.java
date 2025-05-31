@@ -5,6 +5,7 @@ package org.dds_utils.dropps.view;
 
 import java.awt.GridBagLayout;
 import java.awt.image.BufferedImage;
+import java.util.ResourceBundle;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,20 +30,15 @@ public class ImageInfoPanel extends JPanel {
 	private JLabel pixelformat;
 	private JLabel lblType;
 	private JLabel type;
+	private static final ResourceBundle resourceBundle = ResourceBundle.getBundle(ImageInfoPanel.class.getName());
 
-	
-	private ResourceMap getResourceMap() {
-		final ResourceMap resourceMap = new ResourceMap("ImageInfoPanel.properties");
-		return resourceMap;
-	}
-	
 	private void init() {
 		
-		this.lblNumMipMaps = new JLabel(getResourceMap().getString("MipMaps")+":");
-		this.lblWidth = new JLabel(getResourceMap().getString("Width")+":");
-		this.lblHeight = new JLabel(getResourceMap().getString("Height")+":");
-		this.lblPixelformat = new JLabel(getResourceMap().getString("Pixelformat")+":");
-		this.lblType = new JLabel(getResourceMap().getString("Type")+":");
+		this.lblNumMipMaps = new JLabel(resourceBundle.getString("MipMaps")+":");
+		this.lblWidth = new JLabel(resourceBundle.getString("Width")+":");
+		this.lblHeight = new JLabel(resourceBundle.getString("Height")+":");
+		this.lblPixelformat = new JLabel(resourceBundle.getString("Pixelformat")+":");
+		this.lblType = new JLabel(resourceBundle.getString("Type")+":");
 		
 		this.numMipMaps = new JLabel("-");
 		this.width = new JLabel("-");

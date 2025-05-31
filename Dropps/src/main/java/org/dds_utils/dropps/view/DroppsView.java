@@ -1,18 +1,21 @@
-package org.dds_utils.dropps;
+package org.dds_utils.dropps.view;
 
-import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.*;
 
+import org.dds_utils.dropps.ConvertController;
+import org.dds_utils.dropps.models.ConversionExecution;
 import org.dds_utils.dropps.models.IProgressListener;
 import org.dds_utils.dropps.models.ProgressStatus;
-import org.dds_utils.dropps.view.DropList;
-import org.dds_utils.dropps.view.FileDrop;
-import org.dds_utils.dropps.view.ImageInfoPanel;
+import org.ddsutil.UnsupportedCompressionFormatException;
 import org.httprpc.sierra.ActivityIndicator;
 import org.httprpc.sierra.TaskExecutor;
 import org.httprpc.sierra.UILoader;
+import org.model.DDSFile;
+import org.model.TextureImage;
 
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
@@ -34,10 +37,12 @@ public class DroppsView extends JFrame implements Runnable {
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
     private ActivityIndicator activityIndicator;
+    private JCheckBox chkWhiteAlpha;
+    private JCheckBox chkMipMaps;
 
     private final ConvertController controller;
-    private DefaultListModel<File> fileListModel;
-    private JList dropPanel;
+    private DefaultListModel<ConversionExecution> executionsListModel;
+    private JList<ConversionExecution> dropList;
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle(DroppsView.class.getName());
 
@@ -52,87 +57,80 @@ public class DroppsView extends JFrame implements Runnable {
 
 
     public DroppsView(final ConvertController controller) {
-        super(resourceBundle.getString("Application.title"));
+        super(resourceBundle.getString("title"));
         this.controller = controller;
 	}
 
-
 	private void initComponents() {
-        fileListModel = new DefaultListModel<File>();
-        fileListModel.addListDataListener(new ListDataListener() {
-            @Override
-            public void intervalAdded(ListDataEvent e) {
-                executeConversions(getFileListModel().elementAt(e.getIndex1()));
-            }
-
-            @Override
-            public void intervalRemoved(ListDataEvent e) { }
-
-            @Override
-            public void contentsChanged(ListDataEvent e) { }
-        });
-        dropPanel = new DropList(fileListModel, resourceBundle);
-        JScrollPane scrollpane = new JScrollPane(dropPanel);
-        scrollpane.setPreferredSize(new Dimension(450, 190));
+        executionsListModel = new DefaultListModel<ConversionExecution>();
+        executionsListModel.addListDataListener(new DropListDataListener());
+        dropList.setModel(executionsListModel);
 
         setupFileDrop();
 
-        activityIndicator = new ActivityIndicator(48);
 
-        imageInfoPanel = new ImageInfoPanel();
-//        setContentPane(column(
-//            row(4,
-//                stack(
-//                    cell(scrollpane),
-//                    cell(activityIndicator)
-//                )
-//            ),
-//            row(
-//                glue(),
-//                cell(new SettingsPanel(this.controller.getOptions())),
-//                glue(),
-//                    cell(imageInfoPanel)
-//            )
-//        ).with(contentPane -> contentPane.setBorder(new EmptyBorder(8, 8, 8, 8))).getComponent());
+        dropList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                JList<ConversionExecution> list = (JList<ConversionExecution>)evt.getSource();
+                if (evt.getClickCount() == 2) {
+
+                    // Double-click detected
+                    int index = list.locationToIndex(evt.getPoint());
+                    File file = list.getModel().getElementAt(index).getSourceFile();
+                    TextureImage image = new DDSFile(file);
+                    try {
+                        image.loadImageData();
+                    } catch (UnsupportedCompressionFormatException e) {
+                        throw new RuntimeException(e);
+                    }
+                    PreviewView previewView = new PreviewView(image);
+                } else if (evt.getClickCount() == 3) {
+
+                    // Triple-click detected
+                    int index = list.locationToIndex(evt.getPoint());
+                }
+            }
+        });
+
+        activityIndicator = new ActivityIndicator(48);
     }
 
     private FileDrop setupFileDrop() {
-        return new FileDrop(null, dropPanel, /*dragBorder,*/ new FileDrop.Listener() {
+        return new FileDrop(null, dropList, /*dragBorder,*/ new FileDrop.Listener() {
             @Override
             public void filesDropped(final File[] files) {
                 for (final File file : files) {
-                    getFileListModel().addElement(file);
+                    ConversionExecution conversionExecution = new ConversionExecution(file);
+                    getExecutionsListModel().addElement(conversionExecution);
                 }
             }
         });
     }
 
-    public DefaultListModel<File> getFileListModel() {
-        return fileListModel;
+    public DefaultListModel<ConversionExecution> getExecutionsListModel() {
+        return executionsListModel;
     }
 
     @Override
     public void run() {
+        UILoader.bind("drop-list", DropList.class);
+        UILoader.bind("settings-panel", SettingsPanel.class);
         setContentPane(UILoader.load(this, "DroppsView.xml", resourceBundle));
 
-
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
         setSize(680, 350);
 
         initComponents();
 
         setLocationByPlatform(true);
-        setResizable(false);
-        pack();
         setVisible(true);
 
         controller.addListener(new ConversionProgressListener());
     }
 
-    private void executeConversions(final File file) {
+    private void executeConversions(final ConversionExecution conversionExecution) {
         taskExecutor.execute(() -> {
-            controller.convertFile(file);
+            controller.convertFile(conversionExecution);
 
             return 100.0;
         }, (result, exception) -> {
@@ -168,10 +166,24 @@ public class DroppsView extends JFrame implements Runnable {
 
         @Override
         public void end(ProgressStatus status) {
-            ((DefaultListModel<Object>)dropPanel.getModel()).removeElement(status.file);;
+            //((DefaultListModel<ConversionExecution>) dropList.getModel()).removeElement(status.conversionExecution);;
 
             activityIndicator.stop();
         }
+    }
+
+    private class DropListDataListener implements ListDataListener {
+        @Override
+        public void intervalAdded(ListDataEvent e) {
+            ConversionExecution conversionExecution = getExecutionsListModel().elementAt(e.getIndex1());
+            executeConversions(conversionExecution);
+        }
+
+        @Override
+        public void intervalRemoved(ListDataEvent e) { }
+
+        @Override
+        public void contentsChanged(ListDataEvent e) { }
     }
 }
 

@@ -12,7 +12,6 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import javax.activation.UnsupportedDataTypeException;
 
 import org.util.ImageUtils;
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE column-panel SYSTEM "sierra.dtd">
+
+<column-panel padding="0" spacing="0" opaque="true">
+    <row-panel spacing="0" weight="1">
+        <scroll-pane weight="1" size="450, 200">
+            <drop-list name="dropList" />
+        </scroll-pane>
+        <activity-indicator name="activityIndicator" indicatorSize="18"/>
+    </row-panel>
+
+    <row-panel spacing="8">
+        <column-panel padding="8">
+            <check-box text="chkWhiteAlpha"/>
+            <check-box text="chkMipMaps"/>
+        </column-panel>
+    </row-panel>
+</column-panel>

@@ -73,13 +73,16 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	 * Color displayed when showing transparency.
 	 */
 	private Color transparencyColor;
-		
+
+
+	public BICanvas() {
+		 this.channelMode = ImageOperations.ChannelMode.RGB;
+	}
+
 	/**
 	 * Displays a {@link BufferedImage} in RGB-Mode 
 	 * without multiplied Alpha-channel.
-	 * @param controller 
-	 * @param image 
-	 * @param biRendered BufferedImage to display
+	 * @param image
 	 */
 	public BICanvas(BufferedImage image) {
 		this(image, ImageOperations.ChannelMode.RGB);
@@ -88,17 +91,15 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	
 	/**
 	 * Displays a {@link BufferedImage} in the channel-mode specified.
-	 * @param controller 
-	 * @param image 
-	 * @param biRendered BufferedImage to display
-	 * @param channel Channel of the BufferedImage to display 
+	 * @param image
+	 * @param channelMode Channels of the BufferedImage to display
 	 */
 	public BICanvas(final BufferedImage image, 
-			final ImageOperations.ChannelMode channel) {
-		this.channelMode = channel;
+			final ImageOperations.ChannelMode channelMode) {
+		this.channelMode = channelMode;
 		this.biRendered = image;
 		this.biSource = image;
-		changeChannelBi(channel, biSource);
+		changeDisplayedChannels(channelMode, biSource);
 		this.addMouseMotionListener(this);
 		this.transparencyColor = Color.CYAN;
 		
@@ -106,28 +107,15 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 		this.setPreferredSize(new Dimension(biRendered.getWidth(), biRendered.getHeight()));
 	}
 
-	private void changeChannelBi(ImageOperations.ChannelMode channel, BufferedImage currentImage) {
-		switch(channel){
-			default:
-			case RGBA:
-				this.biRendered = currentImage;
-				break;
-			case RGB:
-				this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.RGB);
-				break;
-			case ALPHA:
-				this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.ALPHA);
-				break;
-			case RED:
-				this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.RED);
-				break;
-			case GREEN:
-				this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.GREEN);
-				break;
-			case BLUE:
-				this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.BLUE);
-				break;
-		}
+	private void changeDisplayedChannels(ImageOperations.ChannelMode channelMode, BufferedImage currentImage) {
+        switch (channelMode) {
+            default -> this.biRendered = currentImage;
+            case RGB -> this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.RGB);
+            case ALPHA -> this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.ALPHA);
+            case RED -> this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.RED);
+            case GREEN -> this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.GREEN);
+            case BLUE -> this.biRendered = BIUtil.getChannel(currentImage, ImageOperations.ChannelMode.BLUE);
+        }
 		super.repaint();
 		revalidate();
 	}
@@ -137,7 +125,7 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	 * @param channel new channel to display
 	 */
 	public void setChannelMode(final ImageOperations.ChannelMode channel) {
-		changeChannelBi(channel, biSource);
+		changeDisplayedChannels(channel, biSource);
 		this.channelMode = channel;
 	}
 	
@@ -167,16 +155,16 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	/**
 	 * Overwrite the current source-BufferedImage.
 	 * This will also update the displayed canvas and the window-size.
-	 * @param bi
+	 * @param bufferedImage
 	 */
-	public void setSourceBI(final BufferedImage bi) {
-		this.biRendered = bi;
-		this.biSource = bi;
-		int width = (int) (zoomFactor*bi.getWidth());
-		int height = (int) (zoomFactor*bi.getHeight());
+	public void setSourceImage(final BufferedImage bufferedImage) {
+		this.biRendered = bufferedImage;
+		this.biSource = bufferedImage;
+		int width = (int) (zoomFactor*bufferedImage.getWidth());
+		int height = (int) (zoomFactor*bufferedImage.getHeight());
 		this.setPreferredSize(new Dimension(width, height));
-		this.getParent().setPreferredSize(new Dimension(bi.getWidth(), bi.getHeight()));
-		changeChannelBi(channelMode, biSource);
+		this.getParent().setPreferredSize(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
+		changeDisplayedChannels(channelMode, biSource);
 		invalidate();
 		notifyAllRenderedChangeListeners();
 	}
@@ -221,8 +209,12 @@ public class BICanvas extends JPanel implements Scrollable, MouseMotionListener 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
+		if(biRendered == null)
+			return;
+
 		drawBackground(g);
+
 
 		int width =  biRendered.getWidth(), height =  biRendered.getHeight();
 		int newW = (int) (zoomFactor * width); 

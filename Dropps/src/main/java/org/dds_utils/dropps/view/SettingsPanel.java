@@ -11,6 +11,9 @@ import java.awt.*;
 
 
 /**
+ *
+ * Panel with the export settings for the dds files
+
  * @author danielsenff
  *
  */
@@ -18,18 +21,17 @@ public class SettingsPanel extends JPanel {
 
 	private JComboBox comboPixelformat;
 	private JCheckBox chkMipMaps;
-	private final ExportConfiguration exportOptions;
+	private ExportConfiguration exportOptions;
 	private JCheckBox chkWhiteAlpha;
 
-	/**
-	 * Panel with the export settings for the dds files
-	 */
-	public SettingsPanel(ExportConfiguration exportoptions) {
-		this.exportOptions = exportoptions;
-		
-		//this.resourceMap = Application.getInstance().getContext().getResourceMap(getClass(), SettingsPanel.class);
-		
+	public SettingsPanel() {
+		super();
+
 		init();
+	}
+
+	public void setExportConfiguration(ExportConfiguration exportOptions) {
+		this.exportOptions = exportOptions;
 	}
 
 	private void init() {

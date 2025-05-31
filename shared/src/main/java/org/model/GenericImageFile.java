@@ -16,6 +16,12 @@ public class GenericImageFile extends AbstractTextureImage{
     }
 
     @Override
+    public BufferedImage getTopMipMap() {
+        return this.image;
+    }
+
+
+    @Override
     public TextureType getTextureType() {
         return null;
     }

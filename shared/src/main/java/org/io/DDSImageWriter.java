@@ -26,7 +26,7 @@ public class DDSImageWriter extends AbstractImageWriter {
     @Override
     public void write(TextureImage textureImage) throws IOException {
         //DDSUtil.write(this.targetFile, sourceImage, options.getNewPixelformat(), options.hasGeneratedMipMaps());
-
+        System.out.println(textureImage);
 
         final int pixelFormat = options.getNewPixelformat();
         BufferedImage sourceImage = textureImage.getBufferedImage();
@@ -39,6 +39,9 @@ public class DDSImageWriter extends AbstractImageWriter {
 
         ByteBuffer[] mipmapBuffer;
 
+        System.out.println(pixelFormat);
+        System.out.println(PixelFormats.isDXTCompressed(pixelFormat));
+
         if (PixelFormats.isDXTCompressed(pixelFormat)) {
             try {
                 mipmapBuffer = maps.getDXTCompressedBuffer(pixelFormat); // TODO parallelize
@@ -47,6 +50,8 @@ public class DDSImageWriter extends AbstractImageWriter {
             }
         } else
             mipmapBuffer = maps.getUncompressedBuffer();
+
+        System.out.println(mipmapBuffer.length);
 
         writeFile(pixelFormat, sourceImage.getWidth(), sourceImage.getHeight(), mipmapBuffer);
     }
