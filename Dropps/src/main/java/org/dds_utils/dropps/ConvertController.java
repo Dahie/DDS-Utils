@@ -59,7 +59,7 @@ public class ConvertController implements IProgressObserverable {
 				return;
 			}
 
-			final ConversionResult result = convert(sourceFile, reader, writer);
+			final ConversionResult result = convert(conversionExecution, reader, writer);
 
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -75,11 +75,12 @@ public class ConvertController implements IProgressObserverable {
 		notifyConversionEnd(sourceFile);
 	}
 
-	private ConversionResult convert(File sourceFile, ImageReader reader, ImageWriter writer) throws IOException {
+	private ConversionResult convert(ConversionExecution conversionExecution, ImageReader reader, ImageWriter writer) throws IOException {
+		File sourceFile = conversionExecution.getSourceFile();
 		TextureImage textureImage = reader.read();
+		conversionExecution.setTextureImage(textureImage);
 
-		System.out.println("read");
-		//notifyImageLoaded(sourceFile, textureImage);
+		notifyImageLoaded(sourceFile, textureImage);
 
 		if(textureImage == null) {
 			return newImageNotLoadableException("Image not loadable");
@@ -94,7 +95,7 @@ public class ConvertController implements IProgressObserverable {
 		System.out.println(writer);
 		writer.write(textureImage);
 		System.out.println("written" + writer.getTargetFile());
-		return newConversionResult(writer.getTargetFile(), textureImage);
+		return newConversionResult(conversionExecution, textureImage);
 	}
 
 	private static ConversionResult newImageNotLoadableException(String message) {
@@ -102,8 +103,8 @@ public class ConvertController implements IProgressObserverable {
 	}
 
 
-	private ConversionResult newConversionResult(File targetFile, TextureImage textureImage) {
-		return new ConversionResultBuilder().textureImage(textureImage).targetFile(targetFile).buildConversionResult();
+	private ConversionResult newConversionResult(ConversionExecution conversionExecution, TextureImage textureImage) {
+		return new ConversionResultBuilder().textureImage(textureImage).conversionExecution(conversionExecution).buildConversionResult();
 	}
 
 

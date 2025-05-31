@@ -65,6 +65,7 @@ public class DroppsView extends JFrame implements Runnable {
         executionsListModel = new DefaultListModel<ConversionExecution>();
         executionsListModel.addListDataListener(new DropListDataListener());
         dropList.setModel(executionsListModel);
+        dropList.setCellRenderer(new ExecutionListItem());
 
         setupFileDrop();
 
@@ -76,14 +77,11 @@ public class DroppsView extends JFrame implements Runnable {
 
                     // Double-click detected
                     int index = list.locationToIndex(evt.getPoint());
-                    File file = list.getModel().getElementAt(index).getSourceFile();
-                    TextureImage image = new DDSFile(file);
-                    try {
-                        image.loadImageData();
-                    } catch (UnsupportedCompressionFormatException e) {
-                        throw new RuntimeException(e);
+                    TextureImage image = list.getModel().getElementAt(index).getTextureImage();
+                    System.out.println(image);
+                    if(image != null) {
+                        new PreviewView(image).run();
                     }
-                    PreviewView previewView = new PreviewView(image);
                 } else if (evt.getClickCount() == 3) {
 
                     // Triple-click detected
@@ -151,7 +149,7 @@ public class DroppsView extends JFrame implements Runnable {
 
         @Override
         public void imageLoaded(ProgressStatus status) {
-            imageInfoPanel.setTextureFile(status.textureImage);
+            dropList.invalidate();
         }
 
         @Override

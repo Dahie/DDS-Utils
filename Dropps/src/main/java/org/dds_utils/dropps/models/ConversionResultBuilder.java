@@ -8,13 +8,13 @@ import java.io.*;
 public class ConversionResultBuilder {
 
     private String _error = null;
-    private File _targetFile = null;
+    private ConversionExecution _conversionExecution = null;
     private TextureImage _textureImage = null;
 
     public ConversionResultBuilder() { }
 
     public ConversionResult buildConversionResult() {
-        return new ConversionResult(_error, _textureImage, _targetFile);
+        return new ConversionResult(_error, _textureImage, _conversionExecution);
     }
 
     public ConversionResultBuilder error(final String _error) {
@@ -27,8 +27,8 @@ public class ConversionResultBuilder {
         return this;
     }
 
-    public ConversionResultBuilder targetFile(final File _targetFile) {
-        this._targetFile = _targetFile;
+    public ConversionResultBuilder conversionExecution(final ConversionExecution _conversionExecution) {
+        this._conversionExecution = _conversionExecution;
         return this;
     }
 }
