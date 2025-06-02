@@ -33,7 +33,7 @@ public class ARGBBufferDecompressor extends BufferDecompressor{
 	/**
 	 * @param databuffer
 	 * @param dimension
-	 * @param type 
+	 * @param pixelformat
 	 */
 	public ARGBBufferDecompressor(final ByteBuffer databuffer, 
 			final Dimension dimension, int pixelformat) {

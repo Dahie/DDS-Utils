@@ -24,11 +24,11 @@ public class DXTBufferDecompressor extends BufferDecompressor{
 	 * @param compressedBuffer
 	 * @param width
 	 * @param height
-	 * @param pixelformat
+	 * @param compressionType
 	 */
 	public DXTBufferDecompressor(final ByteBuffer compressedBuffer, 
-			final int width, final int height, CompressionType type) {
-		this(compressedBuffer, new Dimension(width, height), type);
+			final int width, final int height, CompressionType compressionType) {
+		this(compressedBuffer, new Dimension(width, height), compressionType);
 	}
 	
 	
@@ -46,15 +46,14 @@ public class DXTBufferDecompressor extends BufferDecompressor{
 	/**
 	 * @param compressedBuffer
 	 * @param dimension
-	 * @param type 
+	 * @param compressionType
 	 */
 	public DXTBufferDecompressor(final ByteBuffer compressedBuffer, 
-			final Dimension dimension, CompressionType type) {
+			final Dimension dimension, final CompressionType compressionType) {
 		this.uncompressedBuffer = 
-			squishDecompressBuffer(compressedBuffer, dimension.width, dimension.height, type);
+			squishDecompressBuffer(compressedBuffer, dimension.width, dimension.height, compressionType);
 		this.dimension = dimension;
-		this.compressionType = type;
-		
+		this.compressionType = compressionType;
 	}
 
 
@@ -109,18 +108,18 @@ public class DXTBufferDecompressor extends BufferDecompressor{
 	 * @param byteBuffer
 	 * @param width
 	 * @param height
-	 * @param type
+	 * @param compressionType
 	 * @return
 	 * @throws OutOfMemoryError
 	 */
 	private static ByteBuffer squishDecompressBuffer(final ByteBuffer byteBuffer, 
 			final int width, final int height,
-			final Squish.CompressionType type) throws OutOfMemoryError {
+			final Squish.CompressionType compressionType) throws OutOfMemoryError {
 		
 		byte[] data = new byte[byteBuffer.capacity()]; 
 		byteBuffer.get(data); 
 		 
-		return squishDecompress(data, width, height, type);
+		return squishDecompress(data, width, height, compressionType);
 	} 
 	
 }

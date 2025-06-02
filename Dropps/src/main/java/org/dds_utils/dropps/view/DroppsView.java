@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.dds_utils.dropps.ConvertController;
@@ -58,6 +59,7 @@ public class DroppsView extends JFrame implements Runnable {
     public DroppsView(final ConvertController controller) {
         super(resourceBundle.getString("title"));
         this.controller = controller;
+        this.setIconImage(new ImageIcon("src/main/resources/icon.png").getImage());
 	}
 
 	private void initComponents() {
@@ -69,24 +71,24 @@ public class DroppsView extends JFrame implements Runnable {
         setupFileDrop();
 
 
-//        dropList.addMouseListener(new MouseAdapter() {
-//            public void mouseClicked(MouseEvent evt) {
-//                JList<ConversionExecution> list = (JList<ConversionExecution>)evt.getSource();
-//                if (evt.getClickCount() == 2) {
-//
-//                    // Double-click detected
-//                    int index = list.locationToIndex(evt.getPoint());
-//                    TextureImage image = list.getModel().getElementAt(index).textureImage;
-//                    if(image != null) {
-//                        new PreviewView(image).run();
-//                    }
-//                } else if (evt.getClickCount() == 3) {
-//
-//                    // Triple-click detected
-//                    int index = list.locationToIndex(evt.getPoint());
-//                }
-//            }
-//        });
+        dropList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                JList<ConversionExecution> list = (JList<ConversionExecution>)evt.getSource();
+                if (evt.getClickCount() == 2) {
+
+                    // Double-click detected
+                    int index = list.locationToIndex(evt.getPoint());
+                    TextureImage image = list.getModel().getElementAt(index).textureImage;
+                    if(image != null) {
+                        new PreviewView(image).run();
+                    }
+                } else if (evt.getClickCount() == 3) {
+
+                    // Triple-click detected
+                    int index = list.locationToIndex(evt.getPoint());
+                }
+            }
+        });
 
         activityIndicator = new ActivityIndicator(48);
     }
@@ -120,13 +122,12 @@ public class DroppsView extends JFrame implements Runnable {
 
         setLocationByPlatform(true);
         setVisible(true);
-
-        controller.addListener(new ConversionProgressListener());
     }
 
     private void executeConversions(final ConversionExecution conversionExecution) {
         taskExecutor.execute(() -> {
             controller.convertFile(conversionExecution);
+            controller.addListener(new ConversionProgressListener());
 
             return 100.0;
         }, (result, exception) -> {
@@ -163,7 +164,7 @@ public class DroppsView extends JFrame implements Runnable {
         @Override
         public void end(ProgressStatus status) {
             //((DefaultListModel<ConversionExecution>) dropList.getModel()).removeElement(status.conversionExecution);;
-
+            dropList.repaint();
             activityIndicator.stop();
         }
     }

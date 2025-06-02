@@ -9,6 +9,7 @@ import org.model.TextureImage;
 import org.model.TextureMap;
 import org.util.ImageUtils;
 
+import javax.imageio.event.IIOWriteProgressListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

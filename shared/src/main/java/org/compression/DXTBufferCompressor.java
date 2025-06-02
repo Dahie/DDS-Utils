@@ -21,7 +21,6 @@ import org.ddsutil.ByteBufferedImage;
  */
 public class DXTBufferCompressor {
 
-//	byte[] compressedData;
 	protected byte[] byteData;
 	protected int[] intData;
 	protected Dimension dimension;
@@ -105,7 +104,6 @@ public class DXTBufferCompressor {
 			// the data-Array given to the squishCompressToArray is expected to be
 			// width * height * 4 -> with RGBA, which means, if we got RGB, we need to add A!
 			if(byteData.length < dimension.height*dimension.width*4) {
-				System.out.println("blow up array from RGB to ARGB");
 				byteData = convertRGBArraytiRGBAArray(byteData, dimension);
 			}
 			

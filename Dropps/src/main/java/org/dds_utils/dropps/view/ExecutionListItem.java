@@ -13,6 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ResourceBundle;
 
 public class ExecutionListItem implements ListCellRenderer<ConversionExecution> {
@@ -26,19 +28,29 @@ public class ExecutionListItem implements ListCellRenderer<ConversionExecution> 
     private ActivityIndicator activityIndicator = null;
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle(ExecutionListItem.class.getName());
 
+    //ImageIO.read(CellRendererTest.class.getResource(String.format("flags/%s", imageName)));
+
     public ExecutionListItem() {
         component = UILoader.load(this, "ExecutionListItem.xml");
         progressBar.setIndeterminate(true);
-        activityIndicator.start();
-        menuButton.setText(resourceBundle.getString("showMenu"));
-
-        var popupMenu = new JPopupMenu();
-
-        popupMenu.add(new JMenuItem(resourceBundle.getString("item1")));
-        popupMenu.add(new JMenuItem(resourceBundle.getString("item2")));
-        popupMenu.add(new JMenuItem(resourceBundle.getString("item3")));
-
-        menuButton.setPopupMenu(popupMenu);
+//        activityIndicator.start();
+//        menuButton.setText(resourceBundle.getString("showMenu"));
+//        menuButton.setFocusable(true);
+//
+//        var popupMenu = new JPopupMenu();
+//
+//        popupMenu.add(new JMenuItem(resourceBundle.getString("item1")));
+//        popupMenu.add(new JMenuItem(resourceBundle.getString("item2")));
+//        popupMenu.add(new JMenuItem(resourceBundle.getString("item3")));
+//
+//        menuButton.setPopupMenu(popupMenu);
+//        menuButton.setEnabled(true);
+//        component.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                System.out.println("click");
+//            }
+//        });
     }
 
     public void updateProgress(int max, int current) {
@@ -46,7 +58,7 @@ public class ExecutionListItem implements ListCellRenderer<ConversionExecution> 
         progressBar.setMaximum(max);
         progressBar.setValue(current);
         descriptionLabel.setText(
-                String.format(resourceBundle.getString("descriptionLabel.in_progress"), (current/max)));
+                String.format(resourceBundle.getString("descriptionLabel.in_progress"), current));
     }
 
     public void finishProgress() {
@@ -58,16 +70,18 @@ public class ExecutionListItem implements ListCellRenderer<ConversionExecution> 
     }
 
     @Override
-    public Component getListCellRendererComponent(JList<? extends ConversionExecution> list, ConversionExecution value, int index, boolean selected, boolean cellHasFocus) {
-        nameLabel.setText(value.getTitle());
-        if(value.textureImage != null && value.textureImage.getBufferedImage() != null) {
-            imagePane.setImage(value.textureImage.getBufferedImage());
+    public Component getListCellRendererComponent(JList<? extends ConversionExecution> list, ConversionExecution conversionExecution, int index, boolean selected, boolean cellHasFocus) {
+        nameLabel.setText(conversionExecution.getTitle());
+        if(conversionExecution.textureImage != null && conversionExecution.textureImage.getBufferedImage() != null) {
+            imagePane.setImage(conversionExecution.textureImage.getBufferedImage());
             imagePane.setVisible(true);
-            activityIndicator.stop();
-            activityIndicator.setVisible(false);
         }
 
-        //descriptionLabel.setText("value.description");
+        if(conversionExecution.status == "in_progress") {
+            updateProgress(conversionExecution.maxProgress, conversionExecution.currentProgress);
+        } else {
+            finishProgress();
+        }
 
         Color background;
         Color foreground;
