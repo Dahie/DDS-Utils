@@ -3,6 +3,8 @@
 DDS-Utils are a bunch of tools to work cross-platform with DirectDrawSurfaces textures in Java.
 These work well decent on MacOS and provide an alternative to the nVidia Texture Tools.
 
+Future development at [Codeberg](https://codeberg.org/Dahie/DDS-Utils).
+
 ## DDS-Utils Provides
 
 - Badds - Batch a DDS, Rescale and Batch-process DDS-files.
